@@ -6,21 +6,19 @@ npm run dev
 http://localhost:5173/
 
 
-# Heroku Create
-heroku apps:create snap-chipsahoystrangerthings
-https://snap-chipsahoystrangerthings-e2b6c0246458.herokuapp.com/ 
-
-## Heroku Create Prod
-heroku buildpacks:set heroku/nodejs -a snap-chipsahoystrangerthings
+# Heroku Create Prod
+heroku apps:create snap-castgame
+heroku buildpacks:set heroku/nodejs -a snap-castgame
 heroku config:set NPM_CONFIG_PRODUCTION=false YARN_PRODUCTION=false
 git push heroku main
-https://snap-chipsahoystrangerthings-e2b6c0246458.herokuapp.com/ 
+TODO https://snap-castgame-e2b6c0246458.herokuapp.com/
 
 ## Heroku Create Stage
-heroku buildpacks:set heroku/nodejs -a snap-chipsahoystrangerthings-staging
-heroku create --remote staging snap-chipsahoystrangerthings-staging
+heroku create --remote staging snap-castgame-staging
+heroku buildpacks:set heroku/nodejs -a snap-castgame-staging
+heroku config:set NPM_CONFIG_PRODUCTION=false YARN_PRODUCTION=false
 git push staging main
-https://snap-chipsahoystrangerthings-staging-830396e11f4a.herokuapp.com/ 
+https://snap-castgame-staging-59ca3a0b5639.herokuapp.com/
 
 
 # Heroku Deploy Prod

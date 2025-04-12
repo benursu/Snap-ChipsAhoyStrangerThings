@@ -14,7 +14,7 @@ import { Push2Web } from '@snap/push2web';
 //camkit config
 //TODO: set apiToken to final CamKit token
 const configuration = {
-    apiToken: 'eyJhbGciOiJIUzI1NiIsImtpZCI6IkNhbnZhc1MyU0hNQUNQcm9kIiwidHlwIjoiSldUIn0.eyJhdWQiOiJjYW52YXMtY2FudmFzYXBpIiwiaXNzIjoiY2FudmFzLXMyc3Rva2VuIiwibmJmIjoxNzMxMzc1ODk3LCJzdWIiOiIyODk3NTcyYS0xMTkwLTQ5YzktODk3NC00OTFiNTJkZjQzZjJ-U1RBR0lOR35hYWM1Y2U4Yi0yM2YwLTRiMmQtOGJkMi02NjUyZTZjNTY0NzQifQ.Kzk1m5orKAEOlIutf_YCDaCQ_JYl2NQ8ksHkgcZKuOM',
+    apiToken: 'eyJhbGciOiJIUzI1NiIsImtpZCI6IkNhbnZhc1MyU0hNQUNQcm9kIiwidHlwIjoiSldUIn0.eyJhdWQiOiJjYW52YXMtY2FudmFzYXBpIiwiaXNzIjoiY2FudmFzLXMyc3Rva2VuIiwibmJmIjoxNzQ0NDkyMDE3LCJzdWIiOiI4MzdmOTA0Yy1jYTU4LTQ2OWEtOWExNi1hN2ZkNTc0MjM4ZmV-U1RBR0lOR340YzI0MGU2NC0zOTQ4LTQxOGYtOGM2OS0wZTU1MDA3MTQ3NTUifQ.Y7QGwmP1OHx_BXD3TIAqv9sMaxlOogcQE0q5g08SHJw',
     // logger: 'console',
 }
 
@@ -544,7 +544,7 @@ const capturePhoto = async () => {
     //create the image
     const imageElement = document.createElement('img');
     imageElement.src = dataUrl;
-    imageElement.alt = 'My Coca-Cola Tastebud Map';
+    imageElement.alt = 'Chips Ahoy! Stranger Things';
     imageContainer.appendChild(imageElement); 
     imageContainer.style.display = 'flex';
 
@@ -555,7 +555,7 @@ const capturePhoto = async () => {
     if (!isOnPhone) {
         const link = document.createElement('a');
         link.href = dataUrl;
-        link.download = 'My Coca-Cola Tastebud Map.png';
+        link.download = 'Chips Ahoy! Stranger Things.png';
               
         tapBtn.style.pointerEvents = 'auto';
         //change button text for click instead of hold
@@ -628,23 +628,10 @@ unmuteBtn.addEventListener('click', (e) => {
 //analytics
 
 //events:
-// Terms Agree (found here in main.js)
 // Lens Start
-// Tongue Started
-// Scanning Complete
-// Authenticate Ready
-// Authenticate Start
-// Authenticate Complete
-// Pairing
-// Profile
-// Capture Start
-// Capture Complete (found here in main.js)
-// Capture Download Desktop  (found here in main.js)
-// Capture Download Mobile (found here in main.js)
-// Restart
 
 function analytics(event){
-    //TODO: add coca-cola.com anayltics logic
+    //TODO: add chips ahoy anayltics logic
     console.log('Analytic Event: ' + event);
 }
 

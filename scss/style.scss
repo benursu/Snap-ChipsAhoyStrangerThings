@@ -1,0 +1,31 @@
+// Import variables and mixins
+@use '/scss/variables' as vars;
+
+//other scss imports
+@use '/scss/app';
+@use '/scss/loader';
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: vars.$grayDark;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  position: relative;
+  margin: 0;
+  background-color: vars.$grayDark;
+  color: vars.$white;
+  height: 100%; width: 100%;
+  overflow: hidden;
+  -webkit-overflow-scrolling: touch;
+}

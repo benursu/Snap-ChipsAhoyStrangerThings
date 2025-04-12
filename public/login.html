@@ -1,0 +1,54 @@
+<html lang="en">
+  <body>
+    <div id="display_name"></div>
+    <img id="bitmoji" />
+    <div id="external_id"></div>
+    <div id="access_token"></div>
+    <hr />
+    <div id="my-login-button-target"></div>
+    <script>
+      window.snapKitInit = function () {
+        var loginButtonIconId = 'my-login-button-target';
+        // Mount Login Button
+        snap.loginkit.mountButton(loginButtonIconId, {
+          clientId: 'b6e97bd4-a754-4d97-835e-728eddc53e16',
+          redirectURI: window.location.origin  + '/login.html',
+          scopeList: [
+            'user.display_name',
+            'user.bitmoji.avatar',
+            'user.external_id',
+            'camkit_lens_push_to_device'
+          ],
+          handleResponseCallback: function () {
+
+            snap.loginkit.fetchUserInfo().then(
+              function (result) {
+                console.log('User info:', result.data.me);
+
+                document.getElementById('display_name').innerText = result.data.me.displayName;
+                document.getElementById('bitmoji').src = result.data.me.bitmoji.avatar;
+                document.getElementById('external_id').src = result.data.me.externalId;
+                document.getElementById('access_token').innerHTML = '<a href="/?access_token=' + snap.loginkit.getSharedDataAccessToken() + '">Launch app with Push2Web</a>';
+
+              },
+              function (err) {
+                console.log(err); // Error
+              }
+            );
+          },
+        });
+      };
+
+      // Load the SDK asynchronously
+      (function (d, s, id) {
+        var js,
+          sjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s);
+        js.id = id;
+        js.src = 'https://sdk.snapkit.com/js/v1/login.js';
+        sjs.parentNode.insertBefore(js, sjs);
+      })(document, 'script', 'loginkit-sdk');
+    </script>
+  </body>
+</html>

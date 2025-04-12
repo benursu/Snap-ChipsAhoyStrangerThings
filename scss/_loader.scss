@@ -1,0 +1,54 @@
+@use '/scss/variables' as vars;
+
+//loader spinner
+.castGame-loader{
+  position:absolute;
+  top:0; right:0; left:0; bottom:0;
+  width: 60px; height: 60px;
+  margin:auto;
+  transform:scale(0.5);
+}
+
+.castGame-spinner {
+  position:relative;
+  width: 60px; height: 60px;
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+  border: 5px solid;
+  border-color: vars.$white vars.$white transparent;
+  box-sizing: border-box;
+  animation: castGame-rotation 1s linear infinite;
+}
+
+.castGame-spinner::after {
+  content: '';  
+  box-sizing: border-box;
+  position: absolute;
+  left: 0; right: 0; top: 0; bottom: 0;
+  margin: auto;
+  border: 5px solid;
+  border-color: transparent vars.$white vars.$white;
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  animation: castGame-rotationBack 0.5s linear infinite;
+  transform-origin: center center;
+}
+
+@keyframes castGame-rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+} 
+    
+@keyframes castGame-rotationBack {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-360deg);
+  }
+}

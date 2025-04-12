@@ -1,0 +1,25 @@
+{
+  "hash": "b34ac0b5",
+  "configHash": "8b565f4a",
+  "lockfileHash": "66330028",
+  "browserHash": "e49f0c4e",
+  "optimized": {
+    "@snap/camera-kit": {
+      "src": "../../node_modules/@snap/camera-kit/dist/index.js",
+      "file": "@snap_camera-kit.js",
+      "fileHash": "53bb6d68",
+      "needsInterop": false
+    },
+    "@snap/push2web": {
+      "src": "../../node_modules/@snap/push2web/dist/public-api.js",
+      "file": "@snap_push2web.js",
+      "fileHash": "7df09d44",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "chunk-TRIVD64I": {
+      "file": "chunk-TRIVD64I.js"
+    }
+  }
+}

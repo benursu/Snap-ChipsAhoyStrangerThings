@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon-32x32.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Chips Ahoy! Stranger Things</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,100..900;1,100..900&family=Paytone+One&display=swap" rel="stylesheet">
+
+  </head>
+  <body>
+    <div id="castGame-app">
+      
+      <div class="castGame-container">
+
+        <div class="castGame-loaderContainer"><div class="castGame-icon"></div><div class="castGame-loader"><div class="castGame-spinner"></div></div></div>
+
+        <div id="castGame-termsContainer" style="display: none;">
+
+          <span>
+            <button id="castGame-termsDismissButton"><img src="/close-btn-small.svg" /></button>
+            <img class="castGame-termsChipsAhoyLogo" src="/chipsAhoy-logo.png" />
+            <img class="castGame-termsLogoSeperator"  src="/close-btn-black.svg" />
+            <img class="castGame-termsSnapLogo"  src="/snap-logo.svg" />
+            <p id="castGame-termsMessage">By using Lenses, you acknowledge reading Snap’s <a href="https://values.snap.com/privacy/privacy-policy" target="_blank">Privacy Policy</a> and agree to Snap’s <a href="https://www.snap.com/terms" target="_blank">Terms of Service</a>. Some lenses use information about your face, hands and voice to work. <a href="https://help.snapchat.com/hc/en-us/articles/7012366118676-How-Snap-Uses-Information-from-the-Camera" target="_blank">Learn More</a>, and if you want to agree and continue, tap below.</p>
+            <button id="castGame-termsAgreeButton">I Agree</button>
+          </span>
+        </div>
+
+        <div id="castGame-errorContainer" style="display: none;">
+          <span>
+            <img src="/error.svg" />
+            <p id="castGame-errorMessage">There was a problem with the camera.</p>
+            <button id="castGame-errorContainerButton">Refresh The Page</button>
+          </span>
+        </div>
+        
+        <div class="castGame-content" style="display: none;">
+        
+          <canvas id="castGame-cameraKit"></canvas>
+
+          <div class="castGame-unmuteButton"></div>
+
+          <div id="castGame-imageContainer">
+            <div class="castGame-closeImageBtn"></div>
+            <div class="castGame-tap">
+              <p><strong>Tap & Hold</strong>Add to Photos</p>
+            </div>
+          </div>
+
+          <div id="castGame-tempAuthContainer">
+            <div class="castGame-wrap">
+              <h3>Log In</h3>
+              <form>
+                <div id="castGame-closeAuthButton">Continue</div>
+              </form>
+            </div>
+          </div>
+
+        </div>
+
+      </div>  
+
+    </div>
+
+    <script type="module" src="/js/main.js"></script>
+
+  </body>
+</html>

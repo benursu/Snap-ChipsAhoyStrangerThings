@@ -287,6 +287,9 @@ const cameraKitInit = async () => {
 
     await createStreamSource();
 
+    lensId = '43288930875';
+    groupId = 'b3bcab54-2bfe-4b99-93bd-31b106ee6c56';
+
     lens = await cameraKit.lensRepository.loadLens(
         lensId,
         groupId
@@ -332,8 +335,8 @@ const createStreamSource = async () => {
         // cameraType: 'front',
         // fpsLimit: 30,
         // cameraType: 'user'
-        // cameraType: 'back'
-        cameraType: 'environment'
+        cameraType: 'back'
+        // cameraType: 'environment'
     });
     await cameraKitSession.setSource(source);
 
@@ -713,8 +716,8 @@ async function updateCameraBack() {
   
     const source = createMediaStreamSource(stream, {
       // NOTE: This is important for world facing experiences
-    //   cameraType: isBackFacing ? 'back' : 'front',
-        cameraType: isBackFacing ? 'environment' : 'user',
+      cameraType: isBackFacing ? 'back' : 'front',
+        // cameraType: isBackFacing ? 'environment' : 'user',
     });
   
     await cameraKitSession.setSource(source);

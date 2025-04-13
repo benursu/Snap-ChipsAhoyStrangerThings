@@ -665,63 +665,37 @@ const changeLens = async () => {
 
 }
 
-async function updateCameraBack() {
-    if (stream) {
-        cameraKitSession.pause();
-        stream.getVideoTracks()[0].stop();
-    }
+let isBackFacing = false;
 
-    stream = await navigator.mediaDevices.getUserMedia({
-        video:
-            {
-                width: { ideal: 1280 },
-                height: { ideal: 720 },
-                facingMode: 'environment',
-            },
-            audio: false,
-        }
-    );
-
-    source = createMediaStreamSource(stream, {
-        cameraType: 'back',
-    });    
-  
-    await cameraKitSession.setSource(source);
-  
-    cameraKitSession.play();
-
-  }
-
-
-  let isBackFacing = false;
-
-  async function updateCamera() {
+async function updateCamera() {
     isBackFacing = !isBackFacing;
-  
+
     if (stream) {
         cameraKitSession.pause();
         stream.getVideoTracks()[0].stop();
     }
-  
+
     stream = await navigator.mediaDevices.getUserMedia({
-      video: {
+        video: {
         facingMode: isBackFacing ? 'environment' : 'user',
-      },
+        },
     });
-  
+
     const source = createMediaStreamSource(stream, {
-      // NOTE: This is important for world facing experiences
-      cameraType: isBackFacing ? 'back' : 'front',
+        // NOTE: This is important for world facing experiences
+        cameraType: isBackFacing ? 'back' : 'front',
     });
-  
+
     await cameraKitSession.setSource(source);
-  
+
     if (!isBackFacing) {
-      source.setTransform(Transform2D.MirrorX);
+        source.setTransform(Transform2D.MirrorX);
     }
-  
+
     cameraKitSession.play();
-  }
+
+}
+
 
 
 /////////////////////////////////////////////////////////////////////////////////////

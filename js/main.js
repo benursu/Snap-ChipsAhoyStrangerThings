@@ -19,9 +19,9 @@ const configuration = {
 }
 
 //TODO: set api IDs to final CamKit values
-const lensId = 'f85f5280-9afc-4ed5-ae53-c8b60a2e2941'; //staging
-const groudId = 'f4bb30fc-3974-4765-b570-3e25b69a102d';
-const apiSpecId = '4bcc807f-59c5-4596-9535-f4489b829fff'; //api spec id for Snap Remote API, currently hosted on House of V account  //TODO: switch out
+var lensId = 'f85f5280-9afc-4ed5-ae53-c8b60a2e2941'; //staging
+var groupId = 'f4bb30fc-3974-4765-b570-3e25b69a102d';
+var apiSpecId = '4bcc807f-59c5-4596-9535-f4489b829fff'; //api spec id for Snap Remote API, currently hosted on House of V account  //TODO: switch out
 
 
 
@@ -289,7 +289,7 @@ const cameraKitInit = async () => {
 
     lens = await cameraKit.lensRepository.loadLens(
         lensId,
-        groudId
+        groupId
     );
 
     var termsValid = false;
@@ -622,18 +622,43 @@ const unmuteBtn = document.querySelector('.castGame-unmuteButton');
 
 unmuteBtn.addEventListener('click', (e) => {
     e.preventDefault();
-    unmuteBtn.style.display = 'none';
+    // unmuteBtn.style.display = 'none';
 
-    if(audioCtx != null){
-        if(audioCtx.state == "interrupted" || audioCtx.state == 'suspended' || audioCtx.state == 'closed') {
-            audioCtx.resume().then(() => play());
-        }
+    // if(audioCtx != null){
+    //     if(audioCtx.state == "interrupted" || audioCtx.state == 'suspended' || audioCtx.state == 'closed') {
+    //         audioCtx.resume().then(() => play());
+    //     }
+    // }
 
-    }
+    changeLens();
 
 });
 
+unmuteBtn.style.display = 'block';
 
+var counter = 0;
+
+const changeLens = async () => {
+
+    if(counter == 0){
+        lensId = '43276930875';
+        groupId = 'b3bcab54-2bfe-4b99-93bd-31b106ee6c56';
+    
+    }else if(counter == 1){
+        lensId = '43288930875';
+        groupId = 'b3bcab54-2bfe-4b99-93bd-31b106ee6c56';
+    
+    }
+    counter++;
+
+    lens = await cameraKit.lensRepository.loadLens(
+        lensId,
+        groupId
+    );
+
+    await cameraKitApply();
+
+}
 
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////

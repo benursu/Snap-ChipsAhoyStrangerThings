@@ -335,8 +335,8 @@ const createStreamSource = async () => {
         // cameraType: 'front',
         // fpsLimit: 30,
         // cameraType: 'user'
-        cameraType: 'back'
-        // cameraType: 'environment'
+        // cameraType: 'back'
+        cameraType: 'environment'
     });
     await cameraKitSession.setSource(source);
 

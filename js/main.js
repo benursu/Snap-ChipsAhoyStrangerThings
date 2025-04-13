@@ -643,29 +643,31 @@ var counter = 0;
 
 const changeLens = async () => {
 
-    if(counter == 0){
-        lensId = '43276930875';
-        groupId = 'b3bcab54-2bfe-4b99-93bd-31b106ee6c56';
+    updateCamera();
+
+    // if(counter == 0){
+    //     lensId = '43276930875';
+    //     groupId = 'b3bcab54-2bfe-4b99-93bd-31b106ee6c56';
     
-    }else if(counter == 1){
-        lensId = '43288930875';
-        groupId = 'b3bcab54-2bfe-4b99-93bd-31b106ee6c56';
+    // }else if(counter == 1){
+    //     lensId = '43288930875';
+    //     groupId = 'b3bcab54-2bfe-4b99-93bd-31b106ee6c56';
     
-        await updateCamera();
+    //     await updateCameraBack();
 
-    }
-    counter++;
+    // }
+    // counter++;
 
-    lens = await cameraKit.lensRepository.loadLens(
-        lensId,
-        groupId
-    );
+    // lens = await cameraKit.lensRepository.loadLens(
+    //     lensId,
+    //     groupId
+    // );
 
-    await cameraKitApply();
+    // await cameraKitApply();
 
 }
 
-async function updateCamera() {
+async function updateCameraBack() {
     if (stream) {
         cameraKitSession.pause();
         stream.getVideoTracks()[0].stop();
@@ -693,6 +695,36 @@ async function updateCamera() {
 
   }
 
+
+  let isBackFacing = true;
+
+  async function updateCamera() {
+    isBackFacing = !isBackFacing;
+  
+    if (stream) {
+        cameraKitSession.pause();
+      stream.getVideoTracks()[0].stop();
+    }
+  
+    stream = await navigator.mediaDevices.getUserMedia({
+      video: {
+        facingMode: isBackFacing ? 'environment' : 'user',
+      },
+    });
+  
+    const source = createMediaStreamSource(stream, {
+      // NOTE: This is important for world facing experiences
+      cameraType: isBackFacing ? 'back' : 'front',
+    });
+  
+    await cameraKitSession.setSource(source);
+  
+    if (!isBackFacing) {
+      source.setTransform(Transform2D.MirrorX);
+    }
+  
+    cameraKitSession.play();
+  }
 
 
 /////////////////////////////////////////////////////////////////////////////////////

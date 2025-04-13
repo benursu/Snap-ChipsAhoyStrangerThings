@@ -322,15 +322,17 @@ const createStreamSource = async () => {
                 width: { ideal: 1280 },
                 height: { ideal: 720 }
             },
-            audio: false
+            audio: false,
+            facingMode: 'environment',
         }
     );
 
     source = createMediaStreamSource(stream, {
         transform: Transform2D.MirrorX,
-        cameraType: 'front',
-        fpsLimit: 30,
-        cameraType: 'user'
+        // cameraType: 'front',
+        // fpsLimit: 30,
+        // cameraType: 'user'
+        cameraType: 'back'
     });
     await cameraKitSession.setSource(source);
 
@@ -680,13 +682,14 @@ async function updateCamera() {
     );
 
     source = createMediaStreamSource(stream, {
-        cameraType: 'environment',
-        fpsLimit: 30,
+        cameraType: 'back',
+        // fpsLimit: 30,
     });    
   
     await cameraKitSession.setSource(source);
   
     cameraKitSession.play();
+
   }
 
 

@@ -642,27 +642,27 @@ unmuteBtn.style.display = 'block';
 var counter = 0;
 
 const changeLens = async () => {
-    await updateCamera();
+    // await updateCamera();
 
-    // if(counter == 0){
-    //     lensId = '43276930875';
-    //     groupId = 'b3bcab54-2bfe-4b99-93bd-31b106ee6c56';
+    if(counter == 0){
+        lensId = '43276930875';
+        groupId = 'b3bcab54-2bfe-4b99-93bd-31b106ee6c56';
     
-    // }else if(counter == 1){
-    //     lensId = '43288930875';
-    //     groupId = 'b3bcab54-2bfe-4b99-93bd-31b106ee6c56';
+    }else if(counter == 1){
+        lensId = '43288930875';
+        groupId = 'b3bcab54-2bfe-4b99-93bd-31b106ee6c56';
     
-    //     await updateCamera();
+        await updateCamera();
 
-    // }
-    // counter++;
+    }
+    counter++;
 
-    // lens = await cameraKit.lensRepository.loadLens(
-    //     lensId,
-    //     groupId
-    // );
+    lens = await cameraKit.lensRepository.loadLens(
+        lensId,
+        groupId
+    );
 
-    // await cameraKitApply();
+    await cameraKitApply();
 
 }
 
@@ -713,7 +713,8 @@ async function updateCameraBack() {
   
     const source = createMediaStreamSource(stream, {
       // NOTE: This is important for world facing experiences
-      cameraType: isBackFacing ? 'back' : 'front',
+    //   cameraType: isBackFacing ? 'back' : 'front',
+        cameraType: isBackFacing ? 'environment' : 'user',
     });
   
     await cameraKitSession.setSource(source);

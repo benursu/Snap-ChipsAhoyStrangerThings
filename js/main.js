@@ -643,27 +643,26 @@ var counter = 0;
 
 const changeLens = async () => {
 
-    updateCamera();
 
-    // if(counter == 0){
-    //     lensId = '43276930875';
-    //     groupId = 'b3bcab54-2bfe-4b99-93bd-31b106ee6c56';
+    if(counter == 0){
+        lensId = '43276930875';
+        groupId = 'b3bcab54-2bfe-4b99-93bd-31b106ee6c56';
     
-    // }else if(counter == 1){
-    //     lensId = '43288930875';
-    //     groupId = 'b3bcab54-2bfe-4b99-93bd-31b106ee6c56';
+    }else if(counter == 1){
+        lensId = '43288930875';
+        groupId = 'b3bcab54-2bfe-4b99-93bd-31b106ee6c56';
     
-    //     await updateCameraBack();
+        await updateCamera();
 
-    // }
-    // counter++;
+    }
+    counter++;
 
-    // lens = await cameraKit.lensRepository.loadLens(
-    //     lensId,
-    //     groupId
-    // );
+    lens = await cameraKit.lensRepository.loadLens(
+        lensId,
+        groupId
+    );
 
-    // await cameraKitApply();
+    await cameraKitApply();
 
 }
 

@@ -290,10 +290,10 @@ const cameraKitInit = async () => {
     // lensId = '43288930875';
     // groupId = 'b3bcab54-2bfe-4b99-93bd-31b106ee6c56';
 
-    // lens = await cameraKit.lensRepository.loadLens(
-    //     lensId,
-    //     groupId
-    // );
+    lens = await cameraKit.lensRepository.loadLens(
+        lensId,
+        groupId
+    );
 
     var termsValid = false;
     const termsAcceptDate = localStorage.getItem('termsAcceptDate');

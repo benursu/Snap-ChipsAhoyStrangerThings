@@ -328,11 +328,12 @@ const createStreamSource = async () => {
     );
 
     source = createMediaStreamSource(stream, {
-        transform: Transform2D.MirrorX,
+        // transform: Transform2D.MirrorX,
         // cameraType: 'front',
         // fpsLimit: 30,
         // cameraType: 'user'
-        cameraType: 'back'
+        // cameraType: 'back'
+        cameraType: 'environment'
     });
     await cameraKitSession.setSource(source);
 

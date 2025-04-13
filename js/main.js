@@ -680,8 +680,7 @@ async function updateCamera() {
     );
 
     source = createMediaStreamSource(stream, {
-        transform: Transform2D.MirrorX,
-        cameraType: 'back',
+        cameraType: 'environment',
         fpsLimit: 30,
     });    
   

@@ -210,14 +210,15 @@ const cokecastGameService = {
             };                
 
 
-        } else if (request.endpointId == 'get_image'){
-            print('get_image')
+        } else if (request.endpointId == 'loadResource'){
+            
+            return async (reply) => {
+                var resource = await downloadResource(request.parameters.url);
 
-            return (reply) => {
                 reply({
                     status: 'success',
                     metadata: {},
-                    body: new TextEncoder().encode('{ "get_image": true }'),
+                    body: new Uint8Array(resource),
                 })
             };                
 
@@ -230,6 +231,43 @@ const cokecastGameService = {
     },
 
 };  
+
+var png = null;
+
+async function downloadResourceToByteArray(url) {
+    try {
+        const response = await fetch(url);
+
+        if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const arrayBuffer = await response.arrayBuffer();
+        const byteArray = new Uint8Array(arrayBuffer);
+
+        return byteArray;
+
+    } catch (error) {
+        console.error("Error fetching or converting the image:", error);
+        return null;
+
+    }
+
+}
+
+async function downloadResource(url) {
+    const byteArray = await downloadResourceToByteArray(url);
+
+    // if (byteArray) {
+    //   // Use the byteArray here
+    //   console.log("Byte Array:", byteArray);
+    // } else {
+    //   console.log("Failed to convert the image.");
+    // }
+
+    return byteArray;
+
+}
 
 
 

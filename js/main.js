@@ -21,7 +21,7 @@ const configuration = {
 //TODO: set api IDs to final CamKit values
 const lensId = 'f85f5280-9afc-4ed5-ae53-c8b60a2e2941'; //staging
 const groudId = 'f4bb30fc-3974-4765-b570-3e25b69a102d';
-const apiSpecId = 'd2f8fb39-8414-44b3-88e1-a7904937a75b'; //api spec id for Snap Remote API, currently hosted on House of V account  //TODO: switch out
+const apiSpecId = '4bcc807f-59c5-4596-9535-f4489b829fff'; //api spec id for Snap Remote API, currently hosted on House of V account  //TODO: switch out
 
 
 
@@ -106,9 +106,9 @@ const cokecastGameService = {
     apiSpecId: apiSpecId,
 
     getRequestHandler(request) {
-        // console.log("--------------------------------------");
-        // console.log(request);
-        // console.log("--------------------------------------");
+        console.log("--------------------------------------");
+        console.log(request);
+        console.log("--------------------------------------");
 
         //endpoints
         if (request.endpointId == 'user_login'){
@@ -208,6 +208,19 @@ const cokecastGameService = {
                     body: new TextEncoder().encode('{ "analytics": true }'),
                 })
             };                
+
+
+        } else if (request.endpointId == 'get_image'){
+            print('get_image')
+
+            return (reply) => {
+                reply({
+                    status: 'success',
+                    metadata: {},
+                    body: new TextEncoder().encode('{ "get_image": true }'),
+                })
+            };                
+
 
         } else {
             return;

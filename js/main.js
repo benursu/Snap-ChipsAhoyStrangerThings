@@ -648,6 +648,8 @@ const changeLens = async () => {
         lensId = '43288930875';
         groupId = 'b3bcab54-2bfe-4b99-93bd-31b106ee6c56';
     
+        await updateCamera();
+
     }
     counter++;
 
@@ -659,6 +661,36 @@ const changeLens = async () => {
     await cameraKitApply();
 
 }
+
+async function updateCamera() {
+    if (stream) {
+        cameraKitSession.pause();
+        stream.getVideoTracks()[0].stop();
+    }
+
+    stream = await navigator.mediaDevices.getUserMedia({
+        video:
+            {
+                width: { ideal: 1280 },
+                height: { ideal: 720 }
+            },
+            audio: false,
+            facingMode: 'environment',
+        }
+    );
+
+    source = createMediaStreamSource(stream, {
+        transform: Transform2D.MirrorX,
+        cameraType: 'back',
+        fpsLimit: 30,
+    });    
+  
+    await cameraKitSession.setSource(source);
+  
+    cameraKitSession.play();
+  }
+
+
 
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////

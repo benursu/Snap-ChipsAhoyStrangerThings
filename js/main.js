@@ -333,10 +333,6 @@ const createStreamSource = async () => {
     source = createMediaStreamSource(stream, {
         transform: Transform2D.MirrorX,
         cameraType: 'front',
-        // fpsLimit: 30,
-        // cameraType: 'user'
-        // cameraType: 'back'
-        // cameraType: 'environment'
     });
     await cameraKitSession.setSource(source);
 
@@ -688,7 +684,6 @@ async function updateCameraBack() {
 
     source = createMediaStreamSource(stream, {
         cameraType: 'back',
-        // fpsLimit: 30,
     });    
   
     await cameraKitSession.setSource(source);
@@ -705,7 +700,7 @@ async function updateCameraBack() {
   
     if (stream) {
         cameraKitSession.pause();
-      stream.getVideoTracks()[0].stop();
+        stream.getVideoTracks()[0].stop();
     }
   
     stream = await navigator.mediaDevices.getUserMedia({
@@ -717,7 +712,6 @@ async function updateCameraBack() {
     const source = createMediaStreamSource(stream, {
       // NOTE: This is important for world facing experiences
       cameraType: isBackFacing ? 'back' : 'front',
-        // cameraType: isBackFacing ? 'environment' : 'user',
     });
   
     await cameraKitSession.setSource(source);

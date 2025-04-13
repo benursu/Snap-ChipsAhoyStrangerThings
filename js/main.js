@@ -696,7 +696,7 @@ async function updateCameraBack() {
   }
 
 
-  let isBackFacing = true;
+  let isBackFacing = false;
 
   async function updateCamera() {
     isBackFacing = !isBackFacing;

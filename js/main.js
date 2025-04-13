@@ -323,10 +323,10 @@ const createStreamSource = async () => {
         video:
             {
                 width: { ideal: 1280 },
-                height: { ideal: 720 }
+                height: { ideal: 720 },
+                facingMode: 'environment',
             },
             audio: false,
-            facingMode: 'environment',
         }
     );
 

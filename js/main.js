@@ -25,6 +25,19 @@ var apiSpecId = '4bcc807f-59c5-4596-9535-f4489b829fff'; //api spec id for Snap R
 
 
 
+var lensCurrent = 0;
+
+var lenses = [
+    { lensId: 'edddcf23-3903-478f-b6f0-254de4cca564', groupId: 'f4bb30fc-3974-4765-b570-3e25b69a102d', camera: 'back'}, //realtime room
+    { lensId: 'c3c869c5-55ff-460b-9294-80dfdbe4e504', groupId: 'f4bb30fc-3974-4765-b570-3e25b69a102d', camera: 'back'}, //360 video
+    { lensId: 'ad9c900f-8d73-4b33-b70d-63f8897bf9d5', groupId: 'f4bb30fc-3974-4765-b570-3e25b69a102d', camera: 'front'}, //overlook map (map2d)
+    { lensId: 'e8d471eb-cc90-43d5-85d1-3755da73e257', groupId: 'f4bb30fc-3974-4765-b570-3e25b69a102d', camera: 'back'}, //clock
+];
+
+lensId = lenses[0].lensId;
+groupId = lenses[0].groupId;
+
+
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
@@ -677,61 +690,70 @@ unmuteBtn.addEventListener('click', (e) => {
 
 unmuteBtn.style.display = 'block';
 
-var counter = 0;
 
 const changeLens = async () => {
-    // await updateCamera();
 
-    if(counter == 0){
-        lensId = '43276930875';
-        groupId = 'b3bcab54-2bfe-4b99-93bd-31b106ee6c56';
+    if(lensCurrent < (lenses.length-1)){
+        lensCurrent++;
+        lensId = lenses[lensCurrent].lensId;
+        groupId = lenses[lensCurrent].groupId;
     
-    }else if(counter == 1){
-        lensId = '43288930875';
-        groupId = 'b3bcab54-2bfe-4b99-93bd-31b106ee6c56';
+        await updateCamera(lenses[lensCurrent].camera);
     
-        await updateCamera();
+        lens = await cameraKit.lensRepository.loadLens(
+            lensId,
+            groupId
+        );
+    
+        await cameraKitApply();
 
+    }else{
+        unmuteBtn.style.display = 'none';
     }
-    counter++;
-
-    lens = await cameraKit.lensRepository.loadLens(
-        lensId,
-        groupId
-    );
-
-    await cameraKitApply();
 
 }
 
-let isBackFacing = false;
+let isBackFacing = true;
 
-async function updateCamera() {
-    isBackFacing = !isBackFacing;
+async function updateCamera(camera) {
+    var change = false;
 
-    if (stream) {
-        cameraKitSession.pause();
-        stream.getVideoTracks()[0].stop();
+    if(camera == 'back' && !isBackFacing){
+        isBackFacing = true;   
+        change = true;
     }
 
-    stream = await navigator.mediaDevices.getUserMedia({
-        video: {
-        facingMode: isBackFacing ? 'environment' : 'user',
-        },
-    });
-
-    const source = createMediaStreamSource(stream, {
-        // NOTE: This is important for world facing experiences
-        cameraType: isBackFacing ? 'back' : 'front',
-    });
-
-    await cameraKitSession.setSource(source);
-
-    if (!isBackFacing) {
-        source.setTransform(Transform2D.MirrorX);
+    if(camera == 'front' && isBackFacing){
+        isBackFacing = false;   
+        change = true;
     }
 
-    cameraKitSession.play();
+    if(change){
+        if (stream) {
+            cameraKitSession.pause();
+            stream.getVideoTracks()[0].stop();
+        }
+    
+        stream = await navigator.mediaDevices.getUserMedia({
+            video: {
+            facingMode: isBackFacing ? 'environment' : 'user',
+            },
+        });
+    
+        const source = createMediaStreamSource(stream, {
+            cameraType: isBackFacing ? 'back' : 'front',
+        });
+    
+        await cameraKitSession.setSource(source);
+    
+        if (!isBackFacing) {
+            source.setTransform(Transform2D.MirrorX);
+        }
+    
+        cameraKitSession.play();
+    
+    }
+
 
 }
 

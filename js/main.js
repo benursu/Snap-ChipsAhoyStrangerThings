@@ -348,20 +348,22 @@ const cameraKitInit = async () => {
         groupId
     );
 
-    var termsValid = false;
-    const termsAcceptDate = localStorage.getItem('termsAcceptDate');
-    const currentTime = new Date().getTime();
-    if(termsAcceptDate == null) {
-        //not valid
-    }else{
-        //check if valid
-        if(currentTime - termsAcceptDate > termsExpirationDuration){
-            //expired terms
-        }else{
-            //valid terms
-            termsValid = true;
-        }
-    }
+    // var termsValid = false;
+    // const termsAcceptDate = localStorage.getItem('termsAcceptDate');
+    // const currentTime = new Date().getTime();
+    // if(termsAcceptDate == null) {
+    //     //not valid
+    // }else{
+    //     //check if valid
+    //     if(currentTime - termsAcceptDate > termsExpirationDuration){
+    //         //expired terms
+    //     }else{
+    //         //valid terms
+    //         termsValid = true;
+    //     }
+    // }
+
+    var termsValid = true;
 
     if(termsValid){
         await cameraKitApply();

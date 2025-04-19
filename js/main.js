@@ -32,6 +32,7 @@ var lenses = [
     { lensId: 'd3e07969-e181-493f-8282-7822197b3974', groupId: 'f4bb30fc-3974-4765-b570-3e25b69a102d', camera: 'back'}, //hunt 1
     { lensId: 'c188afd7-b8b2-4687-b9c2-b15a7d13ecd8', groupId: 'f4bb30fc-3974-4765-b570-3e25b69a102d', camera: 'front'}, //cod
     { lensId: 'edddcf23-3903-478f-b6f0-254de4cca564', groupId: 'f4bb30fc-3974-4765-b570-3e25b69a102d', camera: 'back'}, //realtime room
+    { lensId: 'd3e07969-e181-493f-8282-7822197b3974', groupId: 'f4bb30fc-3974-4765-b570-3e25b69a102d', camera: 'back'}, //hunt 1
     { lensId: 'c3c869c5-55ff-460b-9294-80dfdbe4e504', groupId: 'f4bb30fc-3974-4765-b570-3e25b69a102d', camera: 'back'}, //360 video
     // { lensId: 'ad9c900f-8d73-4b33-b70d-63f8897bf9d5', groupId: 'f4bb30fc-3974-4765-b570-3e25b69a102d', camera: 'front'}, //overlook map (map2d)
     // { lensId: 'e8d471eb-cc90-43d5-85d1-3755da73e257', groupId: 'f4bb30fc-3974-4765-b570-3e25b69a102d', camera: 'back'}, //clock

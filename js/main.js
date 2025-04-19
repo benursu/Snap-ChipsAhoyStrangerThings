@@ -380,8 +380,8 @@ const createStreamSource = async () => {
             {
                 width: { ideal: 1280 },
                 height: { ideal: 720 },
-                // facingMode: 'environment',
-                facingMode: 'user',
+                facingMode: 'environment',
+                // facingMode: 'user',
             },
             audio: false,
         }
@@ -389,8 +389,8 @@ const createStreamSource = async () => {
 
     source = createMediaStreamSource(stream, {
         transform: Transform2D.MirrorX,
-        cameraType: 'front',
-        // cameraType: 'back',
+        // cameraType: 'front',
+        cameraType: 'back',
     });
     await cameraKitSession.setSource(source);
 

@@ -28,8 +28,9 @@ var apiSpecId = '4bcc807f-59c5-4596-9535-f4489b829fff'; //api spec id for Snap R
 var lensCurrent = 0;
 
 var lenses = [
-    { lensId: 'c188afd7-b8b2-4687-b9c2-b15a7d13ecd8', groupId: 'f4bb30fc-3974-4765-b570-3e25b69a102d', camera: 'front'}, //cod
+    { lensId: 'd3e07969-e181-493f-8282-7822197b3974', groupId: 'f4bb30fc-3974-4765-b570-3e25b69a102d', camera: 'back'}, //hunt 1
     { lensId: '4bca3adb-0b7b-4c4a-9862-beea60d49985', groupId: 'f4bb30fc-3974-4765-b570-3e25b69a102d', camera: 'front'}, //video background
+    { lensId: 'c188afd7-b8b2-4687-b9c2-b15a7d13ecd8', groupId: 'f4bb30fc-3974-4765-b570-3e25b69a102d', camera: 'front'}, //cod
     { lensId: 'edddcf23-3903-478f-b6f0-254de4cca564', groupId: 'f4bb30fc-3974-4765-b570-3e25b69a102d', camera: 'back'}, //realtime room
     { lensId: 'c3c869c5-55ff-460b-9294-80dfdbe4e504', groupId: 'f4bb30fc-3974-4765-b570-3e25b69a102d', camera: 'back'}, //360 video
     // { lensId: 'ad9c900f-8d73-4b33-b70d-63f8897bf9d5', groupId: 'f4bb30fc-3974-4765-b570-3e25b69a102d', camera: 'front'}, //overlook map (map2d)
@@ -379,8 +380,8 @@ const createStreamSource = async () => {
             {
                 width: { ideal: 1280 },
                 height: { ideal: 720 },
-                // facingMode: 'environment',
-                facingMode: 'user',
+                facingMode: 'environment',
+                // facingMode: 'user',
             },
             audio: false,
         }
@@ -388,8 +389,8 @@ const createStreamSource = async () => {
 
     source = createMediaStreamSource(stream, {
         transform: Transform2D.MirrorX,
-        cameraType: 'front',
-        // cameraType: 'back',
+        // cameraType: 'front',
+        cameraType: 'back',
     });
     await cameraKitSession.setSource(source);
 

@@ -31,6 +31,7 @@ var lenses = [
     { lensId: '4bca3adb-0b7b-4c4a-9862-beea60d49985', groupId: 'f4bb30fc-3974-4765-b570-3e25b69a102d', camera: 'front'}, //video background
     { lensId: 'd3e07969-e181-493f-8282-7822197b3974', groupId: 'f4bb30fc-3974-4765-b570-3e25b69a102d', camera: 'back'}, //hunt 1
     { lensId: '3ad61355-7280-4b50-b77b-82e7fa908452', groupId: 'f4bb30fc-3974-4765-b570-3e25b69a102d', camera: 'back'}, //hunt 2
+    { lensId: 'd8e6af9a-577b-4f29-bee3-200214af561e', groupId: 'f4bb30fc-3974-4765-b570-3e25b69a102d', camera: 'back'}, //hunt 3
     // { lensId: 'c188afd7-b8b2-4687-b9c2-b15a7d13ecd8', groupId: 'f4bb30fc-3974-4765-b570-3e25b69a102d', camera: 'front'}, //cod
     // { lensId: 'edddcf23-3903-478f-b6f0-254de4cca564', groupId: 'f4bb30fc-3974-4765-b570-3e25b69a102d', camera: 'back'}, //realtime room
     // { lensId: 'c3c869c5-55ff-460b-9294-80dfdbe4e504', groupId: 'f4bb30fc-3974-4765-b570-3e25b69a102d', camera: 'back'}, //360 video

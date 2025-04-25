@@ -28,9 +28,9 @@ var apiSpecId = '4bcc807f-59c5-4596-9535-f4489b829fff'; //api spec id for Snap R
 var lensCurrent = 0;
 
 var lenses = [
+    { lensId: '4bca3adb-0b7b-4c4a-9862-beea60d49985', groupId: 'f4bb30fc-3974-4765-b570-3e25b69a102d', camera: 'front'}, //video background
     { lensId: '1b47a784-c5b6-42c9-a39d-fc2db0ca935e', groupId: 'f4bb30fc-3974-4765-b570-3e25b69a102d', camera: 'back'}, //room hotspots
     // { lensId: '1753c534-139d-41fb-a3ab-7e964ab02462', groupId: 'f4bb30fc-3974-4765-b570-3e25b69a102d', camera: 'back'}, //room demogorgon
-    // { lensId: '4bca3adb-0b7b-4c4a-9862-beea60d49985', groupId: 'f4bb30fc-3974-4765-b570-3e25b69a102d', camera: 'front'}, //video background
     // { lensId: 'd3e07969-e181-493f-8282-7822197b3974', groupId: 'f4bb30fc-3974-4765-b570-3e25b69a102d', camera: 'back'}, //hunt 1
     // { lensId: '3ad61355-7280-4b50-b77b-82e7fa908452', groupId: 'f4bb30fc-3974-4765-b570-3e25b69a102d', camera: 'back'}, //hunt 2
     // { lensId: 'd8e6af9a-577b-4f29-bee3-200214af561e', groupId: 'f4bb30fc-3974-4765-b570-3e25b69a102d', camera: 'back'}, //hunt 3

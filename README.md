@@ -20,6 +20,13 @@ heroku config:set NPM_CONFIG_PRODUCTION=false YARN_PRODUCTION=false
 git push staging main
 https://snap-castgame-staging-59ca3a0b5639.herokuapp.com/
 
+## Heroku Create Dev
+heroku create --remote dev snap-castgame-dev
+heroku buildpacks:set heroku/nodejs -a snap-castgame-dev
+heroku config:set NPM_CONFIG_PRODUCTION=false YARN_PRODUCTION=false
+git push dev main
+https://snap-castgame-dev-31ea29a7d9cf.herokuapp.com/
+
 
 # Heroku Deploy Prod
 git push heroku main

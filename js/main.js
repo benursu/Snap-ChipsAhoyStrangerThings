@@ -19,30 +19,15 @@ const configuration = {
 }
 
 //TODO: set api IDs to final CamKit values
-var lensId = 'f85f5280-9afc-4ed5-ae53-c8b60a2e2941'; //staging
-var groupId = 'f4bb30fc-3974-4765-b570-3e25b69a102d';
 var apiSpecId = '4bcc807f-59c5-4596-9535-f4489b829fff'; //api spec id for Snap Remote API, currently hosted on House of V account  //TODO: switch out
 
-
-
 var lensCurrent = 0;
-
 var lenses = [
-    { lensId: '4bca3adb-0b7b-4c4a-9862-beea60d49985', groupId: 'f4bb30fc-3974-4765-b570-3e25b69a102d', camera: 'front'}, //video background
-    { lensId: '1b47a784-c5b6-42c9-a39d-fc2db0ca935e', groupId: 'f4bb30fc-3974-4765-b570-3e25b69a102d', camera: 'back'}, //room hotspots
-    // { lensId: '1753c534-139d-41fb-a3ab-7e964ab02462', groupId: 'f4bb30fc-3974-4765-b570-3e25b69a102d', camera: 'back'}, //room demogorgon
-    // { lensId: 'd3e07969-e181-493f-8282-7822197b3974', groupId: 'f4bb30fc-3974-4765-b570-3e25b69a102d', camera: 'back'}, //hunt 1
-    // { lensId: '3ad61355-7280-4b50-b77b-82e7fa908452', groupId: 'f4bb30fc-3974-4765-b570-3e25b69a102d', camera: 'back'}, //hunt 2
-    // { lensId: 'd8e6af9a-577b-4f29-bee3-200214af561e', groupId: 'f4bb30fc-3974-4765-b570-3e25b69a102d', camera: 'back'}, //hunt 3
-    // { lensId: 'c188afd7-b8b2-4687-b9c2-b15a7d13ecd8', groupId: 'f4bb30fc-3974-4765-b570-3e25b69a102d', camera: 'front'}, //cod
-    // { lensId: 'edddcf23-3903-478f-b6f0-254de4cca564', groupId: 'f4bb30fc-3974-4765-b570-3e25b69a102d', camera: 'back'}, //realtime room
-    // { lensId: 'c3c869c5-55ff-460b-9294-80dfdbe4e504', groupId: 'f4bb30fc-3974-4765-b570-3e25b69a102d', camera: 'back'}, //360 video
-    // { lensId: 'ad9c900f-8d73-4b33-b70d-63f8897bf9d5', groupId: 'f4bb30fc-3974-4765-b570-3e25b69a102d', camera: 'front'}, //overlook map (map2d)
-    // { lensId: 'e8d471eb-cc90-43d5-85d1-3755da73e257', groupId: 'f4bb30fc-3974-4765-b570-3e25b69a102d', camera: 'back'}, //clock
+    { lensId: 'cba3e43c-a01b-43cf-b203-91c5931d2cbd', groupId: 'a32e98c9-24b1-4039-b57a-2785f5abed01', camera: 'back'}, //dev    
+    // { lensId: '728a5dca-413a-4450-8603-84be19068f3d', groupId: 'a32e98c9-24b1-4039-b57a-2785f5abed01', camera: 'back'}, //staging
 ];
-
-lensId = lenses[0].lensId;
-groupId = lenses[0].groupId;
+var lensId = lenses[0].lensId;
+var groupId = lenses[0].groupId;
 
 
 

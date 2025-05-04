@@ -18,6 +18,9 @@ export default defineConfig({
       '@scss': resolve(__dirname, './scss'),
     },
   },
+  server: {
+    allowedHosts: true
+  },
   plugins: [
     // basicSsl(),
     {

@@ -37,6 +37,8 @@ git push heroku main
 # Heroku Deploy Staging
 git push staging main
 
+# Heroku Deploy Dev
+git push dev main
 
 # Push2Web
 Uncomment Push2Web import in /js/main.js

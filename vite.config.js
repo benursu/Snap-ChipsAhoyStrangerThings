@@ -19,7 +19,7 @@ export default defineConfig({
     },
   },
   plugins: [
-    basicSsl(),
+    // basicSsl(),
     {
       name: 'create-redirects-file',
       apply: 'build',

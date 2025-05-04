@@ -28,6 +28,9 @@ git push dev main
 https://snap-castgame-dev-31ea29a7d9cf.herokuapp.com/
 
 
+# Heroku Deploy 
+For deployment, make sure to remove basicSSL from vite.config, and remove Push2Web for production.
+
 # Heroku Deploy Prod
 git push heroku main
 

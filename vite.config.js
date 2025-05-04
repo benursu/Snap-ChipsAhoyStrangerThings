@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import fs from 'fs';
 import { resolve } from 'path';
+import basicSsl from '@vitejs/plugin-basic-ssl'
 
 export default defineConfig({
   base: './',
@@ -18,6 +19,7 @@ export default defineConfig({
     },
   },
   plugins: [
+    basicSsl(),
     {
       name: 'create-redirects-file',
       apply: 'build',

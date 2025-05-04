@@ -11,17 +11,18 @@
     "serve-heroku": "vite --host 0.0.0.0 --port $PORT preview"
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.20",
+    "@vitejs/plugin-basic-ssl": "^2.0.0",
+    "autoprefixer": "^10.4.21",
     "cssnano": "^7.0.6",
-    "postcss": "^8.4.49",
+    "postcss": "^8.5.3",
     "postcss-nested": "^7.0.2",
-    "postcss-preset-env": "^10.1.0",
-    "sass": "^1.80.7",
-    "vite": "^5.4.10",
-    "vite-plugin-static-copy": "^2.0.0"
+    "postcss-preset-env": "^10.1.6",
+    "sass": "^1.87.0",
+    "vite": "^6.3.4",
+    "vite-plugin-static-copy": "^2.3.1"
   },
   "dependencies": {
-    "@snap/camera-kit": "^1.3.0",
-    "@snap/push2web": "^1.3.0"
+    "@snap/camera-kit": "^1.4.0",
+    "@snap/push2web": "^1.4.0"
   }
 }

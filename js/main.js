@@ -240,38 +240,99 @@ const cokecastGameService = {
 
 var png = null;
 
-async function downloadResourceToByteArray(url) {
+// async function downloadResourceToByteArray(url) {
+//     try {
+//         const response = await fetch(url);
+
+//         if (!response.ok) {
+//             throw new Error(`HTTP error! status: ${response.status}`);
+//         } 
+
+//         const arrayBuffer = await response.arrayBuffer();
+//         const byteArray = new Uint8Array(arrayBuffer);
+
+//         return byteArray;
+
+//     } catch (error) {
+//         console.error("Error fetching or converting the image:", error);
+//         return null;
+
+//     }
+
+// }
+
+async function downloadResourceToByteArray(url, onProgress) {
+    const response = await fetch(url);
+    const reader = response.body.getReader();
+    const contentLength = +response.headers.get('Content-Length');
+    let receivedLength = 0;
+    const chunks = [];
+  
+    while (true) {
+      const { done, value } = await reader.read();
+  
+      if (done) {
+        break;
+      }
+  
+      chunks.push(value);
+      receivedLength += value.length;
+  
+      onProgress({
+        received: receivedLength,
+        total: contentLength,
+        percent: contentLength ? (receivedLength / contentLength) * 100 : null,
+      });
+    }
+  
+    const allChunks = new Uint8Array(receivedLength);
+    let position = 0;
+  
+    for (const chunk of chunks) {
+      allChunks.set(chunk, position);
+      position += chunk.length;
+    }
+  
+    return allChunks.buffer;
+
+}
+
+async function downloadResource(url) {
+    // const byteArray = await downloadResourceToByteArray(url);
+    // return byteArray;
+
+    //
     try {
-        const response = await fetch(url);
+        //
+        var byteArrayFinal = null;
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
+        const byteArray = await downloadResourceToByteArray(url, (progress) => {
+            if (progress.total) {
+                console.log(`Downloaded ${progress.received} bytes of ${progress.total} bytes (${progress.percent.toFixed(2)}%)`);
+            } else {
+                console.log(`Downloaded ${progress.received} bytes`);
+            }
+        })
+        .then((buffer) => {
+            // Process the buffer
+            // console.log('Download complete, buffer:', buffer);        
 
-        const arrayBuffer = await response.arrayBuffer();
-        const byteArray = new Uint8Array(arrayBuffer);
+            const byteArray = new Uint8Array(buffer);
+            byteArrayFinal = byteArray;
 
-        return byteArray;
+        })
+        .catch((error) => {
+            console.error('Fetch error:', error);
+            return false;
+        });
+
+        return byteArrayFinal;
 
     } catch (error) {
         console.error("Error fetching or converting the image:", error);
         return null;
 
-    }
-
-}
-
-async function downloadResource(url) {
-    const byteArray = await downloadResourceToByteArray(url);
-
-    // if (byteArray) {
-    //   // Use the byteArray here
-    //   console.log("Byte Array:", byteArray);
-    // } else {
-    //   console.log("Failed to convert the image.");
-    // }
-
-    return byteArray;
+    }    
 
 }
 

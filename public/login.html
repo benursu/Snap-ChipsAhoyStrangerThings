@@ -9,6 +9,7 @@
     <div id="my-login-button-target"></div>
     <script>
       window.snapKitInit = function () {
+        console.log(window.location.origin)
         var loginButtonIconId = 'my-login-button-target';
         // Mount Login Button
         snap.loginkit.mountButton(loginButtonIconId, {

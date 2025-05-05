@@ -24,7 +24,8 @@ export default defineConfig({
     },
   },
   server: {
-    allowedHosts: true
+    allowedHosts: true,
+    cors: true,
   },
   plugins: [
     ssl,

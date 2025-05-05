@@ -3,6 +3,12 @@ import fs from 'fs';
 import { resolve } from 'path';
 import basicSsl from '@vitejs/plugin-basic-ssl'
 
+import dotenv from 'dotenv';
+dotenv.config();
+
+const heroku = process.env.HEROKU;
+console.log(heroku)
+
 export default defineConfig({
   base: './',
   css: {

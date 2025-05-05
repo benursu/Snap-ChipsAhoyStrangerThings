@@ -6,7 +6,7 @@ import basicSsl from '@vitejs/plugin-basic-ssl'
 import dotenv from 'dotenv';
 dotenv.config();
 
-let ssl = process.env.HEROKU ? basicSsl() : null;
+let ssl = process.env.HEROKU ? null : basicSsl();
 
 export default defineConfig({
   base: './',

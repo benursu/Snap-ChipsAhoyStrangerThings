@@ -51,3 +51,5 @@ Push using Send to All Camera Kit.
 Embedded CamKit will auto refresh to new version.
 For production deployment, comment out Push2Web import.
 
+# Heroku Logs
+heroku logs -n 200 --app snap-castgame-dev

@@ -6,8 +6,7 @@ import basicSsl from '@vitejs/plugin-basic-ssl'
 import dotenv from 'dotenv';
 dotenv.config();
 
-const heroku = process.env.HEROKU;
-console.log(heroku)
+let ssl = process.env.HEROKU ? basicSsl() : null;
 
 export default defineConfig({
   base: './',
@@ -28,7 +27,7 @@ export default defineConfig({
     allowedHosts: true
   },
   plugins: [
-    // basicSsl(),
+    ssl,
     {
       name: 'create-redirects-file',
       apply: 'build',

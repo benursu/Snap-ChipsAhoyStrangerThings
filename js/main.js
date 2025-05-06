@@ -29,6 +29,10 @@ var lenses = [
 var lensId = lenses[0].lensId;
 var groupId = lenses[0].groupId;
 
+//TODO: set resource URL Prefix
+// const resourceURLPrefix = 'https://snap-castgame-staging-59ca3a0b5639.herokuapp.com';
+const resourceURLPrefix = 'https://snap-castgame-dev-31ea29a7d9cf.herokuapp.com';
+
 
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -240,113 +244,111 @@ const cokecastGameService = {
 
 var png = null;
 
-async function downloadResourceToByteArray(url) {
+// async function downloadResourceToByteArray(url) {
+//     try {
+//         console.log('1')
+//         // const response = await fetch(url);
+//         // const response = await fetch(url, { mode: 'no-cors'});
+//         const response = await fetch(url, {
+//             // headers: {
+//             //   Accept: 'video/mp4',
+//             //   'Access-Control-Allow-Origin': '*',
+//             //   'Access-Control-Allow-Methods': 'GET,HEAD,POST,OPTIONS',
+//             //   'Access-Control-Max-Age': '86400',
+//             // },
+//           });
+//         console.log('2')
+//         // if (!response.ok) {
+//         //     throw new Error(`HTTP error! status: ${response.status}`);
+//         // } 
+//         console.log('3')
+//         const arrayBuffer = await response.arrayBuffer();
+//         console.log('4')
+//         const byteArray = new Uint8Array(arrayBuffer);
+//         console.log('5')
+//         console.log(byteArray)
+//         return byteArray;
+
+//     } catch (error) {
+//         console.error("Error fetching or converting the image:", error);
+//         return null;
+
+//     }
+
+// }
+
+async function downloadResourceToByteArray(url, onProgress) {
+    const response = await fetch(resourceURLPrefix + url);
+    const reader = response.body.getReader();
+    const contentLength = +response.headers.get('Content-Length');
+    let receivedLength = 0;
+    const chunks = [];
+  
+    while (true) {
+      const { done, value } = await reader.read();
+  
+      if (done) {
+        break;
+      }
+  
+      chunks.push(value);
+      receivedLength += value.length;
+  
+      onProgress({
+        received: receivedLength,
+        total: contentLength,
+        percent: contentLength ? (receivedLength / contentLength) * 100 : null,
+      });
+    }
+  
+    const allChunks = new Uint8Array(receivedLength);
+    let position = 0;
+  
+    for (const chunk of chunks) {
+      allChunks.set(chunk, position);
+      position += chunk.length;
+    }
+  
+    return allChunks.buffer;
+
+}
+
+async function downloadResource(url) {
+    // const byteArray = await downloadResourceToByteArray(url);
+    // return byteArray;
+
+    //
     try {
-        console.log('1')
-        // const response = await fetch(url);
-        // const response = await fetch(url, { mode: 'no-cors'});
-        const response = await fetch(url, {
-            // cache: 'no-store',
-            // method: 'GET',
-            headers: {
-              Accept: 'video/mp4',
-              'Access-Control-Allow-Origin': "*",
-              "Access-Control-Allow-Methods": "GET,HEAD,POST,OPTIONS",
-              "Access-Control-Max-Age": "86400",
-            },
-          });
-        console.log('2')
-        // if (!response.ok) {
-        //     throw new Error(`HTTP error! status: ${response.status}`);
-        // } 
-        console.log('3')
-        const arrayBuffer = await response.arrayBuffer();
-        console.log('4')
-        const byteArray = new Uint8Array(arrayBuffer);
-        console.log('5')
-        console.log(byteArray)
-        return byteArray;
+        //
+        var byteArrayFinal = null;
+
+        const byteArray = await downloadResourceToByteArray(url, (progress) => {
+            if (progress.total) {
+                console.log(`Downloaded ${progress.received} bytes of ${progress.total} bytes (${progress.percent.toFixed(2)}%)`);
+            } else {
+                console.log(`Downloaded ${progress.received} bytes`);
+            }
+        })
+        .then((buffer) => {
+            // Process the buffer
+            // console.log('Download complete, buffer:', buffer);        
+
+            const byteArray = new Uint8Array(buffer);
+            byteArrayFinal = byteArray;
+
+        })
+        .catch((error) => {
+            console.error('Fetch error:', error);
+            return false;
+        });
+
+        return byteArrayFinal;
 
     } catch (error) {
         console.error("Error fetching or converting the image:", error);
         return null;
 
-    }
-
-}
-
-// async function downloadResourceToByteArray(url, onProgress) {
-//     const response = await fetch(url, { mode: 'no-cors'});
-//     const reader = response.body.getReader();
-//     const contentLength = +response.headers.get('Content-Length');
-//     let receivedLength = 0;
-//     const chunks = [];
-  
-//     while (true) {
-//       const { done, value } = await reader.read();
-  
-//       if (done) {
-//         break;
-//       }
-  
-//       chunks.push(value);
-//       receivedLength += value.length;
-  
-//       onProgress({
-//         received: receivedLength,
-//         total: contentLength,
-//         percent: contentLength ? (receivedLength / contentLength) * 100 : null,
-//       });
-//     }
-  
-//     const allChunks = new Uint8Array(receivedLength);
-//     let position = 0;
-  
-//     for (const chunk of chunks) {
-//       allChunks.set(chunk, position);
-//       position += chunk.length;
-//     }
-  
-//     return allChunks.buffer;
-
-// }
-
-async function downloadResource(url) {
-    const byteArray = await downloadResourceToByteArray(url);
-    return byteArray;
-
-    //
-    // try {
-    //     //
-    //     var byteArrayFinal = null;
-
-    //     const byteArray = await downloadResourceToByteArray(url, (progress) => {
-    //         if (progress.total) {
-    //             console.log(`Downloaded ${progress.received} bytes of ${progress.total} bytes (${progress.percent.toFixed(2)}%)`);
-    //         } else {
-    //             console.log(`Downloaded ${progress.received} bytes`);
-    //         }
-    //     })
-    //     .then((buffer) => {
-    //         // Process the buffer
-    //         // console.log('Download complete, buffer:', buffer);        
-
-    //         const byteArray = new Uint8Array(buffer);
-    //         byteArrayFinal = byteArray;
-
-    //     })
-    //     .catch((error) => {
-    //         console.error('Fetch error:', error);
-    //         return false;
-    //     });
-
-    //     return byteArrayFinal;
-
-    // } catch (error) {
-    //     console.error("Error fetching or converting the image:", error);
-    //     return null;
-
-    // }    
+    }    
 
 }
 

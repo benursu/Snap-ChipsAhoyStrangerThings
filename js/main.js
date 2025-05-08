@@ -31,7 +31,8 @@ var groupId = lenses[0].groupId;
 
 //TODO: set resource URL Prefix
 // const resourceURLPrefix = 'https://snap-castgame-staging-59ca3a0b5639.herokuapp.com';
-const resourceURLPrefix = 'https://snap-castgame-dev-31ea29a7d9cf.herokuapp.com';
+// const resourceURLPrefix = 'https://snap-castgame-dev-31ea29a7d9cf.herokuapp.com';
+const resourceURLPrefix = '';
 
 
 
@@ -242,41 +243,6 @@ const cokecastGameService = {
 
 };  
 
-var png = null;
-
-// async function downloadResourceToByteArray(url) {
-//     try {
-//         console.log('1')
-//         // const response = await fetch(url);
-//         // const response = await fetch(url, { mode: 'no-cors'});
-//         const response = await fetch(url, {
-//             // headers: {
-//             //   Accept: 'video/mp4',
-//             //   'Access-Control-Allow-Origin': '*',
-//             //   'Access-Control-Allow-Methods': 'GET,HEAD,POST,OPTIONS',
-//             //   'Access-Control-Max-Age': '86400',
-//             // },
-//           });
-//         console.log('2')
-//         // if (!response.ok) {
-//         //     throw new Error(`HTTP error! status: ${response.status}`);
-//         // } 
-//         console.log('3')
-//         const arrayBuffer = await response.arrayBuffer();
-//         console.log('4')
-//         const byteArray = new Uint8Array(arrayBuffer);
-//         console.log('5')
-//         console.log(byteArray)
-//         return byteArray;
-
-//     } catch (error) {
-//         console.error("Error fetching or converting the image:", error);
-//         return null;
-
-//     }
-
-// }
-
 async function downloadResourceToByteArray(url, onProgress) {
     const response = await fetch(resourceURLPrefix + url);
     const reader = response.body.getReader();
@@ -314,12 +280,7 @@ async function downloadResourceToByteArray(url, onProgress) {
 }
 
 async function downloadResource(url) {
-    // const byteArray = await downloadResourceToByteArray(url);
-    // return byteArray;
-
-    //
     try {
-        //
         var byteArrayFinal = null;
 
         const byteArray = await downloadResourceToByteArray(url, (progress) => {
@@ -330,9 +291,6 @@ async function downloadResource(url) {
             }
         })
         .then((buffer) => {
-            // Process the buffer
-            // console.log('Download complete, buffer:', buffer);        
-
             const byteArray = new Uint8Array(buffer);
             byteArrayFinal = byteArray;
 
@@ -407,9 +365,6 @@ const cameraKitInit = async () => {
     });
 
     await createStreamSource();
-
-    // lensId = '43288930875';
-    // groupId = 'b3bcab54-2bfe-4b99-93bd-31b106ee6c56';
 
     lens = await cameraKit.lensRepository.loadLens(
         lensId,

@@ -35,6 +35,24 @@ var groupId = lenses[0].groupId;
 const resourceURLPrefix = '';
 
 
+/////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////
+//util
+
+//phone check
+function phoneCheck(){
+    const userAgentCheck = /Android|iPhone|iPod|Opera Mini|IEMobile|BlackBerry|webOS/i.test(navigator.userAgent);
+    const touchCheck = ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+    return userAgentCheck && touchCheck;
+}
+const isOnPhone = phoneCheck();
+
+const isIOS = () => {
+    return /iPhone|iPad|iPod/.test(navigator.userAgent);
+}
+
+
 
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
@@ -100,113 +118,15 @@ errorMessageButton.addEventListener('click', (e) => {
 /////////////////////////////////////////////////////////////////////////////////////
 //remote api
 
-//keys for flavor profile
-const cokecastGameServiceKeys = [
-    { id: 'mode' },
-    { id: 'flavor0' },
-    { id: 'flavor1' },
-    { id: 'flavor2' },
-    { id: 'flavor0_percentage' },
-    { id: 'flavor1_percentage' },
-    { id: 'flavor2_percentage' },
-    { id: 'product' },
-    { id: 'food' },
-];
-
-const cokecastGameService = {
+const castGameService = {
     apiSpecId: apiSpecId,
 
     getRequestHandler(request) {
-        console.log("--------------------------------------");
         console.log(request);
-        console.log("--------------------------------------");
 
         //endpoints
         if (request.endpointId == 'user_login'){
-            //open user login
-            userLogin();
-
-            return (reply) => {
-                reply({
-                    status: 'success',
-                    metadata: {},
-                    body: new TextEncoder().encode('{ "user_login": true }'),
-                })
-            };
-
-        } else if (request.endpointId == 'user_authenticated'){
-            //check for userAuthenticatedSuccess, checked on an interval
-            return (reply) => {
-                reply({
-                    status: 'success',
-                    metadata: {},
-                    body: new TextEncoder().encode('{ "user_authenticated": ' +  userAuthenticatedSuccess + ' }'),
-                })
-            };          
-
-        } else if (request.endpointId == 'capture_photo'){
-            //capture photo
-            capturePhoto();
-
-            return (reply) => {
-                reply({
-                    status: 'success',
-                    metadata: {},
-                    body: new TextEncoder().encode('{ "capture_photo": true }'),
-                })
-            };     
-
-        } else if (request.endpointId == 'profile_set'){
-            //profile set
-            //localStorage
-            cokecastGameServiceKeys.forEach((key, i) => {
-                if(request.parameters[key.id] != null){
-                    localStorage.setItem(key.id, request.parameters[key.id]);
-                }
-            });
-
-            return (reply) => {
-                reply({
-                    status: 'success',
-                    metadata: {},
-                    body: new TextEncoder().encode('{ "profile_set": true }'),
-                })
-            };                
-
-        } else if (request.endpointId == 'profile_get'){
-            //profile get
-            const results = {};
-            
-            cokecastGameServiceKeys.forEach(key => {
-                const value = localStorage.getItem(key.id);
-                if (value !== null && value.trim() !== '') {
-                    results[key.id] = isNaN(value) ? value : Number(value);
-                }
-            });
-
-            const profile = results ? JSON.stringify(results, null, 2) : '{}';
-
-            return (reply) => {
-                reply({
-                    status: 'success',
-                    metadata: {},
-                    body: new TextEncoder().encode(profile),
-                })
-            };                
-
-        } else if (request.endpointId == 'profile_clear'){
-            //profile clear
-            cokecastGameServiceKeys.forEach(key => {
-                localStorage.removeItem(key.id);
-            });
-
-            return (reply) => {
-                reply({
-                    status: 'success',
-                    metadata: {},
-                    body: new TextEncoder().encode('{ "profile_clear": true }'),
-                })
-            };                
+                   
 
         } else if (request.endpointId == 'analytics'){
             //analytics
@@ -222,7 +142,7 @@ const cokecastGameService = {
 
 
         } else if (request.endpointId == 'loadResource'){
-            
+            //loadResource to byteArray
             return async (reply) => {
                 var resource = await downloadResource(request.parameters.url);
 
@@ -232,7 +152,6 @@ const cokecastGameService = {
                     body: new Uint8Array(resource),
                 })
             };                
-
 
         } else {
             return;
@@ -284,11 +203,11 @@ async function downloadResource(url) {
         var byteArrayFinal = null;
 
         const byteArray = await downloadResourceToByteArray(url, (progress) => {
-            if (progress.total) {
-                console.log(`Downloaded ${progress.received} bytes of ${progress.total} bytes (${progress.percent.toFixed(2)}%)`);
-            } else {
-                console.log(`Downloaded ${progress.received} bytes`);
-            }
+            // if (progress.total) {
+            //     console.log(`Downloaded ${progress.received} bytes of ${progress.total} bytes (${progress.percent.toFixed(2)}%)`);
+            // } else {
+            //     console.log(`Downloaded ${progress.received} bytes`);
+            // }
         })
         .then((buffer) => {
             const byteArray = new Uint8Array(buffer);
@@ -336,7 +255,7 @@ const cameraKitInit = async () => {
             Injectable(
                 remoteApiServicesFactory.token,
                 [remoteApiServicesFactory.token],
-                (existing) => [...existing, cokecastGameService]
+                (existing) => [...existing, castGameService]
             )
         );
 
@@ -345,7 +264,7 @@ const cameraKitInit = async () => {
             Injectable(
                 remoteApiServicesFactory.token,
                 [remoteApiServicesFactory.token],
-                (existing) => [...existing, cokecastGameService]
+                (existing) => [...existing, castGameService]
             )
         );
 
@@ -371,34 +290,14 @@ const cameraKitInit = async () => {
         groupId
     );
 
-    // var termsValid = false;
-    // const termsAcceptDate = localStorage.getItem('termsAcceptDate');
-    // const currentTime = new Date().getTime();
-    // if(termsAcceptDate == null) {
-    //     //not valid
-    // }else{
-    //     //check if valid
-    //     if(currentTime - termsAcceptDate > termsExpirationDuration){
-    //         //expired terms
-    //     }else{
-    //         //valid terms
-    //         termsValid = true;
-    //     }
-    // }
-
-    var termsValid = true;
-
-    if(termsValid){
-        await cameraKitApply();
-    }else{
-        termsContainer.style.display = 'flex';
-    }
+    await cameraKitApply();
 
 }
 
 var createStreamFacingMode = 'environment';
 var createStreamCameraType = 'back';
 let isBackFacing = true;
+
 if(lenses[0].camera == 'front'){
     createStreamFacingMode = 'user';
     createStreamCameraType = 'front';
@@ -411,7 +310,7 @@ const createStreamSource = async () => {
             {
                 width: { ideal: 1280 },
                 height: { ideal: 720 },
-                facingMode: createStreamFacingMode,
+                facingMode: 'environment',
             },
             audio: false,
         }
@@ -419,36 +318,13 @@ const createStreamSource = async () => {
 
     source = createMediaStreamSource(stream, {
         transform: Transform2D.MirrorX,
-        cameraType: createStreamCameraType,
-        // cameraType: 'front',
-        // cameraType: 'back',
+        cameraType: 'back',
+        fpsLimit: 30,
     });
     await cameraKitSession.setSource(source);
+    await cameraKitSession.setFPSLimit(30);
 
 }
-
-termsAgreeButton.addEventListener('click', async(e) => {    
-    e.preventDefault();
-
-    const currentTime = new Date().getTime();
-    localStorage.setItem('termsAcceptDate', currentTime);
-
-    termsContainer.style.display = 'none';
-    await cameraKitApply();
-
-    analytics('Terms Agree');
-
-}); 
-
-termsDismissButton.addEventListener('click', async(e) => {    
-    e.preventDefault();
-
-    termsContainer.style.display = 'none';
-
-    errorMessage.innerHTML = 'The site could not be loaded.';
-    errorContainer.style.display = 'flex';
-
-});
 
 const cameraKitApply = async () => {
     await cameraKitSession.applyLens(lens);
@@ -580,132 +456,6 @@ const cameraKitApply = async () => {
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
-//user
-
-const authArea = document.getElementById('castGame-tempAuthContainer');
-const authCloseButton = document.getElementById('castGame-closeAuthButton');
-
-//
-const userLogin = async () => {
-    if(!userAuthenticatedSuccess){
-        window.userAuthenticationShow();
-    }
-
-}
-
-//
-authCloseButton.addEventListener('click', (e) => {
-    e.preventDefault();
-
-    window.userAuthenticationHide();
-    window.userAuthenticationSuccess();
-
-}); 
-
-window.userAuthenticationShow = async () => {
-    //TODO: show user auth form
-    authArea.style.display = 'flex';
-}
-
-window.userAuthenticationHide = async () => {
-    //TODO: hide user auth form
-    authArea.style.display = 'none';
-}
-
-window.userAuthenticationSuccess = async () => {
-    //TODO: replace this with actual user login permission results.  if login is successful set "userAuthenticatedSuccess = true". userAuthenticatedSuccess is checked on an inteveral during authentication mode in the lens.
-    console.log('User has succesfully authenticated');
-    userAuthenticatedSuccess = true;
-
-}
-
-
-
-/////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////
-//capture photo
-
-const imageContainer = document.getElementById('castGame-imageContainer');
-const closeImageBtn = document.querySelector('.castGame-closeImageBtn');
-
-//phone check
-function phoneCheck(){
-    const userAgentCheck = /Android|iPhone|iPod|Opera Mini|IEMobile|BlackBerry|webOS/i.test(navigator.userAgent);
-    const touchCheck = ('ontouchstart' in window || navigator.maxTouchPoints > 0);
-    return userAgentCheck && touchCheck;
-}
-const isOnPhone = phoneCheck();
-
-const isIOS = () => {
-    return /iPhone|iPad|iPod/.test(navigator.userAgent);
-}
-
-//
-const capturePhoto = async () => {
-    const dataUrl = cameraKitSession.output.capture.toDataURL('image/png');
-
-    //create the image
-    const imageElement = document.createElement('img');
-    imageElement.src = dataUrl;
-    imageElement.alt = 'Chips Ahoy! Stranger Things';
-    imageContainer.appendChild(imageElement); 
-    imageContainer.style.display = 'flex';
-
-    //setup download button on desktop
-    //on mobile, this doesn't need to happen. A Touch and hold will be used instead
-    const tapBtn = document.querySelector('.castGame-tap');
-
-    if (!isOnPhone) {
-        const link = document.createElement('a');
-        link.href = dataUrl;
-        link.download = 'Chips Ahoy! Stranger Things.png';
-              
-        tapBtn.style.pointerEvents = 'auto';
-        //change button text for click instead of hold
-        tapBtn.querySelector('.castGame-tap p strong').textContent = 'Click Here';
-        tapBtn.querySelector('.castGame-tap p').childNodes[1].textContent = 'To Save Your Photo';
-        //event listener to start download on desktop
-        tapBtn.addEventListener('click', () => {
-            //trigger the download by simulating a click on the anchor
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-
-            tapBtn.querySelector('.castGame-tap p strong').textContent = "Your Photo";
-            tapBtn.querySelector('.castGame-tap p').childNodes[1].textContent = "Has Been Downloaded";
-
-            analytics('Capture Download Desktop');
-
-        });
-
-    }else{
-        tapBtn.addEventListener('click', () => {
-            analytics('Capture Download Mobile');
-
-        });
-
-    }
-
-}
-
-//
-closeImageBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-
-    imageContainer.style.display = 'none';
-    //remove the last image from the DOM
-    imageContainer.querySelector('img').remove();
-
-    analytics('Capture Complete');
-
-});
-
-
-
-/////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////
 //unmute for iOS
 
 const audioCtx = new ( window.AudioContext || window.webkitAudioContext )();
@@ -713,93 +463,17 @@ const unmuteBtn = document.querySelector('.castGame-unmuteButton');
 
 unmuteBtn.addEventListener('click', (e) => {
     e.preventDefault();
-    // unmuteBtn.style.display = 'none';
+    unmuteBtn.style.display = 'none';
 
-    // if(audioCtx != null){
-    //     if(audioCtx.state == "interrupted" || audioCtx.state == 'suspended' || audioCtx.state == 'closed') {
-    //         audioCtx.resume().then(() => play());
-    //     }
-    // }
-
-    changeLens();
+    if(audioCtx != null){
+        if(audioCtx.state == "interrupted" || audioCtx.state == 'suspended' || audioCtx.state == 'closed') {
+            audioCtx.resume().then(() => play());
+        }
+    }
 
 });
 
 unmuteBtn.style.display = 'block';
-
-
-const changeLens = async () => {
-
-    if(lensCurrent < (lenses.length-1)){
-        lensCurrent++;
-        lensId = lenses[lensCurrent].lensId;
-        groupId = lenses[lensCurrent].groupId;
-    
-        await updateCamera(lenses[lensCurrent].camera);
-    
-        lens = await cameraKit.lensRepository.loadLens(
-            lensId,
-            groupId
-        );
-    
-        await cameraKitApply();
-
-        if(lensCurrent == (lenses.length-1)){
-            unmuteBtn.style.display = 'none';
-        }
-
-    }else{
-        unmuteBtn.style.display = 'none';
-    }
-
-}
-
-if(lenses.length < 2){
-    unmuteBtn.style.display = 'none';
-}
-
-
-async function updateCamera(camera) {
-    var change = false;
-
-    if(camera == 'back' && !isBackFacing){
-        isBackFacing = true;   
-        change = true;
-    }
-
-    if(camera == 'front' && isBackFacing){
-        isBackFacing = false;   
-        change = true;
-    }
-
-    if(change){
-        if (stream) {
-            cameraKitSession.pause();
-            stream.getVideoTracks()[0].stop();
-        }
-    
-        stream = await navigator.mediaDevices.getUserMedia({
-            video: {
-            facingMode: isBackFacing ? 'environment' : 'user',
-            },
-        });
-    
-        const source = createMediaStreamSource(stream, {
-            cameraType: isBackFacing ? 'back' : 'front',
-        });
-    
-        await cameraKitSession.setSource(source);
-    
-        if (!isBackFacing) {
-            source.setTransform(Transform2D.MirrorX);
-        }
-    
-        cameraKitSession.play();
-    
-    }
-
-
-}
 
 
 

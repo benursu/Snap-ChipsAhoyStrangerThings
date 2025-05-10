@@ -15,7 +15,7 @@ import { Push2Web } from '@snap/push2web';
 //TODO: set apiToken to final CamKit token
 const configuration = {
     apiToken: 'eyJhbGciOiJIUzI1NiIsImtpZCI6IkNhbnZhc1MyU0hNQUNQcm9kIiwidHlwIjoiSldUIn0.eyJhdWQiOiJjYW52YXMtY2FudmFzYXBpIiwiaXNzIjoiY2FudmFzLXMyc3Rva2VuIiwibmJmIjoxNzQ0NDkyMDE3LCJzdWIiOiI4MzdmOTA0Yy1jYTU4LTQ2OWEtOWExNi1hN2ZkNTc0MjM4ZmV-U1RBR0lOR340YzI0MGU2NC0zOTQ4LTQxOGYtOGM2OS0wZTU1MDA3MTQ3NTUifQ.Y7QGwmP1OHx_BXD3TIAqv9sMaxlOogcQE0q5g08SHJw',
-    // logger: 'console',
+    logger: 'console',
 }
 
 //TODO: set api IDs to final CamKit values
@@ -472,8 +472,6 @@ unmuteBtn.addEventListener('click', (e) => {
     }
 
 });
-
-unmuteBtn.style.display = 'block';
 
 
 

@@ -125,21 +125,36 @@ const castGameService = {
         console.log(request);
 
         //endpoints
-        if (request.endpointId == 'user_login'){
-                   
+        if (request.endpointId == 'processRequest'){
+            var payload = JSON.parse(request.parameters.payload);
+            var response = { 'success': false };
 
-        } else if (request.endpointId == 'analytics'){
-            //analytics
-            analytics(request.parameters.event);
+            //
+            if(payload.function != null){
 
+                if(payload.function == 'analytics'){
+                    if(payload.event != null){
+                        analytics(payload.event);
+                        response = { 'success': true };
+                    }
+
+                }else if(payload.function == 'prize'){
+                    if(payload.prize != null){
+                        //TODO: get prize
+                        response = { 'success': true };
+                    }
+
+                }
+
+            }
+            //
             return (reply) => {
                 reply({
                     status: 'success',
                     metadata: {},
-                    body: new TextEncoder().encode('{ "analytics": true }'),
+                    body: new TextEncoder().encode(JSON.stringify(response)),
                 })
-            };                
-
+            };
 
         } else if (request.endpointId == 'loadResource'){
             //loadResource to byteArray

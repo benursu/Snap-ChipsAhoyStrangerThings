@@ -154,19 +154,7 @@ const castGameService = {
                     metadata: {},
                     body: new TextEncoder().encode(JSON.stringify(response)),
                 })
-            };
-
-        } else if (request.endpointId == 'loadResource'){
-            //loadResource to byteArray
-            return async (reply) => {
-                var resource = await downloadResource(request.parameters.url);
-
-                reply({
-                    status: 'success',
-                    metadata: {},
-                    body: new Uint8Array(resource),
-                })
-            };                
+            };             
 
         } else {
             return;
@@ -176,73 +164,6 @@ const castGameService = {
     },
 
 };  
-
-async function downloadResourceToByteArray(url, onProgress) {
-    const response = await fetch(resourceURLPrefix + url);
-    const reader = response.body.getReader();
-    const contentLength = +response.headers.get('Content-Length');
-    let receivedLength = 0;
-    const chunks = [];
-  
-    while (true) {
-      const { done, value } = await reader.read();
-  
-      if (done) {
-        break;
-      }
-  
-      chunks.push(value);
-      receivedLength += value.length;
-  
-      onProgress({
-        received: receivedLength,
-        total: contentLength,
-        percent: contentLength ? (receivedLength / contentLength) * 100 : null,
-      });
-    }
-  
-    const allChunks = new Uint8Array(receivedLength);
-    let position = 0;
-  
-    for (const chunk of chunks) {
-      allChunks.set(chunk, position);
-      position += chunk.length;
-    }
-  
-    return allChunks.buffer;
-
-}
-
-async function downloadResource(url) {
-    try {
-        var byteArrayFinal = null;
-
-        const byteArray = await downloadResourceToByteArray(url, (progress) => {
-            // if (progress.total) {
-            //     console.log(`Downloaded ${progress.received} bytes of ${progress.total} bytes (${progress.percent.toFixed(2)}%)`);
-            // } else {
-            //     console.log(`Downloaded ${progress.received} bytes`);
-            // }
-        })
-        .then((buffer) => {
-            const byteArray = new Uint8Array(buffer);
-            byteArrayFinal = byteArray;
-
-        })
-        .catch((error) => {
-            console.error('Fetch error:', error);
-            return false;
-        });
-
-        return byteArrayFinal;
-
-    } catch (error) {
-        console.error("Error fetching or converting the image:", error);
-        return null;
-
-    }    
-
-}
 
 
 

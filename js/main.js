@@ -138,6 +138,12 @@ const castGameService = {
                         response = { 'success': true };
                     }
 
+                }else if(payload.function == 'log'){
+                    if(payload.log != null){
+                        console.log(payload.log);
+                        response = { 'success': true };
+                    }
+
                 }else if(payload.function == 'prize'){
                     if(payload.prize != null){
                         //TODO: get prize

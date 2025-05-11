@@ -332,7 +332,7 @@ const createStreamSource = async () => {
     );
 
     source = createMediaStreamSource(stream, {
-        transform: Transform2D.MirrorX,
+        // transform: Transform2D.MirrorX, //only for sellfie
         cameraType: 'back',
         fpsLimit: 30,
     });

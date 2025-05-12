@@ -341,6 +341,7 @@ const cameraKitApply = async () => {
 
     // initial canvas resize
     resizeCanvas();
+    debouncedResizeCanvas();
 
     //
     if(isOnPhone){
@@ -377,10 +378,6 @@ const cameraKitApply = async () => {
 
         });    
 
-    }else{
-        document.addEventListener("visibilitychange", async () => {
-            debouncedResizeCanvas();
-        });  
     }
 
     await sleep(250);

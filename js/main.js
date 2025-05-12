@@ -261,17 +261,17 @@ const createStreamSource = async () => {
     source = createMediaStreamSource(stream, {
         // transform: Transform2D.MirrorX, //only for sellfie
         cameraType: 'back',
-        fpsLimit: 30,
+        fpsLimit: 24,
     });
     await cameraKitSession.setSource(source);
-    await cameraKitSession.setFPSLimit(30);
+    await cameraKitSession.setFPSLimit(24);
 
 }
 
 const cameraKitApply = async () => {
     await cameraKitSession.applyLens(lens);
     await cameraKitSession.play('live');
-    await cameraKitSession.play('capture');
+    // await cameraKitSession.play('capture');
 
     if(push2Web != null){
         var push2WebAccessToken = '';
@@ -358,14 +358,14 @@ const cameraKitApply = async () => {
             if(cameraKitSession != null && stream != null){
                 if (document.hidden) {
                     cameraKitSession.pause('live');
-                    cameraKitSession.pause('capture');
+                    // cameraKitSession.pause('capture');
                     cameraKitSession.mute();
         
                     stream.getTracks().forEach(track => track.stop());
         
                 } else {
                     cameraKitSession.play('live');
-                    cameraKitSession.play('capture');
+                    // cameraKitSession.play('capture');
                     cameraKitSession.unmute();
         
                     await createStreamSource();

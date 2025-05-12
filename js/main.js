@@ -182,6 +182,7 @@ var cameraKit, cameraKitSession, extensions, push2Web, stream, source, lens;
 
 const mobileVideoSourceMaxWidth = 512; //max width of render target for canvas.  optimization technique for fps.
 
+
 const cameraKitInit = async () => {
 
     //extensions
@@ -376,6 +377,10 @@ const cameraKitApply = async () => {
 
         });    
 
+    }else{
+        document.addEventListener("visibilitychange", async () => {
+            debouncedResizeCanvas();
+        });  
     }
 
     await sleep(250);

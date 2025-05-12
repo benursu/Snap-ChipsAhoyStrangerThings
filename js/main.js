@@ -180,12 +180,7 @@ const castGameService = {
 
 var cameraKit, cameraKitSession, extensions, push2Web, stream, source, lens;
 
-const termsContainer = document.getElementById('castGame-termsContainer');
-const termsAgreeButton = document.getElementById('castGame-termsAgreeButton');
-const termsDismissButton = document.getElementById('castGame-termsDismissButton');
-const termsExpirationDuration = 1000 * 60 * 60 * 12; // 12 hours
-
-const mobileVideoSourceMaxWidth = 1024; //max width of render target for canvas.  optimization technique for fps.
+const mobileVideoSourceMaxWidth = 512; //max width of render target for canvas.  optimization technique for fps.
 
 const cameraKitInit = async () => {
 
@@ -240,18 +235,12 @@ var createStreamFacingMode = 'environment';
 var createStreamCameraType = 'back';
 let isBackFacing = true;
 
-if(lenses[0].camera == 'front'){
-    createStreamFacingMode = 'user';
-    createStreamCameraType = 'front';
-    isBackFacing = false;
-}
-
 const createStreamSource = async () => {
     stream = await navigator.mediaDevices.getUserMedia({
         video:
             {
-                width: { ideal: 1280 },
-                height: { ideal: 720 },
+                width: { ideal: 640 },
+                height: { ideal: 360 },
                 facingMode: 'environment',
             },
             audio: false,

@@ -172,10 +172,9 @@ var modelCapability = 'medium'; //low,medium,high
 const init = async () => {
   try {
     if(isPhone){
-
         if(isIOS()){
             model = getDeviceName();
-            if(model);{
+            if(model){
                 modelCapability = model.capability;
             }
             cameraKitStart();

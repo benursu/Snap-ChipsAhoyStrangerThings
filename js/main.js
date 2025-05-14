@@ -52,6 +52,93 @@ const isIOS = () => {
     return /iPhone|iPad|iPod/.test(navigator.userAgent);
 }
 
+// device maps
+const iosDeviceMapping = new Map([
+  ["320x480", "IPhone 4S, 4, 3GS, 3G, 1st gen"],
+  ["320x568", "IPhone 5, SE 1st Gen,5C, 5S"],
+  ["375x667", "IPhone SE 2nd Gen, 6, 6S, 7, 8"],
+  ["375x812", "IPhone X, XS, 11 Pro, 12 Mini, 13 Mini"],
+  ["390x844", "IPhone 13, 13 Pro, 12, 12 Pro"],
+  ["414x736", "IPhone 8+"],
+  ["414x896", "IPhone 11, XR, XS Max, 11 Pro Max"],
+  ["428x926", "IPhone 13 Pro Max, 12 Pro Max"],
+  ["476x847", "IPhone 7+, 6+, 6S+"],
+  ["744x1133", "IPad Mini 6th Gen"],
+  [
+    "768x1024",
+    "IPad Mini (5th Gen), IPad (1-6th Gen), iPad Pro (1st Gen 9.7), Ipad Mini (1-4), IPad Air(1-2)  ",
+  ],
+  ["810x1080", "IPad 7-9th Gen"],
+  ["820x1180", "iPad Air (4th gen)"],
+  ["834x1194", "iPad Pro (3-5th Gen 11)"],
+  ["834x1112", "iPad Air (3rd gen), iPad Pro (2nd gen 10.5)"],
+  ["1024x1366", "iPad Pro (1-5th Gen 12.9)"],
+]);
+
+const desktopDeviceMapping = new Map([
+  ["Win32", "Windows"],
+  ["Linux", "Linux"],
+  ["MacIntel", "Mac OS"],
+]);
+
+
+// get device name for android
+const getAndroidDeviceName = () => {
+  const androidUserAgentString = window.navigator.userAgent.slice(window.navigator.userAgent.indexOf("Android"));
+  const androidDeviceName = androidUserAgentString.slice(androidUserAgentString.indexOf("; ") + 1, androidUserAgentString.indexOf(")"));
+  if (androidDeviceName) {
+    return androidDeviceName.trim().split(" ")[0];
+  }
+
+  return "Android";
+
+};
+
+// get device name for ios
+const getIosDeviceName = () => {
+  const screenResolution = window.screen.width + 'x' + window.screen.height;
+  const device = iosDeviceMapping.get(screenResolution);
+  if (device) {
+    return device;
+  }
+  return "iPhone";
+};
+
+// get device name for desktop
+const getDesktopDeviceName = () => {
+  const platform = navigator.userAgentData.platform || navigator.platform || "unknown";
+  const device = desktopDeviceMapping.get(platform) || "Unknown";
+  return device;
+};
+
+// get device name utility
+export default function getDeviceName() {
+  let device = "";
+  
+  // check if mobile device
+  const isMobileDevice = window.navigator.userAgent
+    .toLowerCase()
+    .includes("mobi");
+
+  if (isMobileDevice) {
+    if (window.navigator.userAgent.includes("Android")) {
+      device = getAndroidDeviceName();
+    } else {
+      device = getIosDeviceName();
+    }
+  } else {
+    const device = getDesktopDeviceName();
+  }
+  
+  return device;
+}
+
+async function userAgent() {
+    return navigator.userAgentData.getHighEntropyValues(['platformVersion', 'model']).then(ua => {
+        model = ua;
+    });
+}
+
 
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -68,7 +155,44 @@ const errorContainer = document.getElementById('castGame-errorContainer');
 const errorMessage = document.getElementById('castGame-errorMessage');
 const errorMessageButton = document.getElementById('castGame-errorContainerButton');
 
+var model = null;
+var modelCapability = 'low'; //low,medium,high
+
 const init = async () => {
+  try {
+
+    if(isOnPhone){
+        if(isIOS()){
+            model = getDeviceName();
+
+            if(model == 'IPhone 13, 13 Pro, 12, 12 Pro'){
+                modelCapability = 'high';
+            }
+
+            init2();
+
+        }else{
+            await userAgent().then(result => {
+                init2();   
+            });
+
+        }
+
+    }else{
+        model = 'Not Mobile';
+        modelCapability = 'high';
+        init2();
+
+    }
+
+  } catch (error) {
+    init2();
+
+  }
+
+};
+
+const init2 = async () => {
   try {
     //initialize canvas size
     let width, height;
@@ -144,6 +268,9 @@ const castGameService = {
                         response = { 'success': true };
                     }
 
+                }else if(payload.function == 'modelCapability'){
+                    response = { 'success': true, model: model, modelCapability: modelCapability };
+
                 }else if(payload.function == 'prize'){
                     if(payload.prize != null){
                         //TODO: get prize
@@ -180,8 +307,7 @@ const castGameService = {
 
 var cameraKit, cameraKitSession, extensions, push2Web, stream, source, lens;
 
-const mobileVideoSourceMaxWidth = 512; //max width of render target for canvas.  optimization technique for fps.
-
+const mobileVideoSourceMaxWidth = 1024; //max width of render target for canvas.  optimization technique for fps.
 
 const cameraKitInit = async () => {
 
@@ -441,86 +567,62 @@ init();
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
-//init
-
-// // device maps
-// const iosDeviceMapping = new Map([
-//   ["320x480", "IPhone 4S, 4, 3GS, 3G, 1st gen"],
-//   ["320x568", "IPhone 5, SE 1st Gen,5C, 5S"],
-//   ["375x667", "IPhone SE 2nd Gen, 6, 6S, 7, 8"],
-//   ["375x812", "IPhone X, XS, 11 Pro, 12 Mini, 13 Mini"],
-//   ["390x844", "IPhone 13, 13 Pro, 12, 12 Pro"],
-//   ["414x736", "IPhone 8+"],
-//   ["414x896", "IPhone 11, XR, XS Max, 11 Pro Max"],
-//   ["428x926", "IPhone 13 Pro Max, 12 Pro Max"],
-//   ["476x847", "IPhone 7+, 6+, 6S+"],
-//   ["744x1133", "IPad Mini 6th Gen"],
-//   [
-//     "768x1024",
-//     "IPad Mini (5th Gen), IPad (1-6th Gen), iPad Pro (1st Gen 9.7), Ipad Mini (1-4), IPad Air(1-2)  ",
-//   ],
-//   ["810x1080", "IPad 7-9th Gen"],
-//   ["820x1180", "iPad Air (4th gen)"],
-//   ["834x1194", "iPad Pro (3-5th Gen 11)"],
-//   ["834x1112", "iPad Air (3rd gen), iPad Pro (2nd gen 10.5)"],
-//   ["1024x1366", "iPad Pro (1-5th Gen 12.9)"],
-// ]);
-
-// const desktopDeviceMapping = new Map([
-//   ["Win32", "Windows"],
-//   ["Linux", "Linux"],
-//   ["MacIntel", "Mac OS"],
-// ]);
 
 
-// // get device name for android
-// const getAndroidDeviceName = () => {
-//   const androidUserAgentString = window.navigator.userAgent.slice(window.navigator.userAgent.indexOf("Android"));
-//   const androidDeviceName = androidUserAgentString.slice(androidUserAgentString.indexOf("; ") + 1, androidUserAgentString.indexOf(")"));
-//   if (androidDeviceName) {
-//     return androidDeviceName.trim().split(" ")[0];
-//   }
-
-//   return "Android";
-// };
-
-// // get device name for ios
-// const getIosDeviceName = () => {
-//   const screenResolution = window.screen.width + 'x' + window.screen.height;
-//   const device = iosDeviceMapping.get(screenResolution);
-//   if (device) {
-//     return device;
-//   }
-//   return "Iphone";
-// };
-
-// // get device name for desktop
-// const getDesktopDeviceName = () => {
-//   const platform = navigator.userAgentData.platform || navigator.platform || "unknown";
-//   const device = desktopDeviceMapping.get(platform) || "Unknown";
-//   return device;
-// };
-
-// // get device name utility
-// export default function getDeviceName() {
-//   let device = "";
-  
-//   // check if mobile device
-//   const isMobileDevice = window.navigator.userAgent
-//     .toLowerCase()
-//     .includes("mobi");
-
-//   if (isMobileDevice) {
-//     if (window.navigator.userAgent.includes("Android")) {
-//       device = getAndroidDeviceName();
-//     } else {
-//       device = getIosDeviceName();
-//     }
-//   } else {
-//     const device = getDesktopDeviceName();
-//   }
-  
-//   return device;
-// }
 
 // console.log(getDeviceName())
+
+// const authArea = document.getElementById('castGame-tempAuthContainer');
+// const authCloseButton = document.getElementById('castGame-closeAuthButton');
+
+// authArea.style.display = 'flex';
+// authCloseButton.innerHTML = '1'
+
+
+// var platform = null;
+// // navigator.userAgentData
+// //  .getHighEntropyValues(
+// //    ['platformVersion', 'model']
+// //  ).then(ua => { 
+// //     console.log(ua)
+// //     platform = ua;
+// //     authCloseButton.innerHTML = JSON.stringify(platform)
+// //     // window.confirm(JSON.stringify(platform))
+// //     // return ua;
+// //  });
+
+
+
+
+
+// async function userAgent(authCloseButton) {
+//     authCloseButton.innerHTML = '2';
+
+//     return navigator.userAgentData.getHighEntropyValues(["platformVersion"]).then(ua => {
+//         // if (navigator.userAgentData.platform === "Windows") {
+//         //     const majorPlatformVersion = parseInt(ua.platformVersion.split('.')[0]);
+//         //     if (majorPlatformVersion >= 13) {
+//         //         console.log("Windows 11 or later");
+//         //         return "Windows 11 or later";
+//         //     } else if (majorPlatformVersion > 0) {
+//         //         console.log("Windows 10");
+//         //         return "Windows 10";
+//         //     } else {
+//         //         console.log("Before Windows 10");
+//         //         return "Before Windows 10";
+//         //     }
+//         // } else {
+//         //     console.log("Not running on Windows");
+//         //     return "Not running on Windows";
+//         // }
+//         platform = ua;
+//         authCloseButton.innerHTML = '3';
+
+//     });
+// }
+
+// userAgent(authCloseButton).then(result => {
+//    // use the result here
+//    console.log(result);
+//    authCloseButton.innerHTML = JSON.stringify(platform)
+// }); 

@@ -35,18 +35,19 @@ var groupId = lenses[0].groupId;
 const resourceURLPrefix = '';
 
 
+
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 //util
 
 //phone check
-function phoneCheck(){
+const phoneCheck = () => {
     const userAgentCheck = /Android|iPhone|iPod|Opera Mini|IEMobile|BlackBerry|webOS/i.test(navigator.userAgent);
     const touchCheck = ('ontouchstart' in window || navigator.maxTouchPoints > 0);
     return userAgentCheck && touchCheck;
 }
-const isOnPhone = phoneCheck();
+const isPhone = phoneCheck();
 
 const isIOS = () => {
     return /iPhone|iPad|iPod/.test(navigator.userAgent);
@@ -112,15 +113,10 @@ const getDesktopDeviceName = () => {
 };
 
 // get device name utility
-export default function getDeviceName() {
+const getDeviceName = () => {
   let device = "";
-  
-  // check if mobile device
-  const isMobileDevice = window.navigator.userAgent
-    .toLowerCase()
-    .includes("mobi");
 
-  if (isMobileDevice) {
+  if (isPhone) {
     if (window.navigator.userAgent.includes("Android")) {
       device = getAndroidDeviceName();
     } else {
@@ -133,7 +129,7 @@ export default function getDeviceName() {
   return device;
 }
 
-async function userAgent() {
+const userAgent = async () => {
     return navigator.userAgentData.getHighEntropyValues(['platformVersion', 'model']).then(ua => {
         model = ua;
     });
@@ -160,20 +156,19 @@ var modelCapability = 'low'; //low,medium,high
 
 const init = async () => {
   try {
-
-    if(isOnPhone){
+    if(isPhone){
         if(isIOS()){
             model = getDeviceName();
 
-            if(model == 'IPhone 13, 13 Pro, 12, 12 Pro'){
-                modelCapability = 'high';
-            }
+            // if(model == 'IPhone 13, 13 Pro, 12, 12 Pro'){
+            //     modelCapability = 'high';
+            // }
 
-            init2();
+            cameraKitStart();
 
         }else{
             await userAgent().then(result => {
-                init2();   
+                cameraKitStart();   
             });
 
         }
@@ -181,18 +176,18 @@ const init = async () => {
     }else{
         model = 'Not Mobile';
         modelCapability = 'high';
-        init2();
+        cameraKitStart();
 
     }
 
   } catch (error) {
-    init2();
+    cameraKitStart();
 
   }
 
 };
 
-const init2 = async () => {
+const cameraKitStart = async () => {
   try {
     //initialize canvas size
     let width, height;
@@ -268,7 +263,7 @@ const castGameService = {
                         response = { 'success': true };
                     }
 
-                }else if(payload.function == 'modelCapability'){
+                }else if(payload.function == 'model'){
                     response = { 'success': true, model: model, modelCapability: modelCapability };
 
                 }else if(payload.function == 'prize'){
@@ -310,7 +305,6 @@ var cameraKit, cameraKitSession, extensions, push2Web, stream, source, lens;
 const mobileVideoSourceMaxWidth = 1024; //max width of render target for canvas.  optimization technique for fps.
 
 const cameraKitInit = async () => {
-
     //extensions
     try {
         push2Web = new Push2Web();
@@ -445,7 +439,7 @@ const cameraKitApply = async () => {
             var newWidth = width;
             var newHeight = height;
 
-            if(isOnPhone && newWidth > mobileVideoSourceMaxWidth){
+            if(isPhone && newWidth > mobileVideoSourceMaxWidth){
                 newWidth = mobileVideoSourceMaxWidth;
 
                 var ratio = mobileVideoSourceMaxWidth / width;
@@ -470,7 +464,7 @@ const cameraKitApply = async () => {
     debouncedResizeCanvas();
 
     //
-    if(isOnPhone){
+    if(isPhone){
         document.addEventListener("visibilitychange", async () => {
             if(cameraKitSession != null && stream != null){
                 if (document.hidden) {
@@ -559,70 +553,3 @@ function sleep(ms) {
 }
 
 init();
-
-
-
-
-
-/////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////
-
-
-
-// console.log(getDeviceName())
-
-// const authArea = document.getElementById('castGame-tempAuthContainer');
-// const authCloseButton = document.getElementById('castGame-closeAuthButton');
-
-// authArea.style.display = 'flex';
-// authCloseButton.innerHTML = '1'
-
-
-// var platform = null;
-// // navigator.userAgentData
-// //  .getHighEntropyValues(
-// //    ['platformVersion', 'model']
-// //  ).then(ua => { 
-// //     console.log(ua)
-// //     platform = ua;
-// //     authCloseButton.innerHTML = JSON.stringify(platform)
-// //     // window.confirm(JSON.stringify(platform))
-// //     // return ua;
-// //  });
-
-
-
-
-
-// async function userAgent(authCloseButton) {
-//     authCloseButton.innerHTML = '2';
-
-//     return navigator.userAgentData.getHighEntropyValues(["platformVersion"]).then(ua => {
-//         // if (navigator.userAgentData.platform === "Windows") {
-//         //     const majorPlatformVersion = parseInt(ua.platformVersion.split('.')[0]);
-//         //     if (majorPlatformVersion >= 13) {
-//         //         console.log("Windows 11 or later");
-//         //         return "Windows 11 or later";
-//         //     } else if (majorPlatformVersion > 0) {
-//         //         console.log("Windows 10");
-//         //         return "Windows 10";
-//         //     } else {
-//         //         console.log("Before Windows 10");
-//         //         return "Before Windows 10";
-//         //     }
-//         // } else {
-//         //     console.log("Not running on Windows");
-//         //     return "Not running on Windows";
-//         // }
-//         platform = ua;
-//         authCloseButton.innerHTML = '3';
-
-//     });
-// }
-
-// userAgent(authCloseButton).then(result => {
-//    // use the result here
-//    console.log(result);
-//    authCloseButton.innerHTML = JSON.stringify(platform)
-// }); 

@@ -41,6 +41,18 @@ const resourceURLPrefix = '';
 /////////////////////////////////////////////////////////////////////////////////////
 //util
 
+function findElementById(array, id) {
+    return array.find(element => element.id === id);    
+}
+
+function findElemenByIdPartial(arr, partialId) {
+  return arr.find(element => element.id.includes(partialId));
+}
+
+function findElementByIdPartial(arr, partialId) {
+  return arr.filter(item => item.id.includes(partialId));
+}
+
 //phone check
 const phoneCheck = () => {
     const userAgentCheck = /Android|iPhone|iPod|Opera Mini|IEMobile|BlackBerry|webOS/i.test(navigator.userAgent);
@@ -54,34 +66,37 @@ const isIOS = () => {
 }
 
 // device maps
-const iosDeviceMapping = new Map([
-  ["320x480", "IPhone 4S, 4, 3GS, 3G, 1st gen"],
-  ["320x568", "IPhone 5, SE 1st Gen,5C, 5S"],
-  ["375x667", "IPhone SE 2nd Gen, 6, 6S, 7, 8"],
-  ["375x812", "IPhone X, XS, 11 Pro, 12 Mini, 13 Mini"],
-  ["390x844", "IPhone 13, 13 Pro, 12, 12 Pro"],
-  ["414x736", "IPhone 8+"],
-  ["414x896", "IPhone 11, XR, XS Max, 11 Pro Max"],
-  ["428x926", "IPhone 13 Pro Max, 12 Pro Max"],
-  ["476x847", "IPhone 7+, 6+, 6S+"],
-  ["744x1133", "IPad Mini 6th Gen"],
-  [
-    "768x1024",
-    "IPad Mini (5th Gen), IPad (1-6th Gen), iPad Pro (1st Gen 9.7), Ipad Mini (1-4), IPad Air(1-2)  ",
-  ],
-  ["810x1080", "IPad 7-9th Gen"],
-  ["820x1180", "iPad Air (4th gen)"],
-  ["834x1194", "iPad Pro (3-5th Gen 11)"],
-  ["834x1112", "iPad Air (3rd gen), iPad Pro (2nd gen 10.5)"],
-  ["1024x1366", "iPad Pro (1-5th Gen 12.9)"],
-]);
+const iosDeviceMapping = [
+  { id: '320x480', name: 'IPhone 4S, 4, 3GS, 3G, 1st gen', capability: 'low' },
+  { id: '320x568', name: 'IPhone 5, SE 1st Gen,5C, 5S', capability: 'low' },
+  { id: '375x667', name: 'IPhone SE 2nd Gen, 6, 6S, 7, 8', capability: 'low' },
+  { id: '375x812', name: 'IPhone X, XS, 11 Pro, 12 Mini, 13 Mini', capability: 'medium' },
+  { id: '390x844', name: 'IPhone 13, 13 Pro, 12, 12 Pro', capability: 'high' },
+  { id: '414x736', name: 'IPhone 8+', capability: 'low' },
+  { id: '414x896', name: 'IPhone 11, XR, XS Max, 11 Pro Max', capability: 'high' },
+  { id: '428x926', name: 'IPhone 13 Pro Max, 12 Pro Max', capability: 'high' },
+  { id: '476x847', name: 'IPhone 7+, 6+, 6S+', capability: 'low' },
+  { id: '744x1133', name: 'IPad Mini 6th Gen', capability: 'low' },
+  { id: '768x1024', name: 'IPad Mini (5th Gen), IPad (1-6th Gen), iPad Pro (1st Gen 9.7), Ipad Mini (1-4), IPad Air(1-2)', capability: 'medium' },
+  { id: '810x1080', name: 'IPad 7-9th Gen', capability: 'medium' },
+  { id: '820x1180', name: 'iPad Air (4th gen)', capability: 'high' },
+  { id: '834x1194', name: 'iPad Pro (3-5th Gen 11)', capability: 'high' },
+  { id: '834x1112', name: 'iPad Air (3rd gen), iPad Pro (2nd gen 10.5)', capability: 'high' },
+  { id: '1024x1366', name: 'iPad Pro (1-5th Gen 12.9)', capability: 'high' },
+];
+
+const androidDeviceMapping = [
+  { id: 'SM-G980F', name: 'Samsung S20', capability: 'medium' },
+];
+// console.log(findElementByIdPartial(androidDeviceMapping, 'SM'))
+//https://deviceatlas.com/blog/samsung-phones-user-agent-strings-list
+//https://whatmyuseragent.com/browser/sb/samsung-browser
 
 const desktopDeviceMapping = new Map([
   ["Win32", "Windows"],
   ["Linux", "Linux"],
   ["MacIntel", "Mac OS"],
 ]);
-
 
 // get device name for android
 const getAndroidDeviceName = () => {
@@ -97,18 +112,18 @@ const getAndroidDeviceName = () => {
 
 // get device name for ios
 const getIosDeviceName = () => {
-  const screenResolution = window.screen.width + 'x' + window.screen.height;
-  const device = iosDeviceMapping.get(screenResolution);
-  if (device) {
-    return device;
-  }
-  return "iPhone";
+    const screenResolution = window.screen.width + 'x' + window.screen.height;
+    const device = findElementById(iosDeviceMapping, screenResolution);
+    if (device) {
+        return device;
+    }
+    return "iPhone";
 };
 
 // get device name for desktop
 const getDesktopDeviceName = () => {
   const platform = navigator.userAgentData.platform || navigator.platform || "unknown";
-  const device = desktopDeviceMapping.get(platform) || "Unknown";
+  const device = desktopDeviceMapping.get(platform) || "unknown";
   return device;
 };
 
@@ -152,18 +167,17 @@ const errorMessage = document.getElementById('castGame-errorMessage');
 const errorMessageButton = document.getElementById('castGame-errorContainerButton');
 
 var model = null;
-var modelCapability = 'low'; //low,medium,high
+var modelCapability = 'medium'; //low,medium,high
 
 const init = async () => {
   try {
     if(isPhone){
+
         if(isIOS()){
             model = getDeviceName();
-
-            // if(model == 'IPhone 13, 13 Pro, 12, 12 Pro'){
-            //     modelCapability = 'high';
-            // }
-
+            if(model);{
+                modelCapability = model.capability;
+            }
             cameraKitStart();
 
         }else{

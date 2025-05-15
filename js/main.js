@@ -167,7 +167,7 @@ const errorMessage = document.getElementById('castGame-errorMessage');
 const errorMessageButton = document.getElementById('castGame-errorContainerButton');
 
 var model = null;
-var modelCapability = 'medium'; //low,medium,high
+var modelCapability = 'high'; //low,medium,high
 
 const init = async () => {
   try {

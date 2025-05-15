@@ -277,7 +277,8 @@ const castGameService = {
                     }
 
                 }else if(payload.function == 'model'){
-                    response = { 'success': true, model: model, modelCapability: modelCapability };
+                    // response = { 'success': true, model: model, modelCapability: modelCapability };
+                    response = { 'success': true, model: 'iPhone', modelCapability: 'high' };
 
                 }else if(payload.function == 'prize'){
                     if(payload.prize != null){

@@ -286,6 +286,22 @@ const castGameService = {
                         response = { 'success': true };
                     }
 
+                }else if(payload.function == 'cameraSource'){
+                    if(payload.type != null){
+                        if(payload.type == 'camera'){
+                            cameraKitSession.setSource(sourceCamera);
+                            source = sourceCamera;
+
+                        }else if(payload.type == 'image'){
+                            cameraKitSession.setSource(sourceImage);
+                            source = sourceImage;
+
+                        }
+
+                        response = { 'success': true };
+
+                    }
+
                 }
 
             }
@@ -317,6 +333,16 @@ const castGameService = {
 var cameraKit, cameraKitSession, extensions, push2Web, stream, source, lens;
 
 const mobileVideoSourceMaxWidth = 1024; //max width of render target for canvas.  optimization technique for fps.
+
+var createStreamFacingMode = 'environment';
+var createStreamCameraType = 'back';
+
+const createImageSourceElement = new Image();
+createImageSourceElement.src = '/assets/UI/black.png';
+createImageSourceElement.width = 1024;
+createImageSourceElement.height = 1024;
+
+var sourceCamera, sourceImage;
 
 const cameraKitInit = async () => {
     //extensions
@@ -366,38 +392,38 @@ const cameraKitInit = async () => {
 
 }
 
-var createStreamFacingMode = 'environment';
-var createStreamCameraType = 'back';
-let isBackFacing = true;
-
 const createStreamSource = async () => {
-    //
-    // stream = await navigator.mediaDevices.getUserMedia({
-    //     video:
-    //         {
-    //             width: { ideal: 512 },
-    //             height: { ideal: 270 },
-    //             facingMode: 'environment',
-    //         },
-    //         audio: false,
-    //     }
-    // );
-
-    // source = createMediaStreamSource(stream, {
-    //     // transform: Transform2D.MirrorX, //only for sellfie
-    //     cameraType: 'back',
-    //     fpsLimit: 24,
-    // });
-
-    //
-    const imgElement = new Image(); // Image constructor
-    imgElement.src = "/assets/UI/black.png";
-
-    source = createImageSource(imgElement,{
-        // transform: Transform2D.MirrorX, //only for sellfie
+    sourceImage = createImageSource(createImageSourceElement, {
+        // transform: Transform2D.MirrorX, //only for selfie
         cameraType: 'back',
         fpsLimit: 24,
     });
+
+    if (isPhone) {
+        //
+        stream = await navigator.mediaDevices.getUserMedia({
+            video:
+                {
+                    width: { ideal: 1024 },
+                    height: { ideal: 540 },
+                    facingMode: 'environment',
+                },
+                audio: false,
+            }
+        );
+
+        sourceCamera = createMediaStreamSource(stream, {
+            // transform: Transform2D.MirrorX, //only for selfie
+            cameraType: 'back',
+            fpsLimit: 24,
+        });
+
+        source = sourceCamera;
+
+    }else{
+        source = sourceImage;
+
+    }
 
     //
     await cameraKitSession.setSource(source);
@@ -473,6 +499,9 @@ const cameraKitApply = async () => {
                 var ratio = mobileVideoSourceMaxWidth / width;
                 newHeight = newHeight * ratio;
             }
+
+            createImageSourceElement.width = newWidth;
+            createImageSourceElement.height = newHeight;
             
             source.setRenderSize(newWidth, newHeight);
             //considered a window.devicePixelRatio, however there is a trade off between ML resources fps vs quality.  Going with fps for this one.

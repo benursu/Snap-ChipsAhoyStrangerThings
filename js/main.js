@@ -1,5 +1,5 @@
 import '../scss/style.scss'
-import { bootstrapCameraKit, createMediaStreamSource, Transform2D, remoteApiServicesFactory, Injectable, estimateLensPerformance } from '@snap/camera-kit';
+import { bootstrapCameraKit, createMediaStreamSource, createImageSource, Transform2D, remoteApiServicesFactory, Injectable, estimateLensPerformance } from '@snap/camera-kit';
 
 //TODO: comment as needed, only for debug, remove from prod
 import { Push2Web } from '@snap/push2web';
@@ -371,28 +371,42 @@ var createStreamCameraType = 'back';
 let isBackFacing = true;
 
 const createStreamSource = async () => {
-    stream = await navigator.mediaDevices.getUserMedia({
-        video:
-            {
-                width: { ideal: 512 },
-                height: { ideal: 270 },
-                facingMode: 'environment',
-            },
-            audio: false,
-        }
-    );
+    //
+    // stream = await navigator.mediaDevices.getUserMedia({
+    //     video:
+    //         {
+    //             width: { ideal: 512 },
+    //             height: { ideal: 270 },
+    //             facingMode: 'environment',
+    //         },
+    //         audio: false,
+    //     }
+    // );
 
-    source = createMediaStreamSource(stream, {
+    // source = createMediaStreamSource(stream, {
+    //     // transform: Transform2D.MirrorX, //only for sellfie
+    //     cameraType: 'back',
+    //     fpsLimit: 24,
+    // });
+
+    //
+    const imgElement = new Image(); // Image constructor
+    imgElement.src = "/assets/UI/black.png";
+
+    source = createImageSource(imgElement,{
         // transform: Transform2D.MirrorX, //only for sellfie
         cameraType: 'back',
         fpsLimit: 24,
     });
+
+    //
     await cameraKitSession.setSource(source);
     await cameraKitSession.setFPSLimit(24);
 
 }
 
 const cameraKitApply = async () => {
+
     await cameraKitSession.applyLens(lens);
     await cameraKitSession.play('live');
     // await cameraKitSession.play('capture');

@@ -21,7 +21,7 @@
     width:300px; height:50px;
     right:0; left:0; bottom:0px; top: 105px;
     margin:auto;
-    background: url('/castGame-logo.png') center no-repeat;
+    background: url('/app/logo.png') center no-repeat;
     background-size:contain;
     z-index:9;
   }  
@@ -34,155 +34,35 @@
 
     //cameraKit canvas
     #castGame-cameraKit {
-      background-color: vars.$grayDark;
+      background-color: vars.$black;
       width:100%; height:100%;
       padding:0px;
       z-index:2;
     }
 
-    //unmute
-    .castGame-unmuteButton{
+    //logo
+    .castGame-logo{
       position:absolute;
       margin:auto;
-      top:40px; right:40px;
+      top:20px; left:10px;
+      width:150px; height:150px;
+      background: url('/app/logo.png') center no-repeat;
+      background-size:contain;
+      z-index:1000;
+    }      
+
+    //unmute
+    .castGame-unmute-btn{
+      position:absolute;
+      margin:auto;
+      bottom:40px; left:40px;
       width:40px; height:40px;
-      background: url('/close-modal.png') center no-repeat;
+      background: url('/app/unmute-btn.png') center no-repeat;
       background-size:contain;
       cursor:pointer;
       display:none;
       z-index:1000;
     }  
-  
-    //photo capture
-    #castGame-imageContainer{
-      position:absolute;
-      top:0; left:0; right:0; bottom:0;
-      margin:auto;
-      width:90%; height:90%;
-      border:3px solid vars.$white;
-      overflow:hidden;
-      z-index:3;
-      display:none;
-      align-items: center;
-      justify-content: center;
-      border-radius: 20px;
-      overflow:hidden;
-      z-index:5;
-      box-shadow: 0px 0px 0px 50vw rgba(0,0,0,0.75);
-      .castGame-tap{
-        position:absolute;
-        top:0; left:0; right:0; bottom:0;
-        margin:auto;
-        display:flex;
-        align-items: center;
-        justify-content: center;
-        width: 160px; height:160px;
-        border-radius:50%;
-        background-color: vars.$white;
-        box-shadow: 0px 0px 8px 2px rgba(0,0,0,0.51);
-        z-index:35;
-        pointer-events: none;
-        opacity: 0.75;
-        p{
-          font: 700 14px/18px vars.$epilogue;
-          color:vars.$black;
-          text-align:center;
-          pointer-events: none;
-          strong{
-            font: 700 23px/23px vars.$epilogue;
-            display:inline-block;
-            text-transform:uppercase;
-            width:100%;
-          }
-        }
-      }
-      img{
-        z-index:0;
-        height:100%; width:100%;
-      }
-      .castGame-closeImageBtn{
-        position:absolute;
-        top:10px; right:10px;
-        width:45px; height:45px;
-        background: url('/close-modal.png') center no-repeat;
-        background-size:contain;
-        cursor:pointer;
-        z-index:2;
-      }
-
-    }
-
-    //terms
-    #castGame-termsContainer{
-      position:fixed;
-      top:0; left:0; right:0; bottom:0;
-      margin:auto;
-      width:80%; height:80%;
-      max-width: 400px;
-      max-height: 300px;
-      background-color: vars.$white;
-      overflow:hidden;
-      display:none;
-      align-items: center;
-      justify-content: center;
-      border-radius: 20px;
-      overflow:hidden;
-      z-index:1;
-      #castGame-termsDismissButton{
-        cursor: pointer;
-        position: absolute;
-        top: 7px;
-        right: 7px;
-        padding: 0;
-        height: 36px;
-        width: 36px;
-        margin: 0;
-        background-color: transparent;
-        border: 0;
-      }
-      span{
-        display:flex;
-        align-items: center;
-        justify-content: center;
-        flex-wrap:wrap;
-        height:200px;
-        width: 90%;
-        .castGame-termsChipsAhoyLogo{
-          width:110px;
-        }
-        .castGame-termsLogoSeperator{
-          width:8px;
-          padding-left: 10px;
-          padding-right: 10px;
-        }
-        .castGame-termsSnapLogo{
-          width:43px;
-        }
-        #castGame-termsAgreeButton{
-          cursor: pointer;
-          width: 90%;
-          max-width: 200px;
-          height: 60px;
-          padding: 10px;
-          font: 700 14px/14px vars.$payton;
-          border: none;
-          border-radius: 30px;
-          margin: 0px 0px 10px 0px;
-          background-color: vars.$red;
-          color: vars.$white;
-        }
-        p{
-          color:vars.$black;
-          width:90%;
-          text-align: center;
-          font: 400 12px/12px vars.$payton;
-          line-height: 1.3em;
-        }
-        a{
-          color: vars.$red;
-        }
-      }
-    }    
 
     //error
     #castGame-errorContainer{
@@ -216,86 +96,22 @@
           max-width: 200px;
           height: 60px;
           padding: 10px;
-          font: 700 14px/14px vars.$payton;
+          font: 700 14px/14px;
           border: none;
           border-radius: 30px;
           margin: 0px 0px 10px 0px;
-          background-color: vars.$red;
+          background-color: vars.$white;
           color: vars.$white;
         }
         p{
           color:vars.$black;
           width:90%;
           text-align: center;
-          font: 700 14px/14px vars.$payton;
+          font: 700 14px/14px;
         }
       }
       
     }
-
-    //temp login
-    #castGame-tempAuthContainer{
-      position:absolute;
-      top:0; left:0; right:0; bottom:0;
-      margin:auto;
-      width:100%; height:100%;
-      // width:calc(100% - 40px); height:calc(100% - 50px);
-      border:1px solid vars.$black;
-      // padding:25px 20px;
-      border:1px solid vars.$black;
-      z-index:3;
-      display:none;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      // overflow-y: auto;
-      overflow:scroll;
-      z-index:5;
-      background-color: vars.$gray;
-      // border-radius: 20px;
-      box-shadow: 0px 0px 0px 50vw rgba(0,0,0,0.7);
-    
-      h3{
-        margin: 0px 0px 30px 0px;
-        font: 700 28px/28px vars.$payton;
-        color:vars.$black;
-      }
-    
-      h6{
-    
-        margin: 0px 0px 12px 0px;
-        font: 600 16px/16px vars.$payton;
-        color:vars.$black;
-      }
-    
-      p{
-        margin: 0px 0px 24px 0px;
-        font: 400 14px/14px vars.$payton;
-        color: vars.$grayDark;
-      }
-    
-      .castGame-wrap{
-        position: relative;
-        width:90%;
-        max-width:500px;
-        padding:120px 0px 10px 0px;
-      }  
-    
-      #castGame-closeAuthButton{
-        cursor: pointer;
-        position:relative;
-        background-color:vars.$red;
-        width:100%; height:40px;
-        border-radius:25px;
-        border:1px solid vars.$white;
-        color:vars.$white;
-        text-align:center;
-        font: 800 14px/40px vars.$payton;
-        cursor:pointer;
-        margin:25px 0px 10px 0px
-      }  
-    
-    }  
 
   }
 

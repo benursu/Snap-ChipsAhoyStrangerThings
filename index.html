@@ -5,30 +5,26 @@
     <link rel="icon" type="image/svg+xml" href="/favicon-32x32.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Chips Ahoy! Stranger Things</title>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,100..900;1,100..900&family=Paytone+One&display=swap" rel="stylesheet">
-
   </head>
   <body>
     <div id="castGame-app">
       
       <div class="castGame-container">
 
-        <div class="castGame-loaderContainer"><div class="castGame-icon"></div><div class="castGame-loader"><div class="castGame-spinner"></div></div></div>
+        <div class="castGame-loaderContainer"><div class="castGame-loader"><div class="castGame-spinner"></div></div></div>
+
+        <div class="castGame-logo"></div>
 
         <div id="castGame-errorContainer" style="display: none;">
           <span>
-            <img src="/error.svg" />
-            <p id="castGame-errorMessage">There was a problem with the camera.</p>
+            <p id="castGame-errorMessage">There was an error loading the site.</p>
             <button id="castGame-errorContainerButton">Refresh The Page</button>
           </span>
         </div>
         
         <div class="castGame-content" style="display: none;">        
           <canvas id="castGame-cameraKit"></canvas>
-          <div class="castGame-unmuteButton"></div>
+          <div class="castGame-unmute-btn"></div>
         </div>
 
       </div>  

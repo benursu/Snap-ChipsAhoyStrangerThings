@@ -1,10 +1,6 @@
 // -- COLORS ---------------------------------------
 $black: #000000;
 $white: #ffffff;
-$red: #f40009;
-$gray: #f1f1f1;
-$grayDark: #242424;
-
 
 
 
@@ -23,28 +19,3 @@ $grayDark: #242424;
    -o-transition: all ($sec) ease-in-out;
    transition: all ($sec) ease-in-out;
 }
-
-
-
-// FONTS -----------------------
-$payton: "Helvetica Neue", Helvetica, Arial, sans-serif;
-$epilogue: "Helvetica Neue", Helvetica, Arial, sans-serif;
-
-
-/*
-.paytone-one-regular {
-  font-family: "Paytone One", sans-serif;
-  font-weight: 400;
-  font-style: normal;
-}
-
-// <weight>: Use a value from 100 to 900
-// <uniquifier>: Use a unique and descriptive class name
-
-.epilogue-<uniquifier> {
-  font-family: "Epilogue", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: <weight>;
-  font-style: normal;
-}
-*/

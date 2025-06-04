@@ -9,30 +9,28 @@ import { Push2Web } from '@snap/push2web';
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
-//vars
+//config
 
-//camkit config
-//TODO: set apiToken to final CamKit token
-const configuration = {
-    apiToken: 'eyJhbGciOiJIUzI1NiIsImtpZCI6IkNhbnZhc1MyU0hNQUNQcm9kIiwidHlwIjoiSldUIn0.eyJhdWQiOiJjYW52YXMtY2FudmFzYXBpIiwiaXNzIjoiY2FudmFzLXMyc3Rva2VuIiwibmJmIjoxNzQ0NDkyMDE3LCJzdWIiOiI4MzdmOTA0Yy1jYTU4LTQ2OWEtOWExNi1hN2ZkNTc0MjM4ZmV-U1RBR0lOR340YzI0MGU2NC0zOTQ4LTQxOGYtOGM2OS0wZTU1MDA3MTQ3NTUifQ.Y7QGwmP1OHx_BXD3TIAqv9sMaxlOogcQE0q5g08SHJw',
+//TODO: set configs
+
+const serverVersion = 0.1;
+
+const camKitConfiguration = {
+    apiToken: 'eyJhbGciOiJIUzI1NiIsImtpZCI6IkNhbnZhc1MyU0hNQUNQcm9kIiwidHlwIjoiSldUIn0.eyJhdWQiOiJjYW52YXMtY2FudmFzYXBpIiwiaXNzIjoiY2FudmFzLXMyc3Rva2VuIiwibmJmIjoxNzQ0NDkyMDE3LCJzdWIiOiI4MzdmOTA0Yy1jYTU4LTQ2OWEtOWExNi1hN2ZkNTc0MjM4ZmV-U1RBR0lOR340YzI0MGU2NC0zOTQ4LTQxOGYtOGM2OS0wZTU1MDA3MTQ3NTUifQ.Y7QGwmP1OHx_BXD3TIAqv9sMaxlOogcQE0q5g08SHJw', //apiToken to final CamKit token
     logger: 'console',
 }
 
-//TODO: set api IDs to final CamKit values
-var apiSpecId = '4bcc807f-59c5-4596-9535-f4489b829fff'; //api spec id for Snap Remote API, currently hosted on House of V account  //TODO: switch out
+const camKitApiSpecId = '4bcc807f-59c5-4596-9535-f4489b829fff'; //api spec id for Snap Remote API
 
-var lensCurrent = 0;
-var lenses = [
-    { lensId: 'cba3e43c-a01b-43cf-b203-91c5931d2cbd', groupId: 'a32e98c9-24b1-4039-b57a-2785f5abed01', camera: 'back'}, //dev    
-    // { lensId: '728a5dca-413a-4450-8603-84be19068f3d', groupId: 'a32e98c9-24b1-4039-b57a-2785f5abed01', camera: 'back'}, //staging
-];
-var lensId = lenses[0].lensId;
-var groupId = lenses[0].groupId;
+const lensId = 'cba3e43c-a01b-43cf-b203-91c5931d2cbd'; //dev
+// const lensId = '728a5dca-413a-4450-8603-84be19068f3d'; //staging
+// const lensId = 'xxxxx'; //alpha
 
-//TODO: set resource URL Prefix
+const groupId = 'a32e98c9-24b1-4039-b57a-2785f5abed01'; //dev,staging,alpha
+
 // const resourceURLPrefix = 'https://snap-castgame-staging-59ca3a0b5639.herokuapp.com';
 // const resourceURLPrefix = 'https://snap-castgame-dev-31ea29a7d9cf.herokuapp.com';
-const resourceURLPrefix = '';
+const serverResourceURLPrefix = '';
 
 
 
@@ -40,18 +38,6 @@ const resourceURLPrefix = '';
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 //util
-
-function findElementById(array, id) {
-    return array.find(element => element.id === id);    
-}
-
-function findElemenByIdPartial(arr, partialId) {
-  return arr.find(element => element.id.includes(partialId));
-}
-
-function findElementByIdPartial(arr, partialId) {
-  return arr.filter(item => item.id.includes(partialId));
-}
 
 //phone check
 const phoneCheck = () => {
@@ -65,90 +51,6 @@ const isIOS = () => {
     return /iPhone|iPad|iPod/.test(navigator.userAgent);
 }
 
-// device maps
-const iosDeviceMapping = [
-  { id: '320x480', name: 'IPhone 4S, 4, 3GS, 3G, 1st gen', capability: 'high' },
-  { id: '320x568', name: 'IPhone 5, SE 1st Gen,5C, 5S', capability: 'high' },
-  { id: '375x667', name: 'IPhone SE 2nd Gen, 6, 6S, 7, 8', capability: 'high' },
-  { id: '375x812', name: 'IPhone X, XS, 11 Pro, 12 Mini, 13 Mini', capability: 'high' },
-  { id: '390x844', name: 'IPhone 13, 13 Pro, 12, 12 Pro', capability: 'high' },
-  { id: '414x736', name: 'IPhone 8+', capability: 'high' },
-  { id: '414x896', name: 'IPhone 11, XR, XS Max, 11 Pro Max', capability: 'high' },
-  { id: '428x926', name: 'IPhone 13 Pro Max, 12 Pro Max', capability: 'high' },
-  { id: '476x847', name: 'IPhone 7+, 6+, 6S+', capability: 'high' },
-  { id: '744x1133', name: 'IPad Mini 6th Gen', capability: 'high' },
-  { id: '768x1024', name: 'IPad Mini (5th Gen), IPad (1-6th Gen), iPad Pro (1st Gen 9.7), Ipad Mini (1-4), IPad Air(1-2)', capability: 'high' },
-  { id: '810x1080', name: 'IPad 7-9th Gen', capability: 'high' },
-  { id: '820x1180', name: 'iPad Air (4th gen)', capability: 'high' },
-  { id: '834x1194', name: 'iPad Pro (3-5th Gen 11)', capability: 'high' },
-  { id: '834x1112', name: 'iPad Air (3rd gen), iPad Pro (2nd gen 10.5)', capability: 'high' },
-  { id: '1024x1366', name: 'iPad Pro (1-5th Gen 12.9)', capability: 'high' },
-];
-
-const androidDeviceMapping = [
-  { id: 'SM-G980F', name: 'Samsung S20', capability: 'medium' },
-];
-// console.log(findElementByIdPartial(androidDeviceMapping, 'SM'))
-//https://deviceatlas.com/blog/samsung-phones-user-agent-strings-list
-//https://whatmyuseragent.com/browser/sb/samsung-browser
-
-const desktopDeviceMapping = new Map([
-  ["Win32", "Windows"],
-  ["Linux", "Linux"],
-  ["MacIntel", "Mac OS"],
-]);
-
-// get device name for android
-const getAndroidDeviceName = () => {
-  const androidUserAgentString = window.navigator.userAgent.slice(window.navigator.userAgent.indexOf("Android"));
-  const androidDeviceName = androidUserAgentString.slice(androidUserAgentString.indexOf("; ") + 1, androidUserAgentString.indexOf(")"));
-  if (androidDeviceName) {
-    return androidDeviceName.trim().split(" ")[0];
-  }
-
-  return "Android";
-
-};
-
-// get device name for ios
-const getIosDeviceName = () => {
-    const screenResolution = window.screen.width + 'x' + window.screen.height;
-    const device = findElementById(iosDeviceMapping, screenResolution);
-    if (device) {
-        return device;
-    }
-    return "iPhone";
-};
-
-// get device name for desktop
-const getDesktopDeviceName = () => {
-  const platform = navigator.userAgentData.platform || navigator.platform || "unknown";
-  const device = desktopDeviceMapping.get(platform) || "unknown";
-  return device;
-};
-
-// get device name utility
-const getDeviceName = () => {
-  let device = "";
-
-  if (isPhone) {
-    if (window.navigator.userAgent.includes("Android")) {
-      device = getAndroidDeviceName();
-    } else {
-      device = getIosDeviceName();
-    }
-  } else {
-    const device = getDesktopDeviceName();
-  }
-  
-  return device;
-}
-
-const userAgent = async () => {
-    return navigator.userAgentData.getHighEntropyValues(['platformVersion', 'model']).then(ua => {
-        model = ua;
-    });
-}
 
 
 
@@ -157,52 +59,14 @@ const userAgent = async () => {
 /////////////////////////////////////////////////////////////////////////////////////
 //init
 
-var userAuthenticatedSuccess = false; //user authentication boolean is initially set to false
-
 const canvas = document.getElementById('castGame-cameraKit');
 const content = document.querySelector('.castGame-content');
 const loaderContainer = document.querySelector('.castGame-loaderContainer');
 const errorContainer = document.getElementById('castGame-errorContainer');
 const errorMessage = document.getElementById('castGame-errorMessage');
-const errorMessageButton = document.getElementById('castGame-errorContainerButton');
-
-var model = null;
-var modelCapability = 'high'; //low,medium,high
 
 const init = async () => {
   try {
-    if(isPhone){
-        if(isIOS()){
-            model = getDeviceName();
-            if(model){
-                modelCapability = model.capability;
-            }
-            cameraKitStart();
-
-        }else{
-            await userAgent().then(result => {
-                cameraKitStart();   
-            });
-
-        }
-
-    }else{
-        model = 'Not Mobile';
-        modelCapability = 'high';
-        cameraKitStart();
-
-    }
-
-  } catch (error) {
-    cameraKitStart();
-
-  }
-
-};
-
-const cameraKitStart = async () => {
-  try {
-    //initialize canvas size
     let width, height;
     if (window.visualViewport) {
         //for devices that support visualViewport, such as iOS Safari
@@ -217,7 +81,6 @@ const cameraKitStart = async () => {
     canvas.width = width;
     canvas.height = height;
 
-    //try initializing cameraKit
     await cameraKitInit();
 
     content.style.display = 'block';
@@ -236,13 +99,6 @@ const cameraKitStart = async () => {
 
 };
 
-//reload button
-errorMessageButton.addEventListener('click', (e) => {
-    e.preventDefault();
-    location.reload();
-
-});
-
 
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -251,7 +107,7 @@ errorMessageButton.addEventListener('click', (e) => {
 //remote api
 
 const castGameService = {
-    apiSpecId: apiSpecId,
+    apiSpecId: camKitApiSpecId,
 
     getRequestHandler(request) {
         console.log(request);
@@ -266,7 +122,7 @@ const castGameService = {
 
                 if(payload.function == 'analytics'){
                     if(payload.event != null){
-                        analytics(payload.event);
+                        console.log('Analytics Event: ' + payload.event);
                         response = { 'success': true };
                     }
 
@@ -276,30 +132,13 @@ const castGameService = {
                         response = { 'success': true };
                     }
 
-                }else if(payload.function == 'model'){
-                    // response = { 'success': true, model: model, modelCapability: modelCapability };
-                    response = { 'success': true, model: 'iPhone', modelCapability: 'high' };
+                }else if(payload.function == 'config'){
+                    response = { 'serverVersion': serverVersion, 'serverResourceURLPrefix': serverResourceURLPrefix, 'success': true };
 
                 }else if(payload.function == 'prize'){
                     if(payload.prize != null){
                         //TODO: get prize
                         response = { 'success': true };
-                    }
-
-                }else if(payload.function == 'cameraSource'){
-                    if(payload.type != null){
-                        if(payload.type == 'camera'){
-                            cameraKitSession.setSource(sourceCamera);
-                            source = sourceCamera;
-
-                        }else if(payload.type == 'image'){
-                            cameraKitSession.setSource(sourceImage);
-                            source = sourceImage;
-
-                        }
-
-                        response = { 'success': true };
-
                     }
 
                 }
@@ -330,19 +169,14 @@ const castGameService = {
 /////////////////////////////////////////////////////////////////////////////////////
 //camera kit
 
-var cameraKit, cameraKitSession, extensions, push2Web, stream, source, lens;
+var cameraKit, cameraKitSession, extensions, push2Web, stream, source, sourceImage, lens;
 
 const mobileVideoSourceMaxWidth = 1024; //max width of render target for canvas.  optimization technique for fps.
 
-var createStreamFacingMode = 'environment';
-var createStreamCameraType = 'back';
-
-const createImageSourceElement = new Image();
-createImageSourceElement.src = '/assets/UI/black.png';
+const createImageSourceElement = new Image(); //force static black background, no camera.
+createImageSourceElement.src = '/assets/ui/black.png';
 createImageSourceElement.width = 1024;
 createImageSourceElement.height = 1024;
-
-var sourceCamera, sourceImage;
 
 const cameraKitInit = async () => {
     //extensions
@@ -369,7 +203,7 @@ const cameraKitInit = async () => {
     }
 
     //
-    cameraKit = await bootstrapCameraKit(configuration, extensions);
+    cameraKit = await bootstrapCameraKit(camKitConfiguration, extensions);
 
     cameraKitSession = await cameraKit.createSession({ liveRenderTarget: canvas });
     cameraKitSession.events.addEventListener('error', (event) => {
@@ -399,31 +233,7 @@ const createStreamSource = async () => {
         fpsLimit: 24,
     });
 
-    if (isPhone) {
-        //
-        stream = await navigator.mediaDevices.getUserMedia({
-            video:
-                {
-                    width: { ideal: 1024 },
-                    height: { ideal: 540 },
-                    facingMode: 'environment',
-                },
-                audio: false,
-            }
-        );
-
-        sourceCamera = createMediaStreamSource(stream, {
-            // transform: Transform2D.MirrorX, //only for selfie
-            cameraType: 'back',
-            fpsLimit: 24,
-        });
-
-        source = sourceCamera;
-
-    }else{
-        source = sourceImage;
-
-    }
+    source = sourceImage;
 
     //
     await cameraKitSession.setSource(source);
@@ -569,7 +379,7 @@ const cameraKitApply = async () => {
 //unmute for iOS
 
 const audioCtx = new ( window.AudioContext || window.webkitAudioContext )();
-const unmuteBtn = document.querySelector('.castGame-unmuteButton');
+const unmuteBtn = document.querySelector('.castGame-unmute-btn');
 
 unmuteBtn.addEventListener('click', (e) => {
     e.preventDefault();
@@ -582,21 +392,6 @@ unmuteBtn.addEventListener('click', (e) => {
     }
 
 });
-
-
-
-/////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////
-//analytics
-
-//events:
-// Lens Start
-
-function analytics(event){
-    //TODO: add chips ahoy anayltics logic
-    console.log('Analytic Event: ' + event);
-}
 
 
 

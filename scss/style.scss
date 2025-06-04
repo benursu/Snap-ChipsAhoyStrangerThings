@@ -6,13 +6,13 @@
 @use '/scss/loader';
 
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: vars.$grayDark;
+  background-color: vars.$black;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -23,7 +23,7 @@
 body {
   position: relative;
   margin: 0;
-  background-color: vars.$grayDark;
+  background-color: vars.$black;
   color: vars.$white;
   height: 100%; width: 100%;
   overflow: hidden;

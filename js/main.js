@@ -217,7 +217,7 @@ var cameraKit, cameraKitSession, extensions, push2Web, stream, source, sourceIma
 const mobileVideoSourceMaxWidth = 1024; //max width of render target for canvas.  optimization technique for fps.
 
 const createImageSourceElement = new Image(); //force static black background, no camera.
-createImageSourceElement.src = '/assets/ui/black.png';
+createImageSourceElement.src = '/app/black.png';
 createImageSourceElement.width = 1024;
 createImageSourceElement.height = 1024;
 
@@ -275,8 +275,8 @@ const img = document.getElementById('castGame-image');
 const createStreamSource = async () => {
 
 
-    // sourceImage = createImageSource(createImageSourceElement, {
-    sourceImage = createImageSource(img, {
+    sourceImage = createImageSource(createImageSourceElement, {
+    // sourceImage = createImageSource(img, {
         // transform: Transform2D.MirrorX, //only for selfie
         cameraType: 'back',
         fpsLimit: 24,

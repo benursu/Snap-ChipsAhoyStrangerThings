@@ -77,19 +77,15 @@ const init = async () => {
         height = document.documentElement.clientHeight;
     }
 
-    console.log('1')
     canvas.width = width;
     canvas.height = height;
 
-    console.log('2')
     await cameraKitInit();
-    console.log('3')
 
     content.style.display = 'block';
     loaderContainer.style.display = 'none';  
 
   } catch (error) {
-    console.log('4')
     //error
     console.error('Error during cameraKitInit:', error);
     errorMessage.innerHTML = 'There was an error loading the site.';
@@ -226,10 +222,8 @@ createImageSourceElement.width = 1024;
 createImageSourceElement.height = 1024;
 
 const cameraKitInit = async () => {
-    console.log('5')
     //extensions
     try {
-        console.log('6')
         push2Web = new Push2Web();
 
         extensions = (container) => container.provides(push2Web.extension).provides(
@@ -241,7 +235,6 @@ const cameraKitInit = async () => {
         );
 
     }catch(e) {
-        console.log('7')
         extensions = (container) => container.provides(
             Injectable(
                 remoteApiServicesFactory.token,
@@ -252,16 +245,10 @@ const cameraKitInit = async () => {
 
     }
 
-    console.log('8')
     //
     cameraKit = await bootstrapCameraKit(camKitConfiguration, extensions);
 
-    console.log('9')
-
     cameraKitSession = await cameraKit.createSession({ liveRenderTarget: canvas });
-
-    console.log('10')
-
     cameraKitSession.events.addEventListener('error', (event) => {
     if (event.detail.error.name === 'LensExecutionError') {
         console.log(
@@ -271,12 +258,7 @@ const cameraKitInit = async () => {
     }
     });
 
-
-    console.log('11')
-
     await createStreamSource();
-
-    console.log('12')
 
     lens = await cameraKit.lensRepository.loadLens(
         lensId,
@@ -285,54 +267,48 @@ const cameraKitInit = async () => {
 
     await cameraKitApply();
 
-    console.log('13')
-
 }
 
 const createStreamSource = async () => {
-    console.log('14')
-
     sourceImage = createImageSource(createImageSourceElement, {
         // transform: Transform2D.MirrorX, //only for selfie
         cameraType: 'back',
         fpsLimit: 24,
     });
-    
-        stream = await navigator.mediaDevices.getUserMedia({
-            video:
-                {
-                    width: { ideal: 1024 },
-                    height: { ideal: 540 },
-                    facingMode: 'environment',
-                },
-                audio: false,
-            }
-        );
 
-        sourceCamera = createMediaStreamSource(stream, {
-            // transform: Transform2D.MirrorX, //only for selfie
-            cameraType: 'back',
-            fpsLimit: 24,
-        });
+    // stream = await navigator.mediaDevices.getUserMedia({
+    //     video:
+    //         {
+    //             width: { ideal: 1024 },
+    //             height: { ideal: 540 },
+    //             facingMode: 'environment',
+    //         },
+    //         audio: false,
+    //     }
+    // );
 
-        source = sourceCamera;    
+    // sourceCamera = createMediaStreamSource(stream, {
+    //     // transform: Transform2D.MirrorX, //only for selfie
+    //     cameraType: 'back',
+    //     fpsLimit: 24,
+    // });
+
+    // source = sourceCamera;    
 
     source = sourceImage;
 
-    console.log('15')
     //
     await cameraKitSession.setSource(source);
     await cameraKitSession.setFPSLimit(24);
 
-    console.log('16')
 }
 
 const cameraKitApply = async () => {
-console.log('17')
+
     await cameraKitSession.applyLens(lens);
     await cameraKitSession.play('live');
     // await cameraKitSession.play('capture');
-console.log('18')
+
     if(push2Web != null){
         var push2WebAccessToken = '';
         const urlParams = new URLSearchParams(window.location.search);
@@ -452,8 +428,6 @@ console.log('18')
         });    
 
     }
-
-    console.log('19')
 
     await sleep(250);
 

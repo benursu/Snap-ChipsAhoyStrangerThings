@@ -317,7 +317,7 @@ const createStreamSource = async () => {
 
         source = sourceCamera;    
 
-    // source = sourceImage;
+    source = sourceImage;
 
     console.log('15')
     //

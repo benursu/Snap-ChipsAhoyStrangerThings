@@ -273,14 +273,14 @@ const cameraKitInit = async () => {
 const img = document.getElementById('castGame-image');
 
 const createStreamSource = async () => {
-
-
+    //
     sourceImage = createImageSource(createImageSourceElement, {
-    // sourceImage = createImageSource(img, {
         // transform: Transform2D.MirrorX, //only for selfie
         cameraType: 'back',
         fpsLimit: 24,
     });
+    
+    source = sourceImage;
 
     // stream = await navigator.mediaDevices.getUserMedia({
     //     video:
@@ -300,8 +300,6 @@ const createStreamSource = async () => {
     // });
 
     // source = sourceCamera;    
-
-    source = sourceImage;
 
     //
     await cameraKitSession.setSource(source);

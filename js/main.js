@@ -13,7 +13,7 @@ import { Push2Web } from '@snap/push2web';
 
 //TODO: set configs
 
-const serverVersion = 0.11;
+const serverVersion = 0.1;
 
 const camKitConfiguration = {
     apiToken: 'eyJhbGciOiJIUzI1NiIsImtpZCI6IkNhbnZhc1MyU0hNQUNQcm9kIiwidHlwIjoiSldUIn0.eyJhdWQiOiJjYW52YXMtY2FudmFzYXBpIiwiaXNzIjoiY2FudmFzLXMyc3Rva2VuIiwibmJmIjoxNzQ0NDkyMDE3LCJzdWIiOiI4MzdmOTA0Yy1jYTU4LTQ2OWEtOWExNi1hN2ZkNTc0MjM4ZmV-U1RBR0lOR340YzI0MGU2NC0zOTQ4LTQxOGYtOGM2OS0wZTU1MDA3MTQ3NTUifQ.Y7QGwmP1OHx_BXD3TIAqv9sMaxlOogcQE0q5g08SHJw', //apiToken to final CamKit token
@@ -28,9 +28,9 @@ const lensId = '8f65b735-e3cd-4fef-a584-ee93fc03da23'; //alpha
 
 const groupId = 'a32e98c9-24b1-4039-b57a-2785f5abed01'; //dev,staging,alpha
 
+//full HTTPS location of assets for CamKit canvas game
 // const serverResourceURLPrefix = 'https://snap-castgame-staging-59ca3a0b5639.herokuapp.com';
 const serverResourceURLPrefix = 'https://snap-castgame-dev-31ea29a7d9cf.herokuapp.com';
-// const serverResourceURLPrefix = '';
 
 
 
@@ -50,7 +50,6 @@ const isPhone = phoneCheck();
 const isIOS = () => {
     return /iPhone|iPad|iPod/.test(navigator.userAgent);
 }
-
 
 
 
@@ -120,26 +119,70 @@ const castGameService = {
             //
             if(payload.function != null){
 
+                //analytics
                 if(payload.function == 'analytics'){
+                    //TODO: setup analtyic call
                     if(payload.event != null){
                         console.log('Analytics Event: ' + payload.event);
                         response = { 'success': true };
                     }
 
+                //log
                 }else if(payload.function == 'log'){
                     if(payload.log != null){
-                        console.log(payload.log);
+                        console.log('Log: ' + payload.log);
                         response = { 'success': true };
                     }
 
+                //error
+                }else if(payload.function == 'error'){
+                    //TODO: hookup an error logger
+                    if(payload.error != null){
+                        console.log('Error: ' + payload.error);
+                        response = { 'success': true };
+                    }
+
+                //config
                 }else if(payload.function == 'config'){
+                    //TODO: setup config for resources
                     response = { 'serverVersion': serverVersion, 'serverResourceURLPrefix': serverResourceURLPrefix, 'success': true };
 
+                //prize
                 }else if(payload.function == 'prize'){
-                    if(payload.prize != null){
-                        //TODO: get prize
+                    //TODO: always respond with 200 and success true
+                    if(payload.tier != null){
+                        console.log('Prize: Submit ' + payload.tier);
                         response = { 'success': true };
                     }
+
+                //prizeStatus
+                }else if(payload.function == 'prizeStatus'){
+                    //TODO: hook into prize status
+                    console.log('Prize: Get Status');
+                    response = {
+                        'success': true,
+                        'prizeEntry1': true,
+                        'prizeEntry2': false,
+                        'prizeEntry3': false,
+                    };
+
+                //gameStatus
+                }else if(payload.function == 'gameStatus'){
+                    //TODO: store game status in localstorage for general site usage
+                    if(payload.cookies != null && payload.demogorgons != null){
+                        console.log('Game: Submit Status, cookies: ' + payload.cookies + ', demogorgons: ' + payload.demogorgons);
+                        localStorage.setItem('cookies', payload.cookies);
+                        localStorage.setItem('demogorgons', payload.demogorgons);
+                        response = { 'success': true };
+                    }
+
+                //gameExit
+                }else if(payload.function == 'gameExit'){
+                    //TODO: hookup redirect logic
+                    console.log('Game: Exit');
+                    response = { 'success': true };
+
+                    location.reload();
 
                 }
 

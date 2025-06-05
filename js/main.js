@@ -269,8 +269,14 @@ const cameraKitInit = async () => {
 
 }
 
+
+const img = document.getElementById('castGame-image');
+
 const createStreamSource = async () => {
-    sourceImage = createImageSource(createImageSourceElement, {
+
+
+    // sourceImage = createImageSource(createImageSourceElement, {
+    sourceImage = createImageSource(img, {
         // transform: Transform2D.MirrorX, //only for selfie
         cameraType: 'back',
         fpsLimit: 24,

@@ -216,7 +216,7 @@ const castGameService = {
 /////////////////////////////////////////////////////////////////////////////////////
 //camera kit
 
-var cameraKit, cameraKitSession, extensions, push2Web, stream, source, sourceImage, lens;
+var cameraKit, cameraKitSession, extensions, push2Web, stream, source, sourceImage, sourceCamera, lens;
 
 const mobileVideoSourceMaxWidth = 1024; //max width of render target for canvas.  optimization technique for fps.
 
@@ -297,8 +297,27 @@ const createStreamSource = async () => {
         cameraType: 'back',
         fpsLimit: 24,
     });
+    
+        stream = await navigator.mediaDevices.getUserMedia({
+            video:
+                {
+                    width: { ideal: 1024 },
+                    height: { ideal: 540 },
+                    facingMode: 'environment',
+                },
+                audio: false,
+            }
+        );
 
-    source = sourceImage;
+        sourceCamera = createMediaStreamSource(stream, {
+            // transform: Transform2D.MirrorX, //only for selfie
+            cameraType: 'back',
+            fpsLimit: 24,
+        });
+
+        source = sourceCamera;    
+
+    // source = sourceImage;
 
     console.log('15')
     //

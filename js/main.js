@@ -23,14 +23,14 @@ const camKitConfiguration = {
 const camKitApiSpecId = '4bcc807f-59c5-4596-9535-f4489b829fff'; //api spec id for Snap Remote API
 
 // const lensId = 'cba3e43c-a01b-43cf-b203-91c5931d2cbd'; //dev
-const lensId = '728a5dca-413a-4450-8603-84be19068f3d'; //staging
-// const lensId = '8f65b735-e3cd-4fef-a584-ee93fc03da23'; //alpha
+// const lensId = '728a5dca-413a-4450-8603-84be19068f3d'; //staging
+const lensId = '8f65b735-e3cd-4fef-a584-ee93fc03da23'; //alpha
 
 const groupId = 'a32e98c9-24b1-4039-b57a-2785f5abed01'; //dev,staging,alpha
 
 //full HTTPS location of assets for CamKit canvas game
-const serverResourceURLPrefix = 'https://snap-castgame-staging-59ca3a0b5639.herokuapp.com';
-// const serverResourceURLPrefix = 'https://snap-castgame-dev-31ea29a7d9cf.herokuapp.com';
+// const serverResourceURLPrefix = 'https://snap-castgame-staging-59ca3a0b5639.herokuapp.com';
+const serverResourceURLPrefix = 'https://snap-castgame-dev-31ea29a7d9cf.herokuapp.com';
 
 
 
@@ -77,15 +77,19 @@ const init = async () => {
         height = document.documentElement.clientHeight;
     }
 
+    console.log('1')
     canvas.width = width;
     canvas.height = height;
 
+    console.log('2')
     await cameraKitInit();
+    console.log('3')
 
     content.style.display = 'block';
     loaderContainer.style.display = 'none';  
 
   } catch (error) {
+    console.log('4')
     //error
     console.error('Error during cameraKitInit:', error);
     errorMessage.innerHTML = 'There was an error loading the site.';
@@ -222,8 +226,10 @@ createImageSourceElement.width = 1024;
 createImageSourceElement.height = 1024;
 
 const cameraKitInit = async () => {
+    console.log('5')
     //extensions
     try {
+        console.log('6')
         push2Web = new Push2Web();
 
         extensions = (container) => container.provides(push2Web.extension).provides(
@@ -235,6 +241,7 @@ const cameraKitInit = async () => {
         );
 
     }catch(e) {
+        console.log('7')
         extensions = (container) => container.provides(
             Injectable(
                 remoteApiServicesFactory.token,
@@ -245,10 +252,16 @@ const cameraKitInit = async () => {
 
     }
 
+    console.log('8')
     //
     cameraKit = await bootstrapCameraKit(camKitConfiguration, extensions);
 
+    console.log('9')
+
     cameraKitSession = await cameraKit.createSession({ liveRenderTarget: canvas });
+
+    console.log('10')
+
     cameraKitSession.events.addEventListener('error', (event) => {
     if (event.detail.error.name === 'LensExecutionError') {
         console.log(
@@ -258,7 +271,12 @@ const cameraKitInit = async () => {
     }
     });
 
+
+    console.log('11')
+
     await createStreamSource();
+
+    console.log('12')
 
     lens = await cameraKit.lensRepository.loadLens(
         lensId,
@@ -266,6 +284,8 @@ const cameraKitInit = async () => {
     );
 
     await cameraKitApply();
+
+    console.log('13')
 
 }
 

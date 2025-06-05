@@ -290,6 +290,8 @@ const cameraKitInit = async () => {
 }
 
 const createStreamSource = async () => {
+    console.log('14')
+
     sourceImage = createImageSource(createImageSourceElement, {
         // transform: Transform2D.MirrorX, //only for selfie
         cameraType: 'back',
@@ -298,18 +300,20 @@ const createStreamSource = async () => {
 
     source = sourceImage;
 
+    console.log('15')
     //
     await cameraKitSession.setSource(source);
     await cameraKitSession.setFPSLimit(24);
 
+    console.log('16')
 }
 
 const cameraKitApply = async () => {
-
+console.log('17')
     await cameraKitSession.applyLens(lens);
     await cameraKitSession.play('live');
     // await cameraKitSession.play('capture');
-
+console.log('18')
     if(push2Web != null){
         var push2WebAccessToken = '';
         const urlParams = new URLSearchParams(window.location.search);
@@ -429,6 +433,8 @@ const cameraKitApply = async () => {
         });    
 
     }
+
+    console.log('19')
 
     await sleep(250);
 

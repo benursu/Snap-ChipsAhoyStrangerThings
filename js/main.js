@@ -68,6 +68,7 @@ const content = document.querySelector('.castGame-content');
 const loaderContainer = document.querySelector('.castGame-loaderContainer');
 const errorContainer = document.getElementById('castGame-errorContainer');
 const errorMessage = document.getElementById('castGame-errorMessage');
+const errorMessageButton = document.getElementById('castGame-errorContainerButton');
 
 const init = async () => {
   try {
@@ -192,7 +193,40 @@ const castGameService = {
                     response = { 'success': true };
 
                     location.reload();
-                    
+
+                //reload
+                }else if(payload.function == 'reload'){
+                    response = { 'success': true };
+
+                    location.reload();
+
+                //visibilitychangeStatus
+                }else if(payload.function == 'visibilitychangeStatus'){
+                    if(isPhone && visibilitychangeStatus == null){
+                        document.addEventListener("visibilitychange", async () => {
+                            if (document.hidden) {
+                                //hidden
+                                visibilitychangeStatus = true;
+                                                
+                            }
+
+                        });    
+
+                        // window.addEventListener("focus", handleBrowserState.bind(context, true));
+                        // window.addEventListener("blur", handleBrowserState.bind(context, false));
+
+                        // function handleBrowserState(isActive){
+                        //     if(!isActive){
+                        //         visibilitychangeStatus = true;
+                        //     }
+                        // }
+
+                        response = { 'success': true, 'visibilitychangeStatus': false, 'documentHidden': document.hidden };
+
+                    }else{
+                        response = { 'success': true, 'visibilitychangeStatus': visibilitychangeStatus, 'documentHidden': document.hidden };
+
+                    }
 
                 }
 
@@ -213,7 +247,14 @@ const castGameService = {
 
     },
 
-};  
+};
+
+//reload button
+errorMessageButton.addEventListener('click', (e) => {
+    e.preventDefault();
+    location.reload();
+
+});
 
 
 
@@ -225,6 +266,7 @@ const castGameService = {
 var cameraKit, cameraKitSession, extensions, push2Web, stream, source, sourceImage, sourceCamera, lens;
 
 const mobileVideoSourceMaxWidth = 1024; //max width of render target for canvas.  optimization technique for fps.
+var visibilitychangeStatus = null;
 
 const createImageSourceElement = new Image(); //force static black background, no camera.
 createImageSourceElement.src = camKitImageSource;
@@ -291,25 +333,6 @@ const createStreamSource = async () => {
     });
     
     source = sourceImage;
-
-    // stream = await navigator.mediaDevices.getUserMedia({
-    //     video:
-    //         {
-    //             width: { ideal: 1024 },
-    //             height: { ideal: 540 },
-    //             facingMode: 'environment',
-    //         },
-    //         audio: false,
-    //     }
-    // );
-
-    // sourceCamera = createMediaStreamSource(stream, {
-    //     // transform: Transform2D.MirrorX, //only for selfie
-    //     cameraType: 'back',
-    //     fpsLimit: 24,
-    // });
-
-    // source = sourceCamera;    
 
     //
     await cameraKitSession.setSource(source);
@@ -426,15 +449,6 @@ const cameraKitApply = async () => {
         
                     resizeCanvas();
 
-                    if(isIOS() && audioCtx != null){             
-                        if(audioCtx.state == "interrupted" || audioCtx.state == 'suspended' || audioCtx.state == 'closed') {
-                            unmuteBtn.style.display = 'block';
-                        }else{
-                            unmuteBtn.style.display = 'none';
-                        }
-                        
-                    }
-        
                 }
 
             }
@@ -443,31 +457,10 @@ const cameraKitApply = async () => {
 
     }
 
+    //
     await sleep(250);
 
 }
-
-
-
-/////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////
-//unmute for iOS
-
-const audioCtx = new ( window.AudioContext || window.webkitAudioContext )();
-const unmuteBtn = document.querySelector('.castGame-unmute-btn');
-
-unmuteBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    unmuteBtn.style.display = 'none';
-
-    if(audioCtx != null){
-        if(audioCtx.state == "interrupted" || audioCtx.state == 'suspended' || audioCtx.state == 'closed') {
-            audioCtx.resume().then(() => play());
-        }
-    }
-
-});
 
 
 

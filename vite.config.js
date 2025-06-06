@@ -28,7 +28,7 @@ export default defineConfig({
     cors: true,
   },
   plugins: [
-    // ssl,
+    ssl,
     {
       name: 'create-redirects-file',
       apply: 'build',

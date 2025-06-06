@@ -31,6 +31,9 @@ const groupId = 'a32e98c9-24b1-4039-b57a-2785f5abed01'; //dev,staging,alpha
 //full HTTPS location of assets for CamKit canvas game
 // const serverResourceURLPrefix = 'https://snap-castgame-staging-59ca3a0b5639.herokuapp.com';
 const serverResourceURLPrefix = 'https://snap-castgame-dev-31ea29a7d9cf.herokuapp.com';
+// const serverResourceURLPrefix = 'https://192.168.0.64:5173';
+
+const camKitImageSource = '/app/black.png';
 
 
 
@@ -120,6 +123,7 @@ const castGameService = {
             if(payload.function != null){
 
                 //analytics
+
                 if(payload.function == 'analytics'){
                     //TODO: setup analtyic call
                     if(payload.event != null){
@@ -164,6 +168,7 @@ const castGameService = {
                         'prizeEntry1': true,
                         'prizeEntry2': false,
                         'prizeEntry3': false,
+                        'instantWin': true,
                     };
 
                 //gameStatus
@@ -171,8 +176,10 @@ const castGameService = {
                     //TODO: store game status in localstorage for general site usage
                     if(payload.cookies != null && payload.demogorgons != null){
                         console.log('Game: Submit Status, cookies: ' + payload.cookies + ', demogorgons: ' + payload.demogorgons);
+
                         localStorage.setItem('cookies', payload.cookies);
                         localStorage.setItem('demogorgons', payload.demogorgons);
+
                         response = { 'success': true };
                     }
 
@@ -183,6 +190,7 @@ const castGameService = {
                     response = { 'success': true };
 
                     location.reload();
+                    
 
                 }
 
@@ -217,7 +225,7 @@ var cameraKit, cameraKitSession, extensions, push2Web, stream, source, sourceIma
 const mobileVideoSourceMaxWidth = 1024; //max width of render target for canvas.  optimization technique for fps.
 
 const createImageSourceElement = new Image(); //force static black background, no camera.
-createImageSourceElement.src = '/app/black.png';
+createImageSourceElement.src = camKitImageSource;
 createImageSourceElement.width = 1024;
 createImageSourceElement.height = 1024;
 

@@ -30,8 +30,10 @@ const groupId = 'a32e98c9-24b1-4039-b57a-2785f5abed01'; //dev,staging,alpha
 
 //full HTTPS location of assets for CamKit canvas game
 // const serverResourceURLPrefix = 'https://snap-castgame-staging-59ca3a0b5639.herokuapp.com';
-const serverResourceURLPrefix = 'https://snap-castgame-dev-31ea29a7d9cf.herokuapp.com';
+// const serverResourceURLPrefix = 'https://snap-castgame-dev-31ea29a7d9cf.herokuapp.com';
 // const serverResourceURLPrefix = 'https://192.168.0.64:5173';
+// const serverResourceURLPrefix = 'http://192.168.0.64:5173';
+const serverResourceURLPrefix = '';
 
 const camKitImageSource = '/app/black.png';
 

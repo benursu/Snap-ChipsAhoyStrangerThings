@@ -7,23 +7,28 @@
     <title>Chips Ahoy! Stranger Things</title>
   </head>
   <body>
-    <div id="castGame-app">
+    <div class="castGame-app">
       
       <div class="castGame-container">
 
-        <div class="castGame-loaderContainer"><div class="castGame-loader"><div class="castGame-spinner"></div></div></div>
-
         <div class="castGame-logo"></div>
 
-        <div id="castGame-errorContainer" style="display: none;">
+        <div class="castGame-loaderContainer">
+          <div class="castGame-launch-btn"></div>
+          <div class="castGame-loader">
+            <div class="castGame-spinner"></div>
+          </div>
+        </div>
+
+        <div class="castGame-errorContainer" style="display: none;">
           <span>
-            <p id="castGame-errorMessage">There was an error loading the site.</p>
-            <button id="castGame-errorContainerButton">Refresh The Page</button>
+            <p class="castGame-errorMessage">There was an error loading the site.</p>
+            <button class="castGame-error-container-btn">Refresh The Page</button>
           </span>
         </div>
         
         <div class="castGame-content" style="display: none;">        
-          <canvas id="castGame-cameraKit"></canvas>
+          <canvas class="castGame-cameraKit"></canvas>
           <div class="castGame-unmute-btn"></div>
         </div>
 

@@ -52,10 +52,6 @@ const phoneCheck = () => {
 }
 const isPhone = phoneCheck();
 
-const isIOS = () => {
-    return /iPhone|iPad|iPod/.test(navigator.userAgent);
-}
-
 var viz = (function(){
     var stateKey, 
         eventKey, 
@@ -77,6 +73,10 @@ var viz = (function(){
     }
 })();
 
+const sleep = (ms) => {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -85,12 +85,13 @@ var viz = (function(){
 //init
 
 const audioCtx = new ( window.AudioContext || window.webkitAudioContext )();
-const canvas = document.getElementById('castGame-cameraKit');
+const launchButton = document.querySelector('.castGame-launch-btn');
+const canvas = document.querySelector('.castGame-cameraKit');
 const content = document.querySelector('.castGame-content');
 const loaderContainer = document.querySelector('.castGame-loaderContainer');
-const errorContainer = document.getElementById('castGame-errorContainer');
-const errorMessage = document.getElementById('castGame-errorMessage');
-const errorMessageButton = document.getElementById('castGame-errorContainerButton');
+const errorContainer = document.querySelector('.castGame-errorContainer');
+const errorMessage = document.querySelector('.castGame-errorMessage');
+const errorMessageButton = document.querySelector('.castGame-error-container-btn');
 
 const init = async () => {
   try {
@@ -126,6 +127,16 @@ const init = async () => {
 
 };
 
+launchButton.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    launchButton.style.display = 'none';  
+    loaderContainer.style.display = 'block';
+
+    init();
+
+});
+
 
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -137,7 +148,7 @@ const castGameService = {
     apiSpecId: camKitApiSpecId,
 
     getRequestHandler(request) {
-        console.log(request);
+        // console.log(request);
 
         //endpoints
         if (request.endpointId == 'processRequest'){
@@ -148,7 +159,6 @@ const castGameService = {
             if(payload.function != null){
 
                 //analytics
-
                 if(payload.function == 'analytics'){
                     //TODO: setup analtyic call
                     if(payload.event != null){
@@ -405,9 +415,6 @@ const cameraKitInit = async () => {
 
 }
 
-
-const img = document.getElementById('castGame-image');
-
 const createStreamSource = async () => {
     //
     sourceImage = createImageSource(createImageSourceElement, {
@@ -549,16 +556,3 @@ const cameraKitApply = async () => {
     await sleep(250);
 
 }
-
-
-
-/////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////
-//init
-
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-init();

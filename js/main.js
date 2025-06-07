@@ -250,6 +250,7 @@ const castGameService = {
                     metadata: {},
                     body: new TextEncoder().encode(JSON.stringify(response)),
                 })
+                
             };
 
         } else {

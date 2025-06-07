@@ -84,6 +84,7 @@ var viz = (function(){
 /////////////////////////////////////////////////////////////////////////////////////
 //init
 
+const audioCtx = new ( window.AudioContext || window.webkitAudioContext )();
 const canvas = document.getElementById('castGame-cameraKit');
 const content = document.querySelector('.castGame-content');
 const loaderContainer = document.querySelector('.castGame-loaderContainer');
@@ -173,7 +174,7 @@ const castGameService = {
                 //config
                 }else if(payload.function == 'config'){
                     //TODO: setup config for resources
-                    response = { 'serverVersion': serverVersion, 'serverResourceURLPrefix': serverResourceURLPrefix, 'success': true };
+                    response = { 'serverVersion': serverVersion, 'serverResourceURLPrefix': serverResourceURLPrefix, 'isPhone': isPhone, 'success': true };
 
                 //prize
                 }else if(payload.function == 'prize'){
@@ -520,6 +521,12 @@ const cameraKitApply = async () => {
                 cameraKitSession.play('live');
                 // cameraKitSession.play('capture');
                 cameraKitSession.unmute();
+
+                if(audioCtx != null){
+                    if(audioCtx.state == "interrupted" || audioCtx.state == 'suspended' || audioCtx.state == 'closed') {
+                        audioCtx.resume().then(() => play());
+                    }
+                }                
 
                 resizeCanvas();
                                 

@@ -56,6 +56,27 @@ const isIOS = () => {
     return /iPhone|iPad|iPod/.test(navigator.userAgent);
 }
 
+var viz = (function(){
+    var stateKey, 
+        eventKey, 
+        keys = {
+                hidden: "visibilitychange",
+                webkitHidden: "webkitvisibilitychange",
+                mozHidden: "mozvisibilitychange",
+                msHidden: "msvisibilitychange"
+    };
+    for (stateKey in keys) {
+        if (stateKey in document) {
+            eventKey = keys[stateKey];
+            break;
+        }
+    }
+    return function(c) {
+        if (c) document.addEventListener(eventKey, c);
+        return !document[stateKey];
+    }
+})();
+
 
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -202,30 +223,10 @@ const castGameService = {
 
                 //visibilitychangeStatus
                 }else if(payload.function == 'visibilitychangeStatus'){
-                    if(isPhone && visibilitychangeStatus == null){
-                        document.addEventListener("visibilitychange", async () => {
-                            if (document.hidden) {
-                                //hidden
-                                visibilitychangeStatus = true;
-                                                
-                            }
+                    response = { 'success': true, 'visibilitychangeStatus': visibilitychangeStatus };
 
-                        });    
-
-                        // window.addEventListener("focus", handleBrowserState.bind(context, true));
-                        // window.addEventListener("blur", handleBrowserState.bind(context, false));
-
-                        // function handleBrowserState(isActive){
-                        //     if(!isActive){
-                        //         visibilitychangeStatus = true;
-                        //     }
-                        // }
-
-                        response = { 'success': true, 'visibilitychangeStatus': false, 'documentHidden': document.hidden };
-
-                    }else{
-                        response = { 'success': true, 'visibilitychangeStatus': visibilitychangeStatus, 'documentHidden': document.hidden };
-
+                    if(visibilitychangeStatus == 'init'){
+                        visibilitychangeStatus = 'ready';
                     }
 
                 }
@@ -266,7 +267,7 @@ errorMessageButton.addEventListener('click', (e) => {
 var cameraKit, cameraKitSession, extensions, push2Web, stream, source, sourceImage, sourceCamera, lens;
 
 const mobileVideoSourceMaxWidth = 1024; //max width of render target for canvas.  optimization technique for fps.
-var visibilitychangeStatus = null;
+var visibilitychangeStatus = 'init';
 
 const createImageSourceElement = new Image(); //force static black background, no camera.
 createImageSourceElement.src = camKitImageSource;
@@ -431,29 +432,27 @@ const cameraKitApply = async () => {
 
     //
     if(isPhone){
-        document.addEventListener("visibilitychange", async () => {
-            if(cameraKitSession != null && stream != null){
-                if (document.hidden) {
-                    cameraKitSession.pause('live');
-                    // cameraKitSession.pause('capture');
-                    cameraKitSession.mute();
-        
-                    stream.getTracks().forEach(track => track.stop());
-        
-                } else {
-                    cameraKitSession.play('live');
-                    // cameraKitSession.play('capture');
-                    cameraKitSession.unmute();
-        
-                    await createStreamSource();
-        
-                    resizeCanvas();
+        viz(function(){
+            //
+            if(viz()){
+                cameraKitSession.play('live');
+                // cameraKitSession.play('capture');
+                cameraKitSession.unmute();
 
+                resizeCanvas();
+                                
+            } else {
+                cameraKitSession.pause('live');
+                // cameraKitSession.pause('capture');
+                cameraKitSession.mute();
+
+                if(visibilitychangeStatus == 'ready'){
+                    visibilitychangeStatus = 'triggered';
                 }
-
+                
             }
 
-        });    
+        });   
 
     }
 

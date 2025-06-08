@@ -52,6 +52,10 @@ const phoneCheck = () => {
 }
 const isPhone = phoneCheck();
 
+const isIOS = () => {
+    return /iPhone|iPad|iPod/.test(navigator.userAgent);
+}
+
 var viz = (function(){
     var stateKey, 
         eventKey, 
@@ -187,7 +191,7 @@ const castGameService = {
 
                     case 'config':
                         //TODO: setup config for resources
-                        response = { 'serverVersion': serverVersion, 'serverResourceURLPrefix': serverResourceURLPrefix, 'isPhone': isPhone, 'success': true };                        
+                        response = { 'serverVersion': serverVersion, 'serverResourceURLPrefix': serverResourceURLPrefix, 'isPhone': isPhone, 'isIOS': isIOS(), 'success': true };                        
                         
                         break;
 

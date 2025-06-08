@@ -486,13 +486,13 @@ const cameraKitApply = async () => {
             if(viz()){
                 cameraKitSession.play('live');
                 // cameraKitSession.play('capture');
-                // cameraKitSession.unmute();
+                cameraKitSession.unmute();
 
-                // if(audioCtx != null){
-                //     if(audioCtx.state == "interrupted" || audioCtx.state == 'suspended' || audioCtx.state == 'closed') {
-                //         audioCtx.resume().then(() => play());
-                //     }
-                // }                
+                if(audioCtx != null){
+                    if(audioCtx.state == "interrupted" || audioCtx.state == 'suspended' || audioCtx.state == 'closed') {
+                        audioCtx.resume().then(() => play());
+                    }
+                }                
 
                 resizeCanvas();
                                 

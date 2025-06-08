@@ -158,91 +158,105 @@ const castGameService = {
             //
             if(payload.function != null){
 
-                //analytics
-                if(payload.function == 'analytics'){
-                    //TODO: setup analtyic call
-                    if(payload.event != null){
-                        console.log('Analytics Event: ' + payload.event);
+                switch (payload.function) {
+                    case 'analytics':
+                        //TODO: setup analtyic call
+                        if(payload.event != null){
+                            console.log('Analytics Event: ' + payload.event);
+                            response = { 'success': true };
+                        }
+
+                        break;
+
+                    case 'log':
+                        if(payload.log != null){
+                            console.log('Log: ' + payload.log);
+                            response = { 'success': true };
+                        }
+
+                        break;
+
+                    case 'error':
+                        //TODO: hookup an error logger
+                        if(payload.error != null){
+                            console.log('Error: ' + payload.error);
+                            response = { 'success': true };
+                        }                        
+
+                        break;
+
+                    case 'config':
+                        //TODO: setup config for resources
+                        response = { 'serverVersion': serverVersion, 'serverResourceURLPrefix': serverResourceURLPrefix, 'isPhone': isPhone, 'success': true };                        
+                        
+                        break;
+
+                    case 'prize':
+                        //TODO: always respond with 200 and success true
+                        if(payload.tier != null){
+                            console.log('Prize: Submit ' + payload.tier);
+                            response = { 'success': true };
+                        }                        
+                        
+                        break;
+
+                    case 'prizeStatus':
+                        //TODO: hook into prize status
+                        console.log('Prize: Get Status');
+                        response = {
+                            'success': true,
+                            'prizeEntry1': true,
+                            'prizeEntry2': false,
+                            'prizeEntry3': false,
+                            'instantWin': true,
+                        };    
+
+                        break;
+
+                    case 'gameStatus':
+                        //TODO: store game status in localstorage for general site usage
+                        if(payload.cookies != null && payload.demogorgons != null){
+                            console.log('Game: Submit Status, cookies: ' + payload.cookies + ', demogorgons: ' + payload.demogorgons);
+
+                            localStorage.setItem('cookies', payload.cookies);
+                            localStorage.setItem('demogorgons', payload.demogorgons);
+
+                            response = { 'success': true };
+                        }
+                        
+                        break;
+
+                    case 'gameExit':
+                        //TODO: hookup redirect logic
+                        console.log('Game: Exit');
                         response = { 'success': true };
-                    }
 
-                //log
-                }else if(payload.function == 'log'){
-                    if(payload.log != null){
-                        console.log('Log: ' + payload.log);
+                        location.reload();
+
+                        break;
+
+                    case 'reload':
                         response = { 'success': true };
-                    }
 
-                //error
-                }else if(payload.function == 'error'){
-                    //TODO: hookup an error logger
-                    if(payload.error != null){
-                        console.log('Error: ' + payload.error);
-                        response = { 'success': true };
-                    }
+                        location.reload();
 
-                //config
-                }else if(payload.function == 'config'){
-                    //TODO: setup config for resources
-                    response = { 'serverVersion': serverVersion, 'serverResourceURLPrefix': serverResourceURLPrefix, 'isPhone': isPhone, 'success': true };
+                        break;
 
-                //prize
-                }else if(payload.function == 'prize'){
-                    //TODO: always respond with 200 and success true
-                    if(payload.tier != null){
-                        console.log('Prize: Submit ' + payload.tier);
-                        response = { 'success': true };
-                    }
+                    case 'visibilitychangeStatus':
+                        response = { 'success': true, 'visibilitychangeStatus': visibilitychangeStatus };
 
-                //prizeStatus
-                }else if(payload.function == 'prizeStatus'){
-                    //TODO: hook into prize status
-                    console.log('Prize: Get Status');
-                    response = {
-                        'success': true,
-                        'prizeEntry1': true,
-                        'prizeEntry2': false,
-                        'prizeEntry3': false,
-                        'instantWin': true,
-                    };
+                        if(visibilitychangeStatus == 'init'){
+                            visibilitychangeStatus = 'ready';
+                        }
 
-                //gameStatus
-                }else if(payload.function == 'gameStatus'){
-                    //TODO: store game status in localstorage for general site usage
-                    if(payload.cookies != null && payload.demogorgons != null){
-                        console.log('Game: Submit Status, cookies: ' + payload.cookies + ', demogorgons: ' + payload.demogorgons);
+                        break;
 
-                        localStorage.setItem('cookies', payload.cookies);
-                        localStorage.setItem('demogorgons', payload.demogorgons);
-
-                        response = { 'success': true };
-                    }
-
-                //gameExit
-                }else if(payload.function == 'gameExit'){
-                    //TODO: hookup redirect logic
-                    console.log('Game: Exit');
-                    response = { 'success': true };
-
-                    location.reload();
-
-                //reload
-                }else if(payload.function == 'reload'){
-                    response = { 'success': true };
-
-                    location.reload();
-
-                //visibilitychangeStatus
-                }else if(payload.function == 'visibilitychangeStatus'){
-                    response = { 'success': true, 'visibilitychangeStatus': visibilitychangeStatus };
-
-                    if(visibilitychangeStatus == 'init'){
-                        visibilitychangeStatus = 'ready';
-                    }
-
+                    default:
+                        
                 }
 
             }
+
             //
             return (reply) => {
                 reply({

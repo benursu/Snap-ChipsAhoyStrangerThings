@@ -388,6 +388,10 @@ const cameraKitApply = async () => {
     /////////////////////////////////////////////////////////////////////////////////////
     //resize
 
+    window.addEventListener('orientationchange', function() {
+        resizeCanvas();
+    });
+
     //debounce function
     const debounce = (func, delay) => {
         let timer;
@@ -426,12 +430,34 @@ const cameraKitApply = async () => {
             var newWidth = width;
             var newHeight = height;
 
-            if(isPhone && newWidth > mobileVideoSourceMaxWidth){
-                newWidth = mobileVideoSourceMaxWidth;
+            if(isPhone){
+                //phone 
+                if(newWidth > mobileVideoSourceMaxWidth){
+                    newWidth = mobileVideoSourceMaxWidth;
 
-                var ratio = mobileVideoSourceMaxWidth / width;
-                newHeight = newHeight * ratio;
+                    var ratio = mobileVideoSourceMaxWidth / width;
+                    newHeight = newHeight * ratio;
+
+                }  
+
+                if(screen.orientation.type == 'landscape-primary' || screen.orientation.type == 'landscape-secondary'){
+                    //landscape
+                    newWidth = newHeight * 0.5625;
+
+                }else{
+                    //portrait, correct position
+
+                }
+
+            }else{
+                //desktop
+                newWidth = newHeight * 0.5625;
+                newHeight = newHeight;
+
             }
+
+            content.style.width = newWidth + 'px';
+            content.style.height = newHeight + 'px';            
 
             createImageSourceElement.width = newWidth;
             createImageSourceElement.height = newHeight;
@@ -460,13 +486,13 @@ const cameraKitApply = async () => {
             if(viz()){
                 cameraKitSession.play('live');
                 // cameraKitSession.play('capture');
-                cameraKitSession.unmute();
+                // cameraKitSession.unmute();
 
-                if(audioCtx != null){
-                    if(audioCtx.state == "interrupted" || audioCtx.state == 'suspended' || audioCtx.state == 'closed') {
-                        audioCtx.resume().then(() => play());
-                    }
-                }                
+                // if(audioCtx != null){
+                //     if(audioCtx.state == "interrupted" || audioCtx.state == 'suspended' || audioCtx.state == 'closed') {
+                //         audioCtx.resume().then(() => play());
+                //     }
+                // }                
 
                 resizeCanvas();
                                 

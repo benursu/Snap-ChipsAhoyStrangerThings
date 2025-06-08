@@ -162,6 +162,8 @@ const castGameService = {
 
                 switch (payload.function) {
                     case 'analytics':
+                        //{ 'function': 'analytics', 'event': 'foo' }
+
                         //TODO: setup analtyic call
                         if(payload.event != null){
                             console.log('Analytics Event: ' + payload.event);
@@ -171,6 +173,9 @@ const castGameService = {
                         break;
 
                     case 'log':
+                        //{ 'function': 'log', 'log': 'foo' }
+
+                        //used for console.log test
                         if(payload.log != null){
                             console.log('Log: ' + payload.log);
                             response = { 'success': true };
@@ -179,6 +184,8 @@ const castGameService = {
                         break;
 
                     case 'error':
+                        //{ 'function': 'error', 'error': 'foo' }
+
                         //TODO: hookup an error logger
                         if(payload.error != null){
                             console.log('Error: ' + payload.error);
@@ -188,12 +195,18 @@ const castGameService = {
                         break;
 
                     case 'config':
+                        //{ 'function': 'config' }
+
                         //TODO: setup config for resources
                         response = { 'serverVersion': serverVersion, 'serverResourceURLPrefix': serverResourceURLPrefix, 'isPhone': isPhone, 'isIOS': isIOS(), 'success': true };                        
                         
                         break;
 
                     case 'prize':
+                        //{ 'function': 'prize', 'tier': 1 }
+                        //{ 'function': 'prize', 'tier': 2 }
+                        //{ 'function': 'prize', 'tier': 3 }
+
                         //TODO: always respond with 200 and success true
                         if(payload.tier != null){
                             console.log('Prize: Submit ' + payload.tier);
@@ -203,7 +216,9 @@ const castGameService = {
                         break;
 
                     case 'prizeStatus':
-                        //TODO: hook into prize status
+                        //{ 'function': 'prizeStatus' }
+
+                        //TODO: hook into prize status and reply
                         console.log('Prize: Get Status');
                         response = {
                             'success': true,
@@ -216,6 +231,8 @@ const castGameService = {
                         break;
 
                     case 'gameStatus':
+                        //{ 'function': 'gameStatus', 'cookies': 0, 'demogorgons': 0 }
+
                         //TODO: store game status in localstorage for general site usage
                         if(payload.cookies != null && payload.demogorgons != null){
                             console.log('Game: Submit Status, cookies: ' + payload.cookies + ', demogorgons: ' + payload.demogorgons);
@@ -229,6 +246,8 @@ const castGameService = {
                         break;
 
                     case 'gameExit':
+                        //{ 'function': 'gameExit' }
+
                         //TODO: hookup redirect logic
                         console.log('Game: Exit');
                         response = { 'success': true };
@@ -238,6 +257,9 @@ const castGameService = {
                         break;
 
                     case 'reload':
+                        //{ 'function': 'reload' }
+
+                        //used to force page reload
                         response = { 'success': true };
 
                         location.reload();
@@ -245,6 +267,9 @@ const castGameService = {
                         break;
 
                     case 'visibilitychangeStatus':
+                        //{ 'function': 'visibilitychangeStatus' }
+
+                        //used for visibilitychange tracking
                         response = { 'success': true, 'visibilitychangeStatus': visibilitychangeStatus };
 
                         if(visibilitychangeStatus == 'init'){

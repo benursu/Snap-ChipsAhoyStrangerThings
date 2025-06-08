@@ -197,7 +197,7 @@ const castGameService = {
                     case 'config':
                         //{ 'function': 'config' }
 
-                        //TODO: setup config for resources
+                        //used to get server config vars
                         response = { 'serverVersion': serverVersion, 'serverResourceURLPrefix': serverResourceURLPrefix, 'isPhone': isPhone, 'isIOS': isIOS(), 'success': true };                        
                         
                         break;

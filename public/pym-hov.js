@@ -18,9 +18,11 @@ pym.js - v1.3.2.1 - 2025-06-29
         define(factory);
     }
     else if (typeof module !== 'undefined' && module.exports) {
+            console.log('b')
         module.exports = factory();
     } else {
         window.pym = factory.call(this);
+    console.log('a')
     }
 })(function() {
     var MESSAGE_DELIMITER = 'xPYMx';
@@ -1127,3 +1129,4 @@ pym.js - v1.3.2.1 - 2025-06-29
 
     return lib;
 });
+

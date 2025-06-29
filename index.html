@@ -5,13 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="Permissions-Policy" content="gyroscope=()">
     <title>Chips Ahoy! Stranger Things</title>
+    <script src="pym-hov.js"></script>
     <script>
       document.addEventListener("DOMContentLoaded", (e) => {
         const pymChild = new pym.Child();
-        pymChild.sendMessage('doEvent', JSON.stringify({ event: 'loaded', data:{} }));
+        pymChild.sendMessage('doEvent', JSON.stringify({ event: 'loaded', data: {}}));
         window.pymChild = pymChild;
       })
-    </script>    
+    </script>
   </head>
   <body>
     <div class="castGame-app">

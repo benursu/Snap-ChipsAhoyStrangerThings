@@ -1,9 +1,6 @@
 import '../scss/style.scss'
 import { bootstrapCameraKit, createMediaStreamSource, createImageSource, Transform2D, remoteApiServicesFactory, Injectable, estimateLensPerformance } from '@snap/camera-kit';
-
-//TODO: comment as needed, only for debug, remove from prod
 import { Push2Web } from '@snap/push2web';
-import * as pym from './pym-hov.js';
 
 
 

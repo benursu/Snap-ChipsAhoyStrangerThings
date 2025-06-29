@@ -157,9 +157,10 @@ const castGameService = {
                     case 'analytics':
                         //{ 'function': 'analytics', 'event': 'foo' }
 
-                        //TODO: setup analtyic call
+                        //send analtyics event
                         if(payload.event != null){
-                            console.log('Analytics Event: ' + payload.event);
+                            console.log('Pym Child: Analytics Event: ' + payload.event);
+                            pymChildSendMessage('analytics', { event: payload.event });
                             response = { 'success': true };
                         }
 
@@ -170,7 +171,7 @@ const castGameService = {
 
                         //used for console.log test
                         if(payload.log != null){
-                            console.log('Log: ' + payload.log);
+                            console.log('Pym Child: Log: ' + payload.log);
                             response = { 'success': true };
                         }
 
@@ -179,9 +180,9 @@ const castGameService = {
                     case 'error':
                         //{ 'function': 'error', 'error': 'foo' }
 
-                        //TODO: hookup an error logger
+                        //used for future logger feature
                         if(payload.error != null){
-                            console.log('Error: ' + payload.error);
+                            console.log('Pym Child: Error: ' + payload.error);
                             response = { 'success': true };
                         }                        
 
@@ -195,38 +196,36 @@ const castGameService = {
                         
                         break;
 
-                    case 'prize':
-                        //{ 'function': 'prize', 'tier': 1 }
-                        //{ 'function': 'prize', 'tier': 2 }
-                        //{ 'function': 'prize', 'tier': 3 }
+                    case 'award':
+                        //{ 'function': 'award', 'tier': 1 }
+                        //{ 'function': 'award', 'tier': 2 }
+                        //{ 'function': 'award', 'tier': 3 }
 
-                        //TODO: always respond with 200 and success true
+                        //send award tier
                         if(payload.tier != null){
-
-                            if (window.pymChild) {
-                                window.pymChild.sendMessage(
-                                    'doEvent',
-                                    JSON.stringify({ event: 'award', data: payload })
-                                );
-                            }
-
-                            console.log('Prize: Submit ' + payload.tier);
+                            console.log('Pym Child: Award: Submit ' + payload.tier);
+                            pymChildSendMessage('award', { tier: payload.tier });
                             response = { 'success': true };
                         }                        
                         
                         break;
 
-                    case 'prizeStatus':
-                        //{ 'function': 'prizeStatus' }
+                    case 'awardStatus':
+                        //{ 'function': 'awardStatus' }
 
-                        //TODO: hook into prize status and reply
-                        console.log('Prize: Get Status');
+                        //recieve awarded status
+                        console.log('Pym Child: Award: Get Status');
+
+                        //TODO: get info back from Pym Parent
+                        pymChildSendMessage('awardStatus', {});
+
+                        //fake data for now
                         response = {
                             'success': true,
-                            'prizeEntry1': true,
-                            'prizeEntry2': false,
-                            'prizeEntry3': false,
-                            'instantWin': true,
+                            'awardTier1': true,
+                            'awardTier2': false,
+                            'awardTier3': false,
+                            'awardInstantWin': true,
                         };    
 
                         break;
@@ -234,26 +233,24 @@ const castGameService = {
                     case 'gameStatus':
                         //{ 'function': 'gameStatus', 'cookies': 0, 'demogorgons': 0 }
 
-                        //TODO: store game status in localstorage for general site usage
+                        //send game progress
                         if(payload.cookies != null && payload.demogorgons != null){
-                            console.log('Game: Submit Status, cookies: ' + payload.cookies + ', demogorgons: ' + payload.demogorgons);
+                            console.log('Pym Child: Game: Submit Status, cookies: ' + payload.cookies + ', demogorgons: ' + payload.demogorgons);
 
-                            localStorage.setItem('cookies', payload.cookies);
-                            localStorage.setItem('demogorgons', payload.demogorgons);
+                            pymChildSendMessage('gameStatus', { cookies: payload.cookies, demogorgons: payload.demogorgons });
 
                             response = { 'success': true };
                         }
                         
                         break;
 
-                    case 'gameExit':
-                        //{ 'function': 'gameExit' }
+                    case 'gameOver':
+                        //{ 'function': 'gameOver' }
 
-                        //TODO: hookup redirect logic
-                        console.log('Game: Exit');
+                        //send game  over
+                        console.log('Pym Child: Game: Over');
+                        pymChildSendMessage('gameOver', {});                        
                         response = { 'success': true };
-
-                        location.reload();
 
                         break;
 
@@ -304,6 +301,17 @@ const castGameService = {
 
 };
 
+function pymChildSendMessage(event, data){
+    if (window.pymChild) {
+        window.pymChild.sendMessage(
+            'doEvent',
+            JSON.stringify({ event: event, data: data })
+        );
+    }
+
+}
+
+
 //reload button
 errorMessageButton.addEventListener('click', (e) => {
     e.preventDefault();
@@ -329,9 +337,9 @@ if(serverResourceURLPrefix.charAt(serverResourceURLPrefix.length - 1) == '/'){
     serverResourceURLPrefix = serverResourceURLPrefix.slice(0, -1);
 }
 
-//canvas image
+//canvas image, force static black background, no camera.
 const blackPixel = 'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=';
-const createImageSourceElement = new Image(); //force static black background, no camera.
+const createImageSourceElement = new Image(); 
 createImageSourceElement.src = blackPixel;
 createImageSourceElement.width = 1024;
 createImageSourceElement.height = 1024;

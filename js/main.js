@@ -28,11 +28,6 @@ const lensId = '728a5dca-413a-4450-8603-84be19068f3d'; //staging
 
 const groupId = 'a32e98c9-24b1-4039-b57a-2785f5abed01'; //dev,staging,alpha
 
-//full HTTPS location of assets for CamKit canvas game
-// const serverResourceURLPrefix = 'https://cdn.com';
-// const serverResourceURLPrefix = '/vendor/HouseOfV/dist'
-const serverResourceURLPrefix = ''
-
 
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -329,8 +324,15 @@ var cameraKit, cameraKitSession, extensions, push2Web, stream, source, sourceIma
 
 const mobileVideoSourceMaxWidth = 1024; //max width of render target for canvas.  optimization technique for fps.
 var visibilitychangeStatus = 'init';
-const blackPixel = 'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=';
 
+//location of assets for CamKit canvas game
+var serverResourceURLPrefix = window.location.pathname.replace('index.html', '');
+if(serverResourceURLPrefix.charAt(serverResourceURLPrefix.length - 1) == '/'){
+    serverResourceURLPrefix = serverResourceURLPrefix.slice(0, -1);
+}
+
+//canvas image
+const blackPixel = 'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=';
 const createImageSourceElement = new Image(); //force static black background, no camera.
 createImageSourceElement.src = blackPixel;
 createImageSourceElement.width = 1024;

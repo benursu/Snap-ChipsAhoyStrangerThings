@@ -3,6 +3,7 @@ import { bootstrapCameraKit, createMediaStreamSource, createImageSource, Transfo
 
 //TODO: comment as needed, only for debug, remove from prod
 import { Push2Web } from '@snap/push2web';
+import * as pym from './pym-hov.js';
 
 
 

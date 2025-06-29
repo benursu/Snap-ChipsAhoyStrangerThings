@@ -29,11 +29,9 @@ const lensId = '728a5dca-413a-4450-8603-84be19068f3d'; //staging
 const groupId = 'a32e98c9-24b1-4039-b57a-2785f5abed01'; //dev,staging,alpha
 
 //full HTTPS location of assets for CamKit canvas game
-// const serverResourceURLPrefix = 'https://snap-castgame-staging-59ca3a0b5639.herokuapp.com';
-// const serverResourceURLPrefix = 'https://snap-castgame-dev-31ea29a7d9cf.herokuapp.com';
-const serverResourceURLPrefix = '';
-
-const camKitImageSource = '/app/black.png';
+// const serverResourceURLPrefix = 'https://cdn.com';
+// const serverResourceURLPrefix = '/vendor/HouseOfV/dist'
+const serverResourceURLPrefix = ''
 
 
 
@@ -96,6 +94,8 @@ const errorMessage = document.querySelector('.castGame-errorMessage');
 const errorMessageButton = document.querySelector('.castGame-error-container-btn');
 
 const init = async () => {
+  loaderContainer.style.display = 'block';
+
   try {
     let width, height;
     if (window.visualViewport) {
@@ -129,15 +129,15 @@ const init = async () => {
 
 };
 
-launchButton.addEventListener('click', (e) => {
-    e.preventDefault();
+// launchButton.addEventListener('click', (e) => {
+//     e.preventDefault();
 
-    launchButton.style.display = 'none';  
-    loaderContainer.style.display = 'block';
+//     launchButton.style.display = 'none';  
+//     loaderContainer.style.display = 'block';
 
-    init();
+//     init();
 
-});
+// });
 
 
 
@@ -209,6 +209,14 @@ const castGameService = {
 
                         //TODO: always respond with 200 and success true
                         if(payload.tier != null){
+
+                            if (window.pymChild) {
+                                window.pymChild.sendMessage(
+                                    'doEvent',
+                                    JSON.stringify({ event: 'award', data: payload })
+                                );
+                            }
+
                             console.log('Prize: Submit ' + payload.tier);
                             response = { 'success': true };
                         }                        
@@ -321,9 +329,10 @@ var cameraKit, cameraKitSession, extensions, push2Web, stream, source, sourceIma
 
 const mobileVideoSourceMaxWidth = 1024; //max width of render target for canvas.  optimization technique for fps.
 var visibilitychangeStatus = 'init';
+const blackPixel = 'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=';
 
 const createImageSourceElement = new Image(); //force static black background, no camera.
-createImageSourceElement.src = camKitImageSource;
+createImageSourceElement.src = blackPixel;
 createImageSourceElement.width = 1024;
 createImageSourceElement.height = 1024;
 
@@ -356,6 +365,7 @@ const cameraKitInit = async () => {
 
     cameraKitSession = await cameraKit.createSession({ liveRenderTarget: canvas });
     cameraKitSession.events.addEventListener('error', (event) => {
+    console.log('cameraKitSession Error:' + event);
     if (event.detail.error.name === 'LensExecutionError') {
         console.log(
         'The current Lens encountered an error and was removed.',
@@ -542,3 +552,12 @@ const cameraKitApply = async () => {
     await sleep(250);
 
 }
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////
+//init
+
+init();

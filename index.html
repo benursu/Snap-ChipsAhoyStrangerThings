@@ -6,16 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="Permissions-Policy" content="gyroscope=()">
     <title>Chips Ahoy! Stranger Things</title>
+    <script src="https://pym.nprapps.org/pym.v1.min.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", (e) => {
+        const pymChild = new pym.Child();
+        pymChild.sendMessage('doEvent', JSON.stringify({ event: 'loaded', data: {tier: 1, more: 'data'}}));
+        window.pymChild = pymChild;
+      })
+    </script>    
   </head>
   <body>
     <div class="castGame-app">
       
       <div class="castGame-container">
 
-        <div class="castGame-logo"></div>
-
         <div class="castGame-loaderContainer">
-          <div class="castGame-launch-btn"></div>
           <div class="castGame-loader">
             <div class="castGame-spinner"></div>
           </div>

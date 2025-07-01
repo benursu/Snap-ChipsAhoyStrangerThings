@@ -447,13 +447,14 @@ const cameraKitInit = async () => {
 
     cameraKitSession = await cameraKit.createSession({ liveRenderTarget: canvas });
     cameraKitSession.events.addEventListener('error', (event) => {
-    console.log('cameraKitSession Error:' + event);
-    if (event.detail.error.name === 'LensExecutionError') {
-        console.log(
-        'The current Lens encountered an error and was removed.',
-        event.detail.error
-        );
-    }
+        console.log('cameraKitSession Error:' + event);
+        if (event.detail.error.name === 'LensExecutionError') {
+            console.log(
+            'The current Lens encountered an error and was removed.',
+            event.detail.error
+            );
+        }
+        location.reload();
     });
 
     await createStreamSource();
@@ -487,7 +488,7 @@ const cameraKitApply = async () => {
 
     await cameraKitSession.applyLens(lens);
     await cameraKitSession.play('live');
-    // await cameraKitSession.play('capture');
+    await cameraKitSession.play('capture');
 
     if(push2Web != null){
         var push2WebAccessToken = '';
@@ -603,7 +604,7 @@ const cameraKitApply = async () => {
         viz(function(){
             //
             if(viz()){
-                cameraKitSession.play('live');
+                // cameraKitSession.play('live');
                 // cameraKitSession.play('capture');
                 cameraKitSession.unmute();
 
@@ -616,7 +617,7 @@ const cameraKitApply = async () => {
                 resizeCanvas();
                                 
             } else {
-                cameraKitSession.pause('live');
+                // cameraKitSession.pause('live');
                 // cameraKitSession.pause('capture');
                 cameraKitSession.mute();
 

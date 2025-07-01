@@ -140,6 +140,13 @@ const init = async () => {
 /////////////////////////////////////////////////////////////////////////////////////
 //remote api
 
+var awardStatusState = {
+    'awardedTier1': false,
+    'awardedTier2': false,
+    'awardedTier3': false,
+    'awardedInstantWin': false,
+};
+
 const castGameService = {
     apiSpecId: camKitApiSpecId,
 
@@ -165,6 +172,8 @@ const castGameService = {
                             response = { 'success': true };
                         }
 
+                        return getRequestHandlerReply(response);
+
                         break;
 
                     case 'log':
@@ -176,6 +185,8 @@ const castGameService = {
                             response = { 'success': true };
                         }
 
+                        return getRequestHandlerReply(response);
+
                         break;
 
                     case 'error':
@@ -185,7 +196,9 @@ const castGameService = {
                         if(payload.error != null){
                             console.log('Pym Child: Error: ' + payload.error);
                             response = { 'success': true };
-                        }                        
+                        }               
+                        
+                        return getRequestHandlerReply(response);
 
                         break;
 
@@ -193,8 +206,10 @@ const castGameService = {
                         //{ 'function': 'config' }
 
                         //used to get server config vars
-                        response = { 'serverVersion': serverVersion, 'serverResourceURLPrefix': serverResourceURLPrefix, 'isPhone': isPhone, 'isIOS': isIOS(), 'success': true };                        
+                        response = { 'serverVersion': serverVersion, 'serverResourceURLPrefix': serverResourceURLPrefix, 'isPhone': isPhone, 'isIOS': isIOS(), 'success': true };
                         
+                        return getRequestHandlerReply(response);
+
                         break;
 
                     case 'award':
@@ -208,6 +223,8 @@ const castGameService = {
                             pymChildSendMessage('award', { tier: payload.tier });
                             response = { 'success': true };
                         }                        
+
+                        return getRequestHandlerReply(response);
                         
                         break;
 
@@ -217,30 +234,23 @@ const castGameService = {
                         //recieve awarded status
                         console.log('Pym Child: Award: Get Status');
 
-                        async function getAwardStatus() {
-                            pymChildSendMessage('awardStatus', {})
-                            response = await new Promise((resolve) => {
-                                const originalAwardStatus = eventRegistry.awardStatus
-                                eventRegistry.awardStatus = (data) => {
-                                eventRegistry.awardStatus = originalAwardStatus
-                                resolve(data)
-                                }
-                            })
+                        pymChildSendMessage('awardStatus', {});
 
-                            console.log('Pym Child: Award: Received Status', response);
-                        }
-                        getAwardStatus();
+                        response = { 'success': true };
 
-                        //example response
-                        // response = {
-                        //     'success': true,
-                        //     'awardedTier1': true,
-                        //     'awardedTier2': false,
-                        //     'awardedTier3': false,
-                        //     'awardedInstantWin': true,
-                        // };    
+                        return getRequestHandlerReply(response);
 
                         break;
+
+                    case 'awardStatusState':
+                        //{ 'function': 'awardStatusState' }
+
+                        //provide awardStatusState
+                        response = { 'awardedTier1': data.awardedTier1, 'awardedTier2': data.awardedTier2, 'awardedTier3': data.awardedTier3,'awardedInstantWin': data.awardedInstantWin, 'success': true };
+
+                        return getRequestHandlerReply(response);
+
+                        break;                        
 
                     case 'gameStatus':
                         //{ 'function': 'gameStatus', 'cookies': 0, 'demogorgons': 0 }
@@ -253,6 +263,8 @@ const castGameService = {
 
                             response = { 'success': true };
                         }
+
+                        return getRequestHandlerReply(response);
                         
                         break;
 
@@ -261,8 +273,7 @@ const castGameService = {
 
                         //send game  over
                         console.log('Pym Child: Game: Over');
-                        pymChildSendMessage('gameOver', {});                        
-                        response = { 'success': true };
+                        pymChildSendMessage('gameOver', {});
 
                         break;
 
@@ -270,8 +281,6 @@ const castGameService = {
                         //{ 'function': 'reload' }
 
                         //used to force page reload
-                        response = { 'success': true };
-
                         location.reload();
 
                         break;
@@ -286,6 +295,8 @@ const castGameService = {
                             visibilitychangeStatus = 'ready';
                         }
 
+                        return getRequestHandlerReply(response);
+
                         break;
 
                     default:
@@ -293,16 +304,6 @@ const castGameService = {
                 }
 
             }
-
-            //
-            return (reply) => {
-                reply({
-                    status: 'success',
-                    metadata: {},
-                    body: new TextEncoder().encode(JSON.stringify(response)),
-                })
-                
-            };
 
         } else {
             return;
@@ -313,13 +314,31 @@ const castGameService = {
 
 };
 
+function getRequestHandlerReply(response){
+    return (reply) => {
+        reply({
+            status: 'success',
+            metadata: {},
+            body: new TextEncoder().encode(JSON.stringify(response)),
+        })
+        
+    };
+}
+
 const eventRegistry = {
   awardStatus: awardStatusEvent,
 }
 
-function awardStatusEvent(data) {
-  console.log('Pym Child Award Status Event:  ' + JSON.stringify(response))
-  // this event will be overwritten while a promise is waiting to receive the status from the award status request. After that resolves this event will be available
+async function awardStatusEvent(data) {
+    console.log('Pym Child: Award: Received Status Event', data);
+
+    awardStatusState = {
+        'awardedTier1': data.awardedTier1,
+        'awardedTier2': data.awardedTier2,
+        'awardedTier3': data.awardedTier3,
+        'awardedInstantWin': data.awardedInstantWin,
+    };
+
 }
 
 // to pym parent
@@ -333,25 +352,25 @@ function pymChildSendMessage(event, data) {
 }
 
 // from pym parent - called when the parent sends a message to this pym frame. Is bound as callback in init()
-function onPymMessage(data) {
+function pymChildOnMessage(data) {
   const dataParsed = JSON.parse(data)
   dispatchEvent(dataParsed?.event, dataParsed?.data) // using the same syntax / setup as ARGame.vue for ease
 }
 
 function registerPymReceiver() {
-  console.log('Registering Pym Receiver')
+  console.log('Registering Pym Receiver');
   return new Promise((resolve, reject) => {
     const checkPymChild = () => {
       if (window.pymChild) {
-        console.log('Registered Pym Receiver Successfully')
-        window.pymChild.onMessage('toChild', onPymMessage)
+        console.log('Registered Pym Receiver Successfully');
+        window.pymChild.onMessage('toChild', pymChildOnMessage);
         resolve()
       } else {
-        console.log('Pym Not Found Rechecking')
-        setTimeout(checkPymChild, 50)
+        console.log('Pym Not Found Rechecking');
+        setTimeout(checkPymChild, 100);
       }
     }
-    checkPymChild()
+    checkPymChild();
   })
 }
 

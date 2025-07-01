@@ -246,7 +246,7 @@ const castGameService = {
                         //{ 'function': 'awardStatusState' }
 
                         //provide awardStatusState
-                        response = { 'awardedTier1': data.awardedTier1, 'awardedTier2': data.awardedTier2, 'awardedTier3': data.awardedTier3,'awardedInstantWin': data.awardedInstantWin, 'success': true };
+                        response = { 'awardedTier1': awardStatusState.awardedTier1, 'awardedTier2': awardStatusState.awardedTier2, 'awardedTier3': awardStatusState.awardedTier3,'awardedInstantWin': awardStatusState.awardedInstantWin, 'success': true };
 
                         return getRequestHandlerReply(response);
 

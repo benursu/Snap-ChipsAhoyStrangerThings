@@ -105,6 +105,7 @@ const init = async () => {
     canvas.height = height;
 
     await cameraKitInit();
+    await registerPymReceiver();
 
     content.style.display = 'block';
     loaderContainer.style.display = 'none';  
@@ -216,17 +217,28 @@ const castGameService = {
                         //recieve awarded status
                         console.log('Pym Child: Award: Get Status');
 
-                        //TODO: get info back from Pym Parent
-                        pymChildSendMessage('awardStatus', {});
+                        async function getAwardStatus() {
+                            pymChildSendMessage('awardStatus', {})
+                            response = await new Promise((resolve) => {
+                                const originalAwardStatus = eventRegistry.awardStatus
+                                eventRegistry.awardStatus = (data) => {
+                                eventRegistry.awardStatus = originalAwardStatus
+                                resolve(data)
+                                }
+                            })
 
-                        //fake data for now
-                        response = {
-                            'success': true,
-                            'awardTier1': true,
-                            'awardTier2': false,
-                            'awardTier3': false,
-                            'awardInstantWin': true,
-                        };    
+                            console.log('Pym Child: Award: Received Status', response);
+                        }
+                        getAwardStatus();
+
+                        //example response
+                        // response = {
+                        //     'success': true,
+                        //     'awardedTier1': true,
+                        //     'awardedTier2': false,
+                        //     'awardedTier3': false,
+                        //     'awardedInstantWin': true,
+                        // };    
 
                         break;
 
@@ -301,16 +313,59 @@ const castGameService = {
 
 };
 
-function pymChildSendMessage(event, data){
-    if (window.pymChild) {
-        window.pymChild.sendMessage(
-            'doEvent',
-            JSON.stringify({ event: event, data: data })
-        );
-    }
-
+const eventRegistry = {
+  awardStatus: awardStatusEvent,
 }
 
+function awardStatusEvent(data) {
+  console.log('Pym Child Award Status Event:  ' + JSON.stringify(response))
+  // this event will be overwritten while a promise is waiting to receive the status from the award status request. After that resolves this event will be available
+}
+
+// to pym parent
+function pymChildSendMessage(event, data) {
+  if (window.pymChild) {
+    window.pymChild.sendMessage(
+      'doEvent',
+      JSON.stringify({ event: event, data: data })
+    )
+  }
+}
+
+// from pym parent - called when the parent sends a message to this pym frame. Is bound as callback in init()
+function onPymMessage(data) {
+  const dataParsed = JSON.parse(data)
+  dispatchEvent(dataParsed?.event, dataParsed?.data) // using the same syntax / setup as ARGame.vue for ease
+}
+
+function registerPymReceiver() {
+  console.log('Registering Pym Receiver')
+  return new Promise((resolve, reject) => {
+    const checkPymChild = () => {
+      if (window.pymChild) {
+        console.log('Registered Pym Receiver Successfully')
+        window.pymChild.onMessage('toChild', onPymMessage)
+        resolve()
+      } else {
+        console.log('Pym Not Found Rechecking')
+        setTimeout(checkPymChild, 50)
+      }
+    }
+    checkPymChild()
+  })
+}
+
+const dispatchEvent = (type, response) => {
+  switch (type) {
+    case 'awardStatus':
+      eventRegistry[type](response)
+      break
+    default:
+      console.log(
+        `Pym Child: Unknown dispatch: ${JSON.stringify({ type, response })}`
+      )
+  }
+}
 
 //reload button
 errorMessageButton.addEventListener('click', (e) => {

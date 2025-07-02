@@ -22,7 +22,7 @@ const camKitApiSpecId = '4bcc807f-59c5-4596-9535-f4489b829fff'; //api spec id fo
 
 // const lensId = 'cba3e43c-a01b-43cf-b203-91c5931d2cbd'; //dev
 // const lensId = '728a5dca-413a-4450-8603-84be19068f3d'; //staging
-const lensId = '8f65b735-e3cd-4fef-a584-ee93fc03da23'; //alpha
+const lensId = '8f65b735-e3cd-4fef-a584-ee93fc03da23'; //alphaf
 
 const groupId = 'a32e98c9-24b1-4039-b57a-2785f5abed01'; //dev,staging,alpha
 
@@ -496,6 +496,8 @@ const cameraKitApply = async () => {
         if(urlParams.get('access_token')){
             push2WebAccessToken = urlParams.get('access_token');
         }
+
+        push2WebAccessToken='eyJpc3MiOiJodHRwczpcL1wvYWNjb3VudHMuc25hcGNoYXQuY29tXC9hY2NvdW50c1wvb2F1dGgyXC90b2tlbiIsInR5cCI6IkpXVCIsImVuYyI6IkExMjhDQkMtSFMyNTYiLCJhbGciOiJkaXIiLCJraWQiOiJhY2Nlc3MtdG9rZW4tYTEyOGNiYy1oczI1Ni4wIn0..BsrAVGdXNNrLnYZNQCfCng.qM_3NBxd0mRL7B2z7uFc7b5_rb0O1_iGhnjcJNEqOQSOncisPUTk5qSo6646stVxGsHqX3jCpgnUpDVBMkUgIo7opYEKHdshzeyJPOvEZYs59B98BhtKbK8aqlEkYUFsC6OiVpGeJ4TdS4hfvo6AEhUUX9qFPndcJkMycGEHlzqfRji_coICq51kRUniY79mvtEUvGtwkcJb7c1aZ6a7uVMgKxdfTRZbzsuaCtHOLGqAgkMS4i0zIZt8AGZucTFldnV03XHIF7p_5XLAmMzwPnt_upsgSGR03r_1YTW1znUOAmFvBRYegX45es9-8KFPdBNX32yzLQtotRpp50bGPGp6ZuwCKn6VrKPpNR3Zv566EQJw7Uf0dQZxjITtBW9DhsiutAtmnrVC0faPunApxUtlJMnAd9flAHL8cSfvtRQgnuP93hafhtqLREGzqnfA8nyNX_y0fFwsWyX35B3AOnkLJOL3ptrFSKQpYgMukpcdI_E3FMdXQ10KtDp3dnPaZEefZRTl1z-qivbLNFjA_ufstQOjNuuUNmcCRa5JHVE3aSrp_Ax2UNWAcVvQUN7vQNEFxx1TyXHpIPTxYtAU57kiaw67TjJi5PX5iI6cX8Oz6gNA8JrIfWPeug9T738wil6CtObGS-ZZ8PFrg2WbyvzQr0mvuT7w4n5Biz3YqOe-Vxrw-B4EAF9EKr8stWuThUO3VcxEbmpVBmt-_fnubJ7kzO7Jx-7TSBEqCzo_dLyXYzk8gkdo0RjUf7GZX7wVRPZ9bUYwrtXGmCZ1jvcZmqA-4MwbEm8qAeBUqRveYExADij42zcMUuvqGpAb3s80Tcf08CN_acT4qeOAjtmdcEp5XrYLtuoc1IyVV6uTsbdV8_gKsoswKdZD1X-XGsdUJJrr4ZiVkq4nNqTh9q-ixVCkXfzgZqjhcybvMQhW75wDUvIocgOfFAkeZfE-uV8QpRRsN_jx8DMbYag6P649dijQH35hjXi1MOnLE2pKG4Fo1xUL6va9Cq6AMgEl81IXEJwPeq4Sim-cnDM8yAk6fg.ImbpT2efUo0OwpFsTJ5M5A'
     
         push2Web.subscribe(
             push2WebAccessToken,

@@ -11,7 +11,7 @@ import { Push2Web } from '@snap/push2web';
 
 //TODO: set configs
 
-const serverVersion = 0.1;
+const serverVersion = 0.2;
 
 const camKitConfiguration = {
     apiToken: 'eyJhbGciOiJIUzI1NiIsImtpZCI6IkNhbnZhc1MyU0hNQUNQcm9kIiwidHlwIjoiSldUIn0.eyJhdWQiOiJjYW52YXMtY2FudmFzYXBpIiwiaXNzIjoiY2FudmFzLXMyc3Rva2VuIiwibmJmIjoxNzQ0NDkyMDE3LCJzdWIiOiI4MzdmOTA0Yy1jYTU4LTQ2OWEtOWExNi1hN2ZkNTc0MjM4ZmV-U1RBR0lOR340YzI0MGU2NC0zOTQ4LTQxOGYtOGM2OS0wZTU1MDA3MTQ3NTUifQ.Y7QGwmP1OHx_BXD3TIAqv9sMaxlOogcQE0q5g08SHJw', //apiToken to final CamKit token
@@ -22,7 +22,7 @@ const camKitApiSpecId = '4bcc807f-59c5-4596-9535-f4489b829fff'; //api spec id fo
 
 // const lensId = 'cba3e43c-a01b-43cf-b203-91c5931d2cbd'; //dev
 // const lensId = '728a5dca-413a-4450-8603-84be19068f3d'; //staging
-const lensId = '8f65b735-e3cd-4fef-a584-ee93fc03da23'; //alphaf
+const lensId = '8f65b735-e3cd-4fef-a584-ee93fc03da23'; //alpha
 
 const groupId = 'a32e98c9-24b1-4039-b57a-2785f5abed01'; //dev,staging,alpha
 
@@ -202,11 +202,22 @@ const castGameService = {
 
                         break;
 
+                    case 'resize':
+                        //{ 'function': 'resize' }
+
+                        //force resize
+                        resizeCanvas();
+                        response = { 'success': true };
+                        
+                        return getRequestHandlerReply(response);
+
+                        break;                        
+
                     case 'config':
                         //{ 'function': 'config' }
 
                         //used to get server config vars
-                        response = { 'serverVersion': serverVersion, 'serverResourceURLPrefix': serverResourceURLPrefix, 'isPhone': isPhone, 'isIOS': isIOS(), 'success': true };
+                        response = { 'serverVersion': serverVersion, 'serverResourceURLFull': window.location.href.split('?')[0], 'serverResourceURLPrefix': serverResourceURLPrefix, 'isPhone': isPhone, 'isIOS': isIOS(), 'success': true };
                         
                         return getRequestHandlerReply(response);
 
@@ -497,6 +508,8 @@ const cameraKitApply = async () => {
             push2WebAccessToken = urlParams.get('access_token');
         }
 
+        push2WebAccessToken = 'eyJpc3MiOiJodHRwczpcL1wvYWNjb3VudHMuc25hcGNoYXQuY29tXC9hY2NvdW50c1wvb2F1dGgyXC90b2tlbiIsInR5cCI6IkpXVCIsImVuYyI6IkExMjhDQkMtSFMyNTYiLCJhbGciOiJkaXIiLCJraWQiOiJhY2Nlc3MtdG9rZW4tYTEyOGNiYy1oczI1Ni4wIn0..ouNO0kvH1ECVoek9_Pfy2A.ZPpuHBI-d0eRv-fViU9shaBSA6pvZAlob3_cDcO4zkXLLTYFSpVZBJqzBgw26zqbVmj6HMsVPUqcYAyBcMRuIrZRDvXNhmXriiV1ZaAoPDjF793PNdNeDsFnYWHep-UnwdgAp58CygL3coKM1EsUCRYn9cJfO_8LF0FASotWuL7WsceJeqRRgR1SwNpNZkMV9Qj6RFdoR5Z3L2NwD_qM-1lP6yeOkR_WutxxaBdsfXe2xYJw6EDBIn-TBuyRsj-E30_iDifHfywC4KG9vzvR2XcfplunjHyPf7TZ50x07MFgpTO_qALOend4y_tXX-zFNluFowV7rzbc1p8GsBCHC8zgT2MyfapimEL-rw1VidoCy1PnrLvuK6T6MivCGXAlsx-IS3JggZ6O-XvS-5G0TdhOzmZ5MYfYlYp_Bhgzf6YKbNeP2a80KQ9tw3ytUH31VjBT0Wwr_J0DOi7b-n29CgJAUDCJa7SPBXeKslIBq646yhgARux2uka1AenY89IBJyd7UFkpDcx4uz6rBfg8SF9x4u40Uj-Pfm272nV65rB6H0QIYHt7r42xaXBk9MxW4eHynPiT2PcU-E0Ib1sLqX0xNUpnBkaO0p1fde6T2M54V221707kVUGLI1e4Yx08THMwUcWABMsL8zU3jO5nACKqw_JXuWoGTiWN1n7l9chaYH2yFH-n7x5e5EtWfcR1TC97SM7cKBrvd4k_Xyb3a6uOQxY4S9JkV3dJT1uluDLMrMDwxLc1rAxfuzpIn7MLc7811OAV5NqMD1RNkiSC3rOSP1SxpKZ1EbzoDNJqm3WZZZ-cgqFvo_qQKfNr5kkaHdOqMNZgxMQ6g7JlzgA0b1v9Ss2OefaJ23AOIvmCRaq7HFMZX4FKBo4U7vYgeBY4oFsHkuPe6RxplpT0ygd7UAaIz3m0ww6s_9A4hO8pBi-1hEhR0mz9DpxnsHLmwVA1foxpT8Mv7sjHmzSNDAiM4UgKj-Uf5Qa00LHe-9sWYRWRbotmks3tfW6Y8_sV4xNymUT4AT6qyYERqya_MLgH1w.n1ntGOioXnnP4dEu23lRmA'
+    
         push2Web.subscribe(
             push2WebAccessToken,
             cameraKitSession,
@@ -511,84 +524,6 @@ const cameraKitApply = async () => {
     window.addEventListener('orientationchange', function() {
         resizeCanvas();
     });
-
-    //debounce function
-    const debounce = (func, delay) => {
-        let timer;
-        return (...args) => {
-            clearTimeout(timer);
-            timer = setTimeout(() => func(...args), delay);
-        };
-    };
-
-    //function to get the appropriate width and height
-    //need this to deal with iOS's janky viewport
-    const getRenderSize = () => {
-        let width, height;
-
-        if (window.visualViewport) {
-            //for devices that support visualViewport, such as iOS Safari
-            width = window.visualViewport.width;
-            height = window.visualViewport.height;
-
-        } else {
-            //allback to window.innerWidth and documentElement.clientHeight for desktop
-            width = window.innerWidth;
-            height = document.documentElement.clientHeight;
-
-        }
-
-        return { width, height };
-
-    };
-
-    //optimized canvas resizing
-    const resizeCanvas = () => {
-        if (source) {
-            const { width, height } = getRenderSize();
-
-            var newWidth = width;
-            var newHeight = height;
-
-            if(isPhone){
-                //phone 
-                if(newWidth > mobileVideoSourceMaxWidth){
-                    newWidth = mobileVideoSourceMaxWidth;
-
-                    var ratio = mobileVideoSourceMaxWidth / width;
-                    newHeight = newHeight * ratio;
-
-                }  
-
-                if(screen.orientation.type == 'landscape-primary' || screen.orientation.type == 'landscape-secondary'){
-                    //landscape
-                    newWidth = newHeight * 0.5625;
-
-                }else{
-                    //portrait, correct position
-
-                }
-
-            }else{
-                //desktop
-                newWidth = newHeight * 0.5625;
-                newHeight = newHeight;
-
-            }
-
-            content.style.width = newWidth + 'px';
-            content.style.height = newHeight + 'px';            
-
-            createImageSourceElement.width = newWidth;
-            createImageSourceElement.height = newHeight;
-            
-            source.setRenderSize(newWidth, newHeight);
-            //considered a window.devicePixelRatio, however there is a trade off between ML resources fps vs quality.  Going with fps for this one.
-            // source.setRenderSize(newWidth * window.devicePixelRatio, newHeight * window.devicePixelRatio);
-
-        }
-
-    };
 
     // debounce function to limit the number of resize calls
     const debouncedResizeCanvas = debounce(resizeCanvas, 500);
@@ -635,6 +570,88 @@ const cameraKitApply = async () => {
     await sleep(250);
 
 }
+
+//debounce function
+const debounce = (func, delay) => {
+    let timer;
+    return (...args) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => func(...args), delay);
+    };
+};
+
+//function to get the appropriate width and height
+//need this to deal with iOS's janky viewport
+const getRenderSize = () => {
+    let width, height;
+
+    if (window.visualViewport) {
+        //for devices that support visualViewport, such as iOS Safari
+        width = window.visualViewport.width;
+        height = window.visualViewport.height;
+
+    } else {
+        //allback to window.innerWidth and documentElement.clientHeight for desktop
+        width = window.innerWidth;
+        height = document.documentElement.clientHeight;
+
+    }
+
+    return { width, height };
+
+};
+
+//optimized canvas resizing
+const resizeCanvas = () => {
+    if (source) {
+        const { width, height } = getRenderSize();
+
+        var newWidth = width;
+        var newHeight = height;
+
+        if(isPhone){
+            //phone 
+            if(newWidth > mobileVideoSourceMaxWidth){
+                newWidth = mobileVideoSourceMaxWidth;
+
+                var ratio = mobileVideoSourceMaxWidth / width;
+                newHeight = newHeight * ratio;
+
+            }  
+
+            if(screen.orientation.type == 'landscape-primary' || screen.orientation.type == 'landscape-secondary'){
+                //landscape
+                newWidth = newHeight * 0.5625;
+
+            }else{
+                //portrait, correct position
+
+            }
+
+        }else{
+            //desktop
+            newWidth = newHeight * 0.5625;
+            newHeight = newHeight;
+
+        }
+
+        content.style.width = newWidth + 'px';
+        content.style.height = newHeight + 'px';            
+
+        createImageSourceElement.width = newWidth;
+        createImageSourceElement.height = newHeight;
+        
+        source.setRenderSize(newWidth, newHeight);
+        //considered a window.devicePixelRatio, however there is a trade off between ML resources fps vs quality.  Going with fps for this one.
+        // source.setRenderSize(newWidth * window.devicePixelRatio, newHeight * window.devicePixelRatio);
+
+        //
+        console.log('Pym Child: Resize');
+        pymChildSendMessage('resize', { width: newWidth, height: newHeight });
+
+    }
+
+};
 
 
 

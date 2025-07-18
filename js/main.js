@@ -421,7 +421,8 @@ errorMessageButton.addEventListener('click', (e) => {
 
 var cameraKit, cameraKitSession, extensions, push2Web, stream, source, sourceImage, sourceCamera, lens;
 
-const mobileVideoSourceMaxWidth = 1024; //max width of render target for canvas.  optimization technique for fps.
+var mobileVideoSourceMaxWidth = 1024; //max width of render target for canvas.  optimization technique for fps.
+var mobileVideoSourceResolution = 1.25;
 var visibilitychangeStatus = 'init';
 
 //location of assets for CamKit canvas game
@@ -649,9 +650,11 @@ const resizeCanvas = () => {
         createImageSourceElement.width = newWidth;
         createImageSourceElement.height = newHeight;
         
-        source.setRenderSize(newWidth, newHeight);
+        // source.setRenderSize(newWidth, newHeight);
+        source.setRenderSize(newWidth * mobileVideoSourceResolution, newHeight * mobileVideoSourceResolution);
         //considered a window.devicePixelRatio, however there is a trade off between ML resources fps vs quality.  Going with fps for this one.
         // source.setRenderSize(newWidth * window.devicePixelRatio, newHeight * window.devicePixelRatio);
+        
 
         //
         console.log('Pym Child: Resize');

@@ -652,7 +652,7 @@ const resizeCanvas = () => {
         
         // source.setRenderSize(newWidth, newHeight);
         source.setRenderSize(newWidth * mobileVideoSourceResolution, newHeight * mobileVideoSourceResolution);
-        //considered a window.devicePixelRatio, however there is a trade off between ML resources fps vs quality.  Going with fps for this one.
+        //considered a window.devicePixelRatio, however there is a trade off between gpu resources fps vs quality.  Going with fps for this one.
         // source.setRenderSize(newWidth * window.devicePixelRatio, newHeight * window.devicePixelRatio);
         
 

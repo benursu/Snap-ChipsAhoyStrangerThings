@@ -20,8 +20,8 @@ const camKitConfiguration = {
 
 const camKitApiSpecId = '4bcc807f-59c5-4596-9535-f4489b829fff'; //api spec id for Snap Remote API
 
-// const lensId = 'cba3e43c-a01b-43cf-b203-91c5931d2cbd'; //dev
-const lensId = '728a5dca-413a-4450-8603-84be19068f3d'; //staging
+const lensId = 'cba3e43c-a01b-43cf-b203-91c5931d2cbd'; //dev
+// const lensId = '728a5dca-413a-4450-8603-84be19068f3d'; //staging
 // const lensId = '8f65b735-e3cd-4fef-a584-ee93fc03da23'; //alpha
 
 const groupId = 'a32e98c9-24b1-4039-b57a-2785f5abed01'; //dev,staging,alpha
@@ -517,8 +517,6 @@ const cameraKitApply = async () => {
             push2WebAccessToken = urlParams.get('access_token');
         }
 
-        push2WebAccessToken = 'eyJpc3MiOiJodHRwczpcL1wvYWNjb3VudHMuc25hcGNoYXQuY29tXC9hY2NvdW50c1wvb2F1dGgyXC90b2tlbiIsInR5cCI6IkpXVCIsImVuYyI6IkExMjhDQkMtSFMyNTYiLCJhbGciOiJkaXIiLCJraWQiOiJhY2Nlc3MtdG9rZW4tYTEyOGNiYy1oczI1Ni4wIn0..a_a_4MQkTCuKS9G7x7b3Bg.JgpPfj4UXH7lkGL-eGkVWVK3vIq9dvgbVldwMAy8VZrZJeDh5HN_mEGQieekKG9l5sdHsoNXHLPXIMROyZ6-psTvRi2ieb0hyUCUAHvFsqOce6bSyyEOU_6796FxkxDTndRGu-S1mGae7gNjhNaJl9KE3Z3tIQhKIO0LArGcmA67WLzQiAlvnaUzRV6HHKsqGGPC-eGi63ajf1TojWm7HdKEArfzdZWav1pPpB1b7OO59X6QOImAZNe9dx7QHdVf6-7XSwYXvQVX8MqvBzWS8pOKk8r5w-xe_l5DGzeeLt-qv4qgQA474qCw_fz3Q6XAsT9bhHMK4OD1pEB0kj_uSncifp7OK0Zfk8Krfzb4JFjmRtirBeL1qPPnAdkfXcHihb0dGLlVmoyUddXxxYchKpEWcYrs-D4NAQtJm4xJ_gDAqi7b5BtUSVwNsyuxxcQc1gqQ8LV18Ke_YqbMVTIJQ1_E6Lz1O5BJHX3GhfMjsGP1b-FuJzQcC54SlzF07EbspWGdhvxt1NRlfd8DhyCXd4mrCY-yXKausGNX06f-Hu7Yk9j5RIB6QFdZxDnejRhDIiHEiQLWxACraoEfxjgPPuFUhhLkS62-8Vpwoy4Y0ErH8ZOgs1QlDSd_y3oO_VZNaTN0Weth94HHk-W-RWnGym3od1p-fqc5XyjY8EytxtzJwGs-aQtBQkjHk1u9eEm0SVWzeYzzG1_KW10Vc-H9EMJkPWR__SxBWgST3i_ZgxLeBNfi43xnAxVIHCoQW3NumX7j5XRomUDjU1xa2x-v3jwe7Z6535wqk7ssn8seicM-GcbcgJ1D5AXcLG4PJinqgkEHH7C5iEcaO-5j0atXYy03K7Q3WnYlmvbxt1Z6cZsEF_1LshWn_l8nZUYAG8YXK-_HQxOuwWP8fC6KJyK_tvM6Y4PltALjt60qwhQA8GDDjZTr00_ChxyvQ-O3EnaVfZmPCYdr4-z8h1cMBtxPDH1gH-tMj5MrXhmY-YjNvMOCHfxqiAP6eLVcJoSVpWC05DCSPDCPdusO6GQ75dHGZA.3urHJAGP7KylV-0wNbHU-Q';
-    
         push2Web.subscribe(
             push2WebAccessToken,
             cameraKitSession,

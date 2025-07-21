@@ -111,6 +111,11 @@ const init = async () => {
             content.style.display = 'block';
             loaderContainer.style.display = 'none';
 
+            //
+            console.log('Pym Child: Analytics Event: Started Embedded');
+            var payload = JSON.parse({ 'function': 'analytics', 'event': 'Page Embedded' });
+            pymChildSendMessage('analytics', { event: payload.event });
+
         } catch (error) {
             //error
             console.error('Error during cameraKitInit:', error);

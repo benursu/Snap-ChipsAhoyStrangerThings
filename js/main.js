@@ -112,9 +112,8 @@ const init = async () => {
             loaderContainer.style.display = 'none';
 
             //
-            console.log('Pym Child: Analytics Event: Started Embedded');
-            var payload = JSON.parse({ 'function': 'analytics', 'event': 'Page Embedded' });
-            pymChildSendMessage('analytics', { event: payload.event });
+            console.log('Pym Child: Analytics Event: Page Embedded');
+            pymChildSendMessage('analytics', { event: 'Page Embedded' });
 
         } catch (error) {
             //error

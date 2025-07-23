@@ -105,8 +105,15 @@ const init = async () => {
             canvas.width = width;
             canvas.height = height;
 
-            await cameraKitInit();
             await registerPymReceiver();
+
+            //
+            const sizeFirst = getRenderSizeForced();
+            console.log('Early, Pym Child: Resize');
+            pymChildSendMessage('resize', { width: sizeFirst.width, height: sizeFirst.height });
+
+            //
+            await cameraKitInit();
 
             content.style.display = 'block';
             loaderContainer.style.display = 'none';
@@ -578,7 +585,8 @@ const cameraKitApply = async () => {
     }
 
     //
-    await sleep(250);
+    await sleep(2000);
+    resizeCanvas();
 
 }
 
@@ -602,7 +610,7 @@ const getRenderSize = () => {
         height = window.visualViewport.height;
 
     } else {
-        //allback to window.innerWidth and documentElement.clientHeight for desktop
+        //callback to window.innerWidth and documentElement.clientHeight for desktop
         width = window.innerWidth;
         height = document.documentElement.clientHeight;
 
@@ -612,55 +620,62 @@ const getRenderSize = () => {
 
 };
 
-//optimized canvas resizing
-const resizeCanvas = () => {
-    if (source) {
-        const { width, height } = getRenderSize();
+const getRenderSizeForced = () => {
+    let { width, height } = getRenderSize();
 
-        var newWidth = width;
-        var newHeight = height;
+    var newWidth = width;
+    var newHeight = height;
 
-        if(isPhone){
-            //phone 
-            if(newWidth > mobileVideoSourceMaxWidth){
-                newWidth = mobileVideoSourceMaxWidth;
+    if(isPhone){
+        //phone 
+        if(newWidth > mobileVideoSourceMaxWidth){
+            newWidth = mobileVideoSourceMaxWidth;
 
-                var ratio = mobileVideoSourceMaxWidth / width;
-                newHeight = newHeight * ratio;
+            var ratio = mobileVideoSourceMaxWidth / width;
+            newHeight = newHeight * ratio;
 
-            }  
+        }  
 
-            if(screen.orientation.type == 'landscape-primary' || screen.orientation.type == 'landscape-secondary'){
-                //landscape
-                newWidth = newHeight * 0.5625;
-
-            }else{
-                //portrait, correct position
-
-            }
+        if(screen.orientation.type == 'landscape-primary' || screen.orientation.type == 'landscape-secondary'){
+            //landscape
+            newWidth = newHeight * 0.5625;
 
         }else{
-            //desktop
-            newWidth = newHeight * 0.5625;
-            newHeight = newHeight;
+            //portrait, correct position
 
         }
 
-        content.style.width = newWidth + 'px';
-        content.style.height = newHeight + 'px';            
+    }else{
+        //desktop
+        newWidth = newHeight * 0.5625;
+        newHeight = newHeight;
 
-        createImageSourceElement.width = newWidth;
-        createImageSourceElement.height = newHeight;
+    }
+
+    return { width: newWidth, height: newHeight };
+
+};
+
+
+//optimized canvas resizing
+const resizeCanvas = () => {
+    if (source) {
+        const { width, height } = getRenderSizeForced();
+
+        content.style.width = width + 'px';
+        content.style.height = height + 'px';            
+
+        createImageSourceElement.width = width;
+        createImageSourceElement.height = height;
         
         // source.setRenderSize(newWidth, newHeight);
-        source.setRenderSize(newWidth * mobileVideoSourceResolution, newHeight * mobileVideoSourceResolution);
+        source.setRenderSize(width * mobileVideoSourceResolution, height * mobileVideoSourceResolution);
         //considered a window.devicePixelRatio, however there is a trade off between gpu resources fps vs quality.  Going with fps for this one.
         // source.setRenderSize(newWidth * window.devicePixelRatio, newHeight * window.devicePixelRatio);
         
-
         //
         console.log('Pym Child: Resize');
-        pymChildSendMessage('resize', { width: newWidth, height: newHeight });
+        pymChildSendMessage('resize', { width: width, height: height });
 
     }
 

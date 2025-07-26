@@ -298,6 +298,26 @@ const castGameService = {
                         
                         break;
 
+                    case 'gameMode':
+                        //{ 'function': 'gameMode', 'mode': 'loading' }
+                        //{ 'function': 'gameMode', 'mode': 'gameplay' }
+                        //{ 'function': 'gameMode', 'mode': 'game' }
+                        //{ 'function': 'gameMode', 'mode': 'entry' }
+                        //{ 'function': 'gameMode', 'mode': 'gameover' }
+
+                        //send game mode
+                        if(payload.mode != null){
+                            console.log('Pym Child: Game: Mode, mode: ' + payload.mode);
+
+                            pymChildSendMessage('gameMode', { mode: payload.mode });
+
+                            response = { 'success': true };
+                        }
+
+                        return getRequestHandlerReply(response);
+                        
+                        break;                        
+
                     case 'gameOver':
                         //{ 'function': 'gameOver' }
 

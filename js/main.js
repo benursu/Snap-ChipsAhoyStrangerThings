@@ -20,9 +20,9 @@ const camKitConfiguration = {
 
 const camKitApiSpecId = '4bcc807f-59c5-4596-9535-f4489b829fff'; //api spec id for Snap Remote API
 
-// const lensId = 'cba3e43c-a01b-43cf-b203-91c5931d2cbd'; //dev
+const lensId = 'cba3e43c-a01b-43cf-b203-91c5931d2cbd'; //dev
 // const lensId = '728a5dca-413a-4450-8603-84be19068f3d'; //staging
-const lensId = '8f65b735-e3cd-4fef-a584-ee93fc03da23'; //alpha
+// const lensId = '8f65b735-e3cd-4fef-a584-ee93fc03da23'; //alpha
 
 const groupId = 'a32e98c9-24b1-4039-b57a-2785f5abed01'; //dev,staging,alpha
 
@@ -89,68 +89,47 @@ const errorMessageButton = document.querySelector('.castGame-error-container-btn
 const init = async () => {
     loaderContainer.style.display = 'block';
 
-    // if(isPhone){
-        try {
-            let width, height;
-            if (window.visualViewport) {
-                //for devices that support visualViewport, such as iOS Safari
-                width = window.visualViewport.width;
-                height = window.visualViewport.height;
-            } else {
-                //fallback to window.innerWidth and documentElement.clientHeight for desktop
-                width = window.innerWidth;
-                height = document.documentElement.clientHeight;
-            }
-
-            canvas.width = width;
-            canvas.height = height;
-
-            await registerPymReceiver();
-
-            //
-            const sizeFirst = getRenderSizeForced();
-            console.log('Early, Pym Child: Resize');
-            pymChildSendMessage('resize', { width: sizeFirst.width, height: sizeFirst.height });
-
-            //
-            await cameraKitInit();
-
-            content.style.display = 'block';
-            loaderContainer.style.display = 'none';
-
-            //
-            console.log('Pym Child: Analytics Event: Page Embedded');
-            pymChildSendMessage('analytics', { event: 'Page Embedded' });
-
-        } catch (error) {
-            //error
-            console.error('Error during cameraKitInit:', error);
-            errorMessage.innerHTML = 'There was an error loading the site.';
-
-            //displays an error message if cameraKit initialization fails
-            loaderContainer.style.display = 'none';
-            errorContainer.style.display = 'flex';
-
+    try {
+        let width, height;
+        if (window.visualViewport) {
+            //for devices that support visualViewport, such as iOS Safari
+            width = window.visualViewport.width;
+            height = window.visualViewport.height;
+        } else {
+            //fallback to window.innerWidth and documentElement.clientHeight for desktop
+            width = window.innerWidth;
+            height = document.documentElement.clientHeight;
         }
 
-    // }else{
-    //     errorMessage.innerHTML = 'Please load on a mobile device.';
-    //     loaderContainer.style.display = 'none';
-    //     errorContainer.style.display = 'flex';
+        canvas.width = width;
+        canvas.height = height;
 
-    // }
+        resizeCanvas();
+
+        await registerPymReceiver();
+
+        //
+        await cameraKitInit();
+
+        content.style.display = 'block';
+        loaderContainer.style.display = 'none';
+
+        //
+        console.log('Pym Child: Analytics Event: Page Embedded');
+        pymChildSendMessage('analytics', { event: 'Page Embedded' });
+
+    } catch (error) {
+        //error
+        console.error('Error during cameraKitInit:', error);
+        errorMessage.innerHTML = 'There was an error loading the site.';
+
+        //displays an error message if cameraKit initialization fails
+        loaderContainer.style.display = 'none';
+        errorContainer.style.display = 'flex';
+
+    }
 
 };
-
-// launchButton.addEventListener('click', (e) => {
-//     e.preventDefault();
-
-//     launchButton.style.display = 'none';  
-//     loaderContainer.style.display = 'block';
-
-//     init();
-
-// });
 
 
 
@@ -189,7 +168,7 @@ const castGameService = {
                             console.log('Pym Child: Analytics Event: ' + payload.event);
                             pymChildSendMessage('analytics', { event: payload.event });
                             response = { 'success': true };
-                        }
+                        }                     
 
                         return getRequestHandlerReply(response);
 
@@ -452,8 +431,6 @@ errorMessageButton.addEventListener('click', (e) => {
 
 var cameraKit, cameraKitSession, extensions, push2Web, stream, source, sourceImage, sourceCamera, lens;
 
-var mobileVideoSourceMaxWidth = 1024; //max width of render target for canvas.  optimization technique for fps.
-var mobileVideoSourceResolution = 1.25;
 var visibilitychangeStatus = 'init';
 
 //location of assets for CamKit canvas game
@@ -559,14 +536,15 @@ const cameraKitApply = async () => {
     /////////////////////////////////////////////////////////////////////////////////////
     //resize
 
-    window.addEventListener('orientationchange', function() {
-        resizeCanvas();
-    });
-
     // debounce function to limit the number of resize calls
-    const debouncedResizeCanvas = debounce(resizeCanvas, 500);
+    const debouncedResizeCanvas = debounce(resizeCanvas, 600);
     window.addEventListener('resize', debouncedResizeCanvas);
     window.addEventListener('orientationchange', debouncedResizeCanvas);
+
+    const debouncedVisualViewportResize = debounce(handleVisualViewportResize, 300);
+    if(window.visualViewport) {
+      window.visualViewport.addEventListener('resize', debouncedVisualViewportResize);
+    }
 
     // initial canvas resize
     resizeCanvas();
@@ -603,10 +581,6 @@ const cameraKitApply = async () => {
         });   
 
     }
-
-    //
-    await sleep(2000);
-    resizeCanvas();
 
 }
 
@@ -648,21 +622,15 @@ const getRenderSizeForced = () => {
 
     if(isPhone){
         //phone 
-        if(newWidth > mobileVideoSourceMaxWidth){
-            newWidth = mobileVideoSourceMaxWidth;
-
-            var ratio = mobileVideoSourceMaxWidth / width;
-            newHeight = newHeight * ratio;
-
-        }  
-
         if(screen.orientation.type == 'landscape-primary' || screen.orientation.type == 'landscape-secondary'){
             //landscape
-            newWidth = newHeight * 0.5625;
+            var newWidthForced = newHeight * 0.5625;
+            if(newWidthForced < newWidth){
+                newWidth = newWidthForced;
+            }
 
         }else{
-            //portrait, correct position
-
+            //portrait, correct orientation
         }
 
     }else{
@@ -676,28 +644,42 @@ const getRenderSizeForced = () => {
 
 };
 
+const handleVisualViewportResize = () => {
+    resizeCanvas();
+};  
 
-//optimized canvas resizing
 const resizeCanvas = () => {
+    const { width, height } = getRenderSizeForced();
+
+    content.style.width = width + 'px';
+    content.style.height = height + 'px';            
+
+    createImageSourceElement.width = width;
+    createImageSourceElement.height = height;
+    
     if (source) {
-        const { width, height } = getRenderSizeForced();
+        var mobileVideoSourceResolution = 1.25;
+        var renderSizeMinumumWidth = 400;
+        var renderSizeMinumumUpResRatio = 1;
 
-        content.style.width = width + 'px';
-        content.style.height = height + 'px';            
+        //up res if width is small
+        var renderSizeFinalWidth = width * mobileVideoSourceResolution;
+        if(renderSizeFinalWidth < renderSizeMinumumWidth){
+            renderSizeMinumumUpResRatio = renderSizeMinumumWidth / renderSizeFinalWidth;
+        }
+        renderSizeFinalWidth = renderSizeFinalWidth * renderSizeMinumumUpResRatio;
 
-        createImageSourceElement.width = width;
-        createImageSourceElement.height = height;
-        
-        // source.setRenderSize(newWidth, newHeight);
-        source.setRenderSize(width * mobileVideoSourceResolution, height * mobileVideoSourceResolution);
-        //considered a window.devicePixelRatio, however there is a trade off between gpu resources fps vs quality.  Going with fps for this one.
-        // source.setRenderSize(newWidth * window.devicePixelRatio, newHeight * window.devicePixelRatio);
-        
         //
-        console.log('Pym Child: Resize');
-        pymChildSendMessage('resize', { width: width, height: height });
+        var renderSizeFinalHeight = height * mobileVideoSourceResolution * renderSizeMinumumUpResRatio;
 
-    }
+        source.setRenderSize(renderSizeFinalWidth, renderSizeFinalHeight);
+        //considered a window.devicePixelRatio, however there is a trade off between gpu resources fps vs quality.  Leaning towards fps with maxiumum of 1.25.
+        // source.setRenderSize(width * window.devicePixelRatio, height * window.devicePixelRatio);
+    }        
+
+    //
+    // console.log('Pym Child: Resize');
+    // pymChildSendMessage('resize', { width: width, height: height });
 
 };
 

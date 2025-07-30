@@ -11,10 +11,10 @@ import { Push2Web } from '@snap/push2web';
 
 //TODO: set configs
 
-const serverVersion = 0.2;
+const serverVersion = 0.3;
 
 const camKitConfiguration = {
-    apiToken: 'eyJhbGciOiJIUzI1NiIsImtpZCI6IkNhbnZhc1MyU0hNQUNQcm9kIiwidHlwIjoiSldUIn0.eyJhdWQiOiJjYW52YXMtY2FudmFzYXBpIiwiaXNzIjoiY2FudmFzLXMyc3Rva2VuIiwibmJmIjoxNzQ0NDkyMDE3LCJzdWIiOiI4MzdmOTA0Yy1jYTU4LTQ2OWEtOWExNi1hN2ZkNTc0MjM4ZmV-U1RBR0lOR340YzI0MGU2NC0zOTQ4LTQxOGYtOGM2OS0wZTU1MDA3MTQ3NTUifQ.Y7QGwmP1OHx_BXD3TIAqv9sMaxlOogcQE0q5g08SHJw', //apiToken to final CamKit token
+    apiToken: 'eyJhbGciOiJIUzI1NiIsImtpZCI6IkNhbnZhc1MyU0hNQUNQcm9kIiwidHlwIjoiSldUIn0.eyJhdWQiOiJjYW52YXMtY2FudmFzYXBpIiwiaXNzIjoiY2FudmFzLXMyc3Rva2VuIiwibmJmIjoxNzQ0NDkyMDE3LCJzdWIiOiI4MzdmOTA0Yy1jYTU4LTQ2OWEtOWExNi1hN2ZkNTc0MjM4ZmV-UFJPRFVDVElPTn5lOWVjYmM2Yi0xMzI4LTRiNjItYTEwZi04ODg4OWFkOTU5ZDQifQ.VDe2UgAedQ1Ywl5_3ErC0vZMpstU54CfWQ0YV-8uZaU', //apiToken to final CamKit token
     logger: 'console',
 }
 
@@ -22,9 +22,10 @@ const camKitApiSpecId = '4bcc807f-59c5-4596-9535-f4489b829fff'; //api spec id fo
 
 // const lensId = 'cba3e43c-a01b-43cf-b203-91c5931d2cbd'; //dev
 // const lensId = '728a5dca-413a-4450-8603-84be19068f3d'; //staging
-const lensId = '8f65b735-e3cd-4fef-a584-ee93fc03da23'; //alpha
+// const lensId = '8f65b735-e3cd-4fef-a584-ee93fc03da23'; //alpha
+const lensId = 'a7a08df7-cc8a-4e58-b0e2-2a2fffb7ddea'; //prod
 
-const groupId = 'a32e98c9-24b1-4039-b57a-2785f5abed01'; //dev,staging,alpha
+const groupId = 'a32e98c9-24b1-4039-b57a-2785f5abed01'; //dev,staging,alpha,prod
 
 
 

@@ -1,6 +1,6 @@
 import '../scss/style.scss'
 import { bootstrapCameraKit, createMediaStreamSource, createImageSource, Transform2D, remoteApiServicesFactory, Injectable, estimateLensPerformance } from '@snap/camera-kit';
-import { Push2Web } from '@snap/push2web';
+// import { Push2Web } from '@snap/push2web';
 
 
 
@@ -449,18 +449,18 @@ createImageSourceElement.height = 1024;
 
 const cameraKitInit = async () => {
     //extensions
-    try {
-        push2Web = new Push2Web();
+    // try {
+    //     push2Web = new Push2Web();
 
-        extensions = (container) => container.provides(push2Web.extension).provides(
-            Injectable(
-                remoteApiServicesFactory.token,
-                [remoteApiServicesFactory.token],
-                (existing) => [...existing, castGameService]
-            )
-        );
+    //     extensions = (container) => container.provides(push2Web.extension).provides(
+    //         Injectable(
+    //             remoteApiServicesFactory.token,
+    //             [remoteApiServicesFactory.token],
+    //             (existing) => [...existing, castGameService]
+    //         )
+    //     );
 
-    }catch(e) {
+    // }catch(e) {
         extensions = (container) => container.provides(
             Injectable(
                 remoteApiServicesFactory.token,
@@ -469,7 +469,7 @@ const cameraKitInit = async () => {
             )
         );
 
-    }
+    // }
 
     //
     cameraKit = await bootstrapCameraKit(camKitConfiguration, extensions);
@@ -519,20 +519,20 @@ const cameraKitApply = async () => {
     await cameraKitSession.play('live');
     await cameraKitSession.play('capture');
 
-    if(push2Web != null){
-        var push2WebAccessToken = '';
-        const urlParams = new URLSearchParams(window.location.search);
-        if(urlParams.get('access_token')){
-            push2WebAccessToken = urlParams.get('access_token');
-        }
+    // if(push2Web != null){
+    //     var push2WebAccessToken = '';
+    //     const urlParams = new URLSearchParams(window.location.search);
+    //     if(urlParams.get('access_token')){
+    //         push2WebAccessToken = urlParams.get('access_token');
+    //     }
 
-        push2Web.subscribe(
-            push2WebAccessToken,
-            cameraKitSession,
-            cameraKit.lensRepository
-        );
+    //     push2Web.subscribe(
+    //         push2WebAccessToken,
+    //         cameraKitSession,
+    //         cameraKit.lensRepository
+    //     );
 
-    }
+    // }
 
     /////////////////////////////////////////////////////////////////////////////////////
     //resize

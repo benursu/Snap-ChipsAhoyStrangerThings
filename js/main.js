@@ -21,9 +21,9 @@ const camKitConfiguration = {
 const camKitApiSpecId = '4bcc807f-59c5-4596-9535-f4489b829fff'; //api spec id for Snap Remote API
 
 // const lensId = 'cba3e43c-a01b-43cf-b203-91c5931d2cbd'; //dev
-// const lensId = '728a5dca-413a-4450-8603-84be19068f3d'; //staging
+const lensId = '728a5dca-413a-4450-8603-84be19068f3d'; //staging
 // const lensId = '8f65b735-e3cd-4fef-a584-ee93fc03da23'; //alpha
-const lensId = 'a7a08df7-cc8a-4e58-b0e2-2a2fffb7ddea'; //prod
+// const lensId = 'a7a08df7-cc8a-4e58-b0e2-2a2fffb7ddea'; //prod
 
 const groupId = 'a32e98c9-24b1-4039-b57a-2785f5abed01'; //dev,staging,alpha,prod
 
@@ -623,15 +623,19 @@ const getRenderSizeForced = () => {
 
     if(isPhone){
         //phone 
-        if(screen.orientation.type == 'landscape-primary' || screen.orientation.type == 'landscape-secondary'){
-            //landscape
-            var newWidthForced = newHeight * 0.5625;
-            if(newWidthForced < newWidth){
-                newWidth = newWidthForced;
+        if (typeof screen.orientation !== 'undefined') {
+          
+            if(screen.orientation.type == 'landscape-primary' || screen.orientation.type == 'landscape-secondary'){
+                //landscape
+                var newWidthForced = newHeight * 0.5625;
+                if(newWidthForced < newWidth){
+                    newWidth = newWidthForced;
+                }
+
+            }else{
+                //portrait, correct orientation
             }
 
-        }else{
-            //portrait, correct orientation
         }
 
     }else{
